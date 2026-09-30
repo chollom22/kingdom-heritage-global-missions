@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ministries | Kingdom Heritage Network Global Missions</title>
+
+  <meta name="description" content="Ministry focus of Kingdom Heritage Network Global Missions, an interdenominational, not-for-profit and non-political organisation.">
+
+  <meta name="theme-color" content="#173b8f">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+      color: #222;
+      background: #fff;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .brand img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 3px;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+    }
+
+    nav a {
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #f5c542;
+    }
+
+    .menu-btn {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 6px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 55px);
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: auto;
+      font-size: 18px;
+    }
+
+    section {
+      padding: 65px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .section-title h2 {
+      color: #173b8f;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .line {
+      width: 65px;
+      height: 4px;
+      background: #f5c542;
+      margin: 12px auto;
+      border-radius: 5px;
+    }
+
+    .section-title p {
+      max-width: 750px;
+      margin: auto;
+      color: #666;
+    }
+
+    .intro {
+      max-width: 850px;
+      margin: auto;
+      text-align: center;
+      font-size: 17px;
+    }
+
+    .ministry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    .ministry-card {
+      background: #fff;
+      padding: 30px 24px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+      border-top: 5px solid #5b2a86;
+      transition: 0.3s;
+    }
+
+    .ministry-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .icon {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .ministry-card h3 {
+      color: #173b8f;
+      margin-bottom: 12px;
+      font-size: 21px;
+    }
+
+    .ministry-card p {
+      color: #555;
+    }
+
+    .objectives-section {
+      background: #f7f9ff;
+    }
+
+    .objective-list {
+      max-width: 900px;
+      margin: auto;
+      display: grid;
+      gap: 15px;
+    }
+
+    .objective {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .number {
+      min-width: 38px;
+      height: 38px;
+      background: #173b8f;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .notice {
+      max-width: 850px;
+      margin: 35px auto 0;
+      padding: 20px;
+      background: #fff8df;
+      border-left: 5px solid #f5c542;
+      border-radius: 8px;
+    }
+
+    footer {
+      background: #111a35;
+      color: white;
+      padding: 40px 20px 20px;
+      text-align: center;
+    }
+
+    footer h3 {
+      color: #f5c542;
+      margin-bottom: 15px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    footer a {
+      color: #dfe3ef;
+    }
+
+    footer a:hover {
+      color: #f5c542;
+    }
+
+    .copyright {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 20px;
+      margin-top: 20px;
+      color: #b9bdca;
+      font-size: 13px;
+    }
+
+    @media (max-width: 800px) {
+
+      .menu-btn {
+        display: block;
+      }
+
+      nav {
+        display: none;
+        position: absolute;
+        top: 79px;
+        left: 0;
+        right: 0;
+        background: #173b8f;
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      nav a {
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+      }
+
+      .brand {
+        font-size: 11px;
+      }
+
+      .brand img {
+        width: 48px;
+        height: 48px;
+      }
+
+      .ministry-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 50px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="nav-container">
+
+    <a href="index.html" class="brand">
+      <img src="logo.png"
+           alt="Kingdom Heritage Network Global Missions logo">
+      <span>Kingdom Heritage Network Global Missions</span>
+    </a>
+
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="index.html#objectives">Objectives</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <img src="logo.png"
+       alt="Kingdom Heritage Network Global Missions">
+
+  <h1>Our Ministries</h1>
+
+  <p>
+    Areas of ministry activity reflected in the objectives
+    of Kingdom Heritage Network Global Missions.
+  </p>
+
+</section>
+
+
+<section>
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Ministry Focus</h2>
+
+      <div class="line"></div>
+
+      <p>
+        The following areas are presented directly from the
+        organisation's stated objectives.
+      </p>
+
+    </div>
+
+    <div class="ministry-grid">
+
+      <div class="ministry-card">
+
+        <div class="icon">✝️</div>
+
+        <h3>Faith & Salvation</h3>
+
+        <p>
+          Helping souls become engrafted in the faith after
+          salvation.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="icon">🌍</div>
+
+        <h3>Missions</h3>
+
+        <p>
+          Equipping believers with missionary power and
+          supporting the missionary purpose of the organisation.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="icon">🙏</div>
+
+        <h3>Intercession</h3>
+
+        <p>
+          Consistently interceding for territories in order
+          to preserve the heritage of God over them.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="icon">🌱</div>
+
+        <h3>Destiny Establishment</h3>
+
+        <p>
+          Establishing great destinies and equipping them for
+          the move of God.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="icon">📖</div>
+
+        <h3>Believer Equipping</h3>
+
+        <p>
+          Equipping believers and helping generations know
+          and play their role in God's program.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="icon">🤝</div>
+
+        <h3>Kingdom Service</h3>
+
+        <p>
+          Undertaking activities that are incidental to the
+          attainment of the organisation's objectives.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="objectives-section">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Our Constitutional Objectives</h2>
+
+      <div class="line"></div>
+
+      <p>
+        These objectives provide the foundation for the
+        ministry focus presented on this website.
+      </p>
+
+    </div>
+
+
+    <div class="objective-list">
+
+      <div class="objective">
+        <div class="number">1</div>
+        <p>
+          To get souls engrafted in the faith after salvation.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="number">2</div>
+        <p>
+          To equip believers with missionary power.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="number">3</div>
+        <p>
+          To help generations know and play their role in
+          God's program.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="number">4</div>
+        <p>
+          To consistently intercede for territories in order
+          to preserve the heritage of God over them.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="number">5</div>
+        <p>
+          To establish great destinies and equip them for
+          the move of God.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="number">6</div>
+        <p>
+          To do any or all things deemed incidental to the
+          attainment of the objectives of the organisation.
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="notice">
+
+      <strong>Note:</strong>
+
+      The ministry areas displayed on this page are an
+      organised presentation of the objectives contained
+      in the organisation's constitution. They do not
+      introduce additional programmes or claims about the
+      organisation.
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+
+  <h3>Kingdom Heritage Network Global Missions</h3>
+
+  <p>
+    An interdenominational, not-for-profit and non-political
+    organisation.
+  </p>
+
+  <div class="footer-links">
+
+    <a href="index.html">Home</a>
+
+    <a href="about.html">About</a>
+
+    <a href="ministries.html">Ministries</a>
+
+    <a href="privacy.html">Privacy Policy</a>
+
+    <a href="terms.html">Terms of Use</a>
+
+    <a href="disclaimer.html">Disclaimer</a>
+
+  </div>
+
+  <div class="copyright">
+
+    © 2026 Kingdom Heritage Network Global Missions.
+    All rights reserved.
+
+  </div>
+
+</footer>
+
+
+<script>
+
+  function toggleMenu() {
+    document.getElementById("nav").classList.toggle("active");
+  }
+
+</script>
+
+</body>
+        </html>
