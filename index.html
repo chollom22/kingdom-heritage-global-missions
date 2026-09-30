@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Kingdom Heritage Network Global Missions</title>
+
+  <meta name="description" content="Kingdom Heritage Network Global Missions — an interdenominational, non-profit and non-political ministry committed to equipping believers, establishing destinies and advancing God's program.">
+
+  <meta name="theme-color" content="#173b8f">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+      color: #222;
+      background: #fff;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .brand img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 3px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    nav a {
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #f5c542;
+    }
+
+    .menu-btn {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 70px 20px;
+      background:
+        linear-gradient(
+          rgba(18,59,143,0.88),
+          rgba(91,42,134,0.88)
+        ),
+        radial-gradient(circle at top, #4267b2, #32145f);
+    }
+
+    .hero-content {
+      max-width: 900px;
+    }
+
+    .hero-logo {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 7px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 62px);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: clamp(17px, 2.5vw, 22px);
+      max-width: 760px;
+      margin: auto;
+    }
+
+    .hero-buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 13px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn-gold {
+      background: #f5c542;
+      color: #18234a;
+    }
+
+    .btn-white {
+      background: white;
+      color: #173b8f;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 18px rgba(0,0,0,0.2);
+    }
+
+    /* GENERAL */
+    section {
+      padding: 75px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .section-title h2 {
+      font-size: 34px;
+      color: #173b8f;
+      margin-bottom: 10px;
+    }
+
+    .section-title span {
+      display: block;
+      width: 70px;
+      height: 4px;
+      background: #f5c542;
+      margin: 12px auto;
+      border-radius: 5px;
+    }
+
+    .section-title p {
+      max-width: 750px;
+      margin: auto;
+      color: #666;
+    }
+
+    /* ABOUT */
+    .about {
+      background: #f7f9ff;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .about-card {
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    }
+
+    .about-card h3 {
+      color: #5b2a86;
+      margin-bottom: 15px;
+    }
+
+    /* OBJECTIVES */
+    .objectives {
+      background: white;
+    }
+
+    .objective-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .objective {
+      padding: 25px;
+      border-left: 5px solid #f5c542;
+      background: #f8f8fc;
+      border-radius: 10px;
+    }
+
+    .objective-number {
+      display: inline-flex;
+      width: 38px;
+      height: 38px;
+      align-items: center;
+      justify-content: center;
+      background: #173b8f;
+      color: white;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* MINISTRIES */
+    .ministries {
+      background: linear-gradient(180deg, #f7f9ff, #ffffff);
+    }
+
+    .ministry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .ministry-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px 22px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+      border-top: 4px solid #5b2a86;
+    }
+
+    .ministry-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .ministry-card h3 {
+      color: #173b8f;
+      margin-bottom: 10px;
+    }
+
+    /* INFORMATION */
+    .info-section {
+      background: #173b8f;
+      color: white;
+    }
+
+    .info-section .section-title h2 {
+      color: white;
+    }
+
+    .info-section .section-title p {
+      color: #e8e8e8;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .info-card {
+      background: rgba(255,255,255,0.1);
+      padding: 28px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .info-card h3 {
+      color: #f5c542;
+      margin-bottom: 10px;
+    }
+
+    /* CONTACT */
+    .contact {
+      background: #fff;
+    }
+
+    .contact-box {
+      max-width: 850px;
+      margin: auto;
+      background: #f7f9ff;
+      padding: 35px;
+      border-radius: 18px;
+      border-left: 6px solid #5b2a86;
+    }
+
+    .contact-box h3 {
+      color: #173b8f;
+      margin-bottom: 15px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #111a35;
+      color: white;
+      padding: 45px 20px 25px;
+    }
+
+    .footer-grid {
+      max-width: 1100px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 35px;
+    }
+
+    footer h3 {
+      color: #f5c542;
+      margin-bottom: 15px;
+    }
+
+    footer p,
+    footer a {
+      color: #d9dce7;
+      font-size: 14px;
+    }
+
+    footer a:hover {
+      color: #f5c542;
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 30px auto 0;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+      font-size: 13px;
+      color: #b9bdca;
+    }
+
+    /* MOBILE */
+    @media (max-width: 800px) {
+
+      .nav-container {
+        padding: 10px 15px;
+      }
+
+      .brand {
+        font-size: 12px;
+      }
+
+      .brand img {
+        width: 48px;
+        height: 48px;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      nav {
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: #173b8f;
+        padding: 20px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      nav a {
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+      }
+
+      .about-grid,
+      .objective-grid,
+      .ministry-grid,
+      .info-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: 78vh;
+      }
+
+      section {
+        padding: 55px 18px;
+      }
+
+      .section-title h2 {
+        font-size: 29px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="nav-container">
+
+    <a href="#home" class="brand">
+      <!-- Replace the src below with your uploaded logo file if needed -->
+      <img src="logo.png" alt="Kingdom Heritage Network Global Missions logo">
+      <span>Kingdom Heritage Network Global Missions</span>
+    </a>
+
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    <nav id="mainNav">
+      <a href="#home" onclick="closeMenu()">Home</a>
+      <a href="#about" onclick="closeMenu()">About</a>
+      <a href="#objectives" onclick="closeMenu()">Objectives</a>
+      <a href="#ministries" onclick="closeMenu()">Ministries</a>
+      <a href="#contact" onclick="closeMenu()">Contact</a>
+    </nav>
+
+  </div>
+</header>
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+  <div class="hero-content">
+
+    <img
+      class="hero-logo"
+      src="logo.png"
+      alt="Kingdom Heritage Network Global Missions">
+
+    <h1>
+      KINGDOM HERITAGE NETWORK GLOBAL MISSIONS
+    </h1>
+
+    <p>
+      An interdenominational ministry committed to helping believers,
+      establishing destinies and advancing God's program.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#about" class="btn btn-gold">About Us</a>
+      <a href="#objectives" class="btn btn-white">Our Objectives</a>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ABOUT -->
+<section class="about" id="about">
+
+  <div class="container">
+
+    <div class="section-title">
+      <h2>About Us</h2>
+      <span></span>
+      <p>
+        Learn about Kingdom Heritage Network Global Missions
+        and its purpose.
+      </p>
+    </div>
+
+    <div class="about-grid">
+
+      <div class="about-card">
+
+        <h3>Kingdom Heritage Network Global Missions</h3>
+
+        <p>
+          Kingdom Heritage Network Global Missions is an
+          interdenominational ministry established as a
+          not-for-profit and non-political organisation.
+        </p>
+
+        <br>
+
+        <p>
+          The organisation exists to pursue its stated objectives
+          through ministry, missions, intercession, equipping
+          believers and establishing destinies.
+        </p>
+
+      </div>
+
+      <div class="about-card">
+
+        <h3>Registration Information</h3>
+
+        <p>
+          <strong>Organisation:</strong><br>
+          Kingdom Heritage Network Global Missions
+        </p>
+
+        <p>
+          <strong>Registration Number:</strong><br>
+          9440936
+        </p>
+
+        <p>
+          <strong>Type:</strong><br>
+          Incorporated Trustee
+        </p>
+
+        <p>
+          <strong>Status:</strong><br>
+          Active
+        </p>
+
+        <p>
+          <strong>Registered:</strong><br>
+          25 March 2026
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- OBJECTIVES -->
+<section class="objectives" id="objectives">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Our Objectives</h2>
+
+      <span></span>
+
+      <p>
+        The objectives below are based on the organisation's
+        constitution.
+      </p>
+
+    </div>
+
+    <div class="objective-grid">
+
+      <div class="objective">
+        <div class="objective-number">1</div>
+        <p>
+          To get souls engrafted in the faith after salvation.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="objective-number">2</div>
+        <p>
+          To equip believers with missionary power.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="objective-number">3</div>
+        <p>
+          To help generations know and play their role in God's program.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="objective-number">4</div>
+        <p>
+          To consistently intercede for territories in order to
+          preserve the heritage of God over them.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="objective-number">5</div>
+        <p>
+          To establish great destinies and equip them for the
+          move of God.
+        </p>
+      </div>
+
+      <div class="objective">
+        <div class="objective-number">6</div>
+        <p>
+          To do any or all things deemed incidental to the attainment
+          of the objectives of the organisation.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MINISTRIES -->
+<section class="ministries" id="ministries">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Ministry Focus</h2>
+
+      <span></span>
+
+      <p>
+        Areas that reflect the objectives and purpose of the ministry.
+      </p>
+
+    </div>
+
+    <div class="ministry-grid">
+
+      <div class="ministry-card">
+
+        <div class="ministry-icon">✝️</div>
+
+        <h3>Faith & Salvation</h3>
+
+        <p>
+          Helping souls become established in the faith after salvation.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="ministry-icon">🌍</div>
+
+        <h3>Missions</h3>
+
+        <p>
+          Equipping believers with missionary power and supporting
+          the advancement of God's program.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="ministry-icon">🙏</div>
+
+        <h3>Intercession</h3>
+
+        <p>
+          Consistent intercession for territories and the preservation
+          of God's heritage over them.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="ministry-icon">🌱</div>
+
+        <h3>Destiny</h3>
+
+        <p>
+          Establishing great destinies and equipping them for
+          the move of God.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="ministry-icon">📖</div>
+
+        <h3>Believer Equipping</h3>
+
+        <p>
+          Helping believers understand and play their role in
+          God's program.
+        </p>
+
+      </div>
+
+
+      <div class="ministry-card">
+
+        <div class="ministry-icon">🤝</div>
+
+        <h3>Kingdom Service</h3>
+
+        <p>
+          Supporting activities that contribute to the attainment
+          of the ministry's objectives.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ORGANISATION INFORMATION -->
+<section class="info-section">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Organisation Information</h2>
+
+      <span></span>
+
+      <p>
+        Official information about the organisation.
+      </p>
+
+    </div>
+
+    <div class="info-grid">
+
+      <div class="info-card">
+
+        <h3>Legal Status</h3>
+
+        <p>
+          Incorporated Trustee
+        </p>
+
+      </div>
+
+      <div class="info-card">
+
+        <h3>Nature</h3>
+
+        <p>
+          Interdenominational Ministry
+        </p>
+
+      </div>
+
+      <div class="info-card">
+
+        <h3>Registration</h3>
+
+        <p>
+          IT No. 9440936
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Contact Us</h2>
+
+      <span></span>
+
+      <p>
+        Connect with Kingdom Heritage Network Global Missions.
+      </p>
+
+    </div>
+
+    <div class="contact-box">
+
+      <h3>Registered Address</h3>
+
+      <p>
+        HIGH BRIDGE ACADEMY INTERNATIONAL,
+        OPPOSITE YELWA CLUB,
+        BUKURU,
+        PLATEAU STATE,
+        NIGERIA.
+      </p>
+
+      <br>
+
+      <p>
+        For ministry enquiries, please use the official contact
+        channels provided by the ministry.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+
+  <div class="footer-grid">
+
+    <div>
+
+      <h3>Kingdom Heritage Network Global Missions</h3>
+
+      <p>
+        An interdenominational, not-for-profit and non-political
+        organisation.
+      </p>
+
+      <br>
+
+      <p>
+        Registration Number: 9440936
+      </p>
+
+    </div>
+
+
+    <div>
+
+      <h3>Quick Links</h3>
+
+      <p><a href="#home">Home</a></p>
+      <p><a href="#about">About Us</a></p>
+      <p><a href="#objectives">Objectives</a></p>
+      <p><a href="#ministries">Ministries</a></p>
+      <p><a href="#contact">Contact</a></p>
+
+    </div>
+
+
+    <div>
+
+      <h3>Policies</h3>
+
+      <p>
+        <a href="privacy.html">Privacy Policy</a>
+      </p>
+
+      <p>
+        <a href="terms.html">Terms of Use</a>
+      </p>
+
+      <p>
+        <a href="disclaimer.html">Disclaimer</a>
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="footer-bottom">
+
+    © 2026 Kingdom Heritage Network Global Missions.
+    All rights reserved.
+
+  </div>
+
+</footer>
+
+
+<script>
+
+  function toggleMenu() {
+    document.getElementById("mainNav").classList.toggle("active");
+  }
+
+  function closeMenu() {
+    document.getElementById("mainNav").classList.remove("active");
+  }
+
+</script>
+
+</body>
+  </html>
