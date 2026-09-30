@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Missions | Kingdom Heritage Network Global Missions</title>
+
+  <meta name="description" content="Missions and missionary purpose of Kingdom Heritage Network Global Missions.">
+
+  <meta name="theme-color" content="#173b8f">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+      color: #222;
+      background: #fff;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .brand img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 3px;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+    }
+
+    nav a {
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #f5c542;
+    }
+
+    .menu-btn {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero img {
+      width: 125px;
+      height: 125px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 6px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(35px, 6vw, 58px);
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      max-width: 750px;
+      margin: auto;
+      font-size: 18px;
+    }
+
+    section {
+      padding: 65px 20px;
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      color: #173b8f;
+      font-size: 32px;
+    }
+
+    .line {
+      width: 65px;
+      height: 4px;
+      background: #f5c542;
+      margin: 12px auto;
+      border-radius: 5px;
+    }
+
+    .intro {
+      max-width: 850px;
+      margin: auto;
+      text-align: center;
+      font-size: 17px;
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .mission-card {
+      background: #f7f9ff;
+      padding: 30px;
+      border-radius: 16px;
+      border-left: 5px solid #5b2a86;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .mission-card .icon {
+      font-size: 38px;
+      margin-bottom: 12px;
+    }
+
+    .mission-card h3 {
+      color: #173b8f;
+      margin-bottom: 12px;
+    }
+
+    .mission-card p {
+      color: #555;
+    }
+
+    .featured {
+      background: #173b8f;
+      color: white;
+    }
+
+    .featured .section-title h2 {
+      color: white;
+    }
+
+    .featured .section-title p {
+      color: #e5e8f1;
+    }
+
+    .mission-statement {
+      max-width: 850px;
+      margin: auto;
+      background: rgba(255,255,255,0.1);
+      padding: 35px;
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .mission-statement h3 {
+      color: #f5c542;
+      margin-bottom: 15px;
+      font-size: 25px;
+    }
+
+    .objective-list {
+      max-width: 900px;
+      margin: auto;
+      display: grid;
+      gap: 15px;
+    }
+
+    .objective {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .number {
+      min-width: 38px;
+      height: 38px;
+      background: #173b8f;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .note {
+      max-width: 850px;
+      margin: 30px auto 0;
+      padding: 20px;
+      background: #fff8df;
+      border-left: 5px solid #f5c542;
+      border-radius: 8px;
+    }
+
+    footer {
+      background: #111a35;
+      color: white;
+      padding: 40px 20px 20px;
+      text-align: center;
+    }
+
+    footer h3 {
+      color: #f5c542;
+      margin-bottom: 15px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    footer a {
+      color: #dfe3ef;
+    }
+
+    footer a:hover {
+      color: #f5c542;
+    }
+
+    .copyright {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 20px;
+      margin-top: 20px;
+      color: #b9bdca;
+      font-size: 13px;
+    }
+
+    @media (max-width: 800px) {
+
+      .menu-btn {
+        display: block;
+      }
+
+      nav {
+        display: none;
+        position: absolute;
+        top: 79px;
+        left: 0;
+        right: 0;
+        background: #173b8f;
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      nav a {
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+      }
+
+      .brand {
+        font-size: 11px;
+      }
+
+      .brand img {
+        width: 48px;
+        height: 48px;
+      }
+
+      .mission-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 50px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="nav-container">
+
+    <a href="index.html" class="brand">
+      <img src="logo.png"
+           alt="Kingdom Heritage Network Global Missions logo">
+      <span>Kingdom Heritage Network Global Missions</span>
+    </a>
+
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="missions.html">Missions</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <img src="logo.png"
+       alt="Kingdom Heritage Network Global Missions">
+
+  <h1>Missions</h1>
+
+  <p>
+    Equipping believers with missionary power and helping
+    advance the objectives of Kingdom Heritage Network
+    Global Missions.
+  </p>
+
+</section>
+
+
+<section>
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Our Missionary Purpose</h2>
+
+      <div class="line"></div>
+
+    </div>
+
+    <p class="intro">
+      Missionary work is part of the stated objectives of
+      Kingdom Heritage Network Global Missions. The organisation
+      seeks to equip believers with missionary power and help
+      generations understand and play their role in God's program.
+    </p>
+
+
+    <div class="mission-grid">
+
+      <div class="mission-card">
+
+        <div class="icon">🌍</div>
+
+        <h3>Missionary Equipping</h3>
+
+        <p>
+          To equip believers with missionary power.
+        </p>
+
+      </div>
+
+
+      <div class="mission-card">
+
+        <div class="icon">✝️</div>
+
+        <h3>Faith</h3>
+
+        <p>
+          To get souls engrafted in the faith after salvation.
+        </p>
+
+      </div>
+
+
+      <div class="mission-card">
+
+        <div class="icon">🙏</div>
+
+        <h3>Intercession</h3>
+
+        <p>
+          To consistently intercede for territories in order
+          to preserve the heritage of God over them.
+        </p>
+
+      </div>
+
+
+      <div class="mission-card">
+
+        <div class="icon">🌱</div>
+
+        <h3>Destiny</h3>
+
+        <p>
+          To establish great destinies and equip them for
+          the move of God.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="featured">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Generational Purpose</h2>
+
+      <div class="line"></div>
+
+    </div>
+
+    <div class="mission-statement">
+
+      <h3>Helping Generations</h3>
+
+      <p>
+        One of the organisation's stated objectives is to help
+        generations know and play their role in God's program.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section>
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Mission-Related Objectives</h2>
+
+      <div class="line"></div>
+
+      <p>
+        These are the relevant objectives stated in the
+        organisation's constitution.
+      </p>
+
+    </div>
+
+
+    <div class="objective-list">
+
+      <div class="objective">
+
+        <div class="number">1</div>
+
+        <p>
+          To get souls engrafted in the faith after salvation.
+        </p>
+
+      </div>
+
+
+      <div class="objective">
+
+        <div class="number">2</div>
+
+        <p>
+          To equip believers with missionary power.
+        </p>
+
+      </div>
+
+
+      <div class="objective">
+
+        <div class="number">3</div>
+
+        <p>
+          To help generations know and play their role in
+          God's program.
+        </p>
+
+      </div>
+
+
+      <div class="objective">
+
+        <div class="number">4</div>
+
+        <p>
+          To consistently intercede for territories in order
+          to preserve the heritage of God over them.
+        </p>
+
+      </div>
+
+
+      <div class="objective">
+
+        <div class="number">5</div>
+
+        <p>
+          To establish great destinies and equip them for
+          the move of God.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="note">
+
+      <strong>About this page:</strong>
+
+      The missionary information presented here is based on
+      the organisation's stated constitutional objectives.
+      No additional missionary programmes or activities are
+      being represented as official programmes on this page.
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+
+  <h3>Kingdom Heritage Network Global Missions</h3>
+
+  <p>
+    An interdenominational, not-for-profit and non-political
+    organisation.
+  </p>
+
+  <div class="footer-links">
+
+    <a href="index.html">Home</a>
+
+    <a href="about.html">About</a>
+
+    <a href="ministries.html">Ministries</a>
+
+    <a href="missions.html">Missions</a>
+
+    <a href="privacy.html">Privacy Policy</a>
+
+    <a href="terms.html">Terms of Use</a>
+
+    <a href="disclaimer.html">Disclaimer</a>
+
+  </div>
+
+  <div class="copyright">
+
+    © 2026 Kingdom Heritage Network Global Missions.
+    All rights reserved.
+
+  </div>
+
+</footer>
+
+
+<script>
+
+  function toggleMenu() {
+    document.getElementById("nav").classList.toggle("active");
+  }
+
+</script>
+
+</body>
+      </html>
