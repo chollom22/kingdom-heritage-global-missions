@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Prayer | Kingdom Heritage Network Global Missions</title>
+
+  <meta name="description" content="Prayer and intercession page of Kingdom Heritage Network Global Missions.">
+
+  <meta name="theme-color" content="#173b8f">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+      color: #222;
+      background: #fff;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .brand img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 3px;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+    }
+
+    nav a {
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #f5c542;
+    }
+
+    .menu-btn {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 6px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(35px, 6vw, 58px);
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      max-width: 750px;
+      margin: auto;
+      font-size: 18px;
+    }
+
+    section {
+      padding: 65px 20px;
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      color: #173b8f;
+      font-size: 32px;
+    }
+
+    .line {
+      width: 65px;
+      height: 4px;
+      background: #f5c542;
+      margin: 12px auto;
+      border-radius: 5px;
+    }
+
+    .section-title p {
+      max-width: 750px;
+      margin: auto;
+      color: #666;
+    }
+
+    .prayer-intro {
+      max-width: 850px;
+      margin: auto;
+      text-align: center;
+      font-size: 18px;
+      color: #444;
+    }
+
+    .prayer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-top: 45px;
+    }
+
+    .prayer-card {
+      padding: 30px;
+      background: #f7f9ff;
+      border-radius: 16px;
+      border-left: 5px solid #5b2a86;
+      box-shadow: 0 7px 22px rgba(0,0,0,0.06);
+    }
+
+    .prayer-card h3 {
+      color: #173b8f;
+      margin-bottom: 10px;
+    }
+
+    .prayer-card p {
+      color: #555;
+    }
+
+    .intercession {
+      background: linear-gradient(135deg, #173b8f, #5b2a86);
+      color: white;
+      text-align: center;
+    }
+
+    .intercession h2 {
+      font-size: 32px;
+      margin-bottom: 15px;
+    }
+
+    .intercession p {
+      max-width: 800px;
+      margin: auto;
+      color: #f0f2f8;
+    }
+
+    .prayer-note {
+      max-width: 850px;
+      margin: 40px auto 0;
+      background: #fff8df;
+      border-left: 5px solid #f5c542;
+      padding: 25px;
+      border-radius: 10px;
+      color: #444;
+    }
+
+    .contact-box {
+      max-width: 800px;
+      margin: auto;
+      padding: 35px;
+      text-align: center;
+      background: #f7f9ff;
+      border-radius: 16px;
+    }
+
+    .contact-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #173b8f;
+      color: white;
+      border-radius: 25px;
+      font-weight: bold;
+    }
+
+    .contact-button:hover {
+      background: #5b2a86;
+    }
+
+    footer {
+      background: #111a35;
+      color: white;
+      padding: 40px 20px 20px;
+      text-align: center;
+    }
+
+    footer h3 {
+      color: #f5c542;
+      margin-bottom: 15px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    footer a {
+      color: #dfe3ef;
+    }
+
+    footer a:hover {
+      color: #f5c542;
+    }
+
+    .copyright {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 20px;
+      margin-top: 20px;
+      color: #b9bdca;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+
+      .menu-btn {
+        display: block;
+      }
+
+      nav {
+        display: none;
+        position: absolute;
+        top: 79px;
+        left: 0;
+        right: 0;
+        background: #173b8f;
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      nav a {
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+      }
+
+      .brand {
+        font-size: 11px;
+      }
+
+      .brand img {
+        width: 48px;
+        height: 48px;
+      }
+
+      .prayer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 50px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="nav-container">
+
+    <a href="index.html" class="brand">
+      <img src="logo.png"
+           alt="Kingdom Heritage Network Global Missions logo">
+      <span>Kingdom Heritage Network Global Missions</span>
+    </a>
+
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="missions.html">Missions</a>
+      <a href="events.html">Events</a>
+      <a href="media.html">Media</a>
+      <a href="prayer.html">Prayer</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <img src="logo.png"
+       alt="Kingdom Heritage Network Global Missions">
+
+  <h1>Prayer & Intercession</h1>
+
+  <p>
+    Standing in prayer for God's purposes, territories,
+    generations and the advancement of His work.
+  </p>
+
+</section>
+
+
+<section>
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>A Call to Prayer</h2>
+
+      <div class="line"></div>
+
+    </div>
+
+    <div class="prayer-intro">
+
+      <p>
+        Prayer and intercession are part of the stated objectives
+        of Kingdom Heritage Network Global Missions. The ministry
+        seeks to consistently intercede for territories in order
+        to preserve the heritage of God over them.
+      </p>
+
+    </div>
+
+
+    <div class="prayer-grid">
+
+      <div class="prayer-card">
+
+        <h3>Intercession for Territories</h3>
+
+        <p>
+          Prayer for territories and communities, with a focus
+          on God's purposes and heritage.
+        </p>
+
+      </div>
+
+
+      <div class="prayer-card">
+
+        <h3>Prayer for Generations</h3>
+
+        <p>
+          Prayer concerning generations and their role in God's
+          programme.
+        </p>
+
+      </div>
+
+
+      <div class="prayer-card">
+
+        <h3>Prayer for God's Work</h3>
+
+        <p>
+          Prayer for the advancement of the work of God and for
+          believers to fulfil their calling.
+        </p>
+
+      </div>
+
+
+      <div class="prayer-card">
+
+        <h3>Prayer for Destinies</h3>
+
+        <p>
+          Prayer that great destinies may be established and
+          equipped for the move of God.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="intercession">
+
+  <div class="container">
+
+    <h2>Intercession for Territories</h2>
+
+    <p>
+      The ministry's constitution identifies consistent
+      intercession for territories as one of its objectives.
+      This page provides a space to communicate that emphasis
+      clearly without presenting unofficial prayer programmes
+      as established ministry activities.
+    </p>
+
+  </div>
+
+</section>
+
+
+<section>
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Prayer Requests</h2>
+
+      <div class="line"></div>
+
+      <p>
+        A prayer-request system can be added here when the
+        ministry is ready to receive and manage requests online.
+      </p>
+
+    </div>
+
+    <div class="contact-box">
+
+      <h3>Prayer Request Service</h3>
+
+      <p>
+        Official prayer-request contact information will be
+        published here when it is provided by the ministry.
+      </p>
+
+      <a href="index.html#contact" class="contact-button">
+        Contact the Ministry
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+
+  <h3>Kingdom Heritage Network Global Missions</h3>
+
+  <p>
+    An interdenominational, not-for-profit and non-political
+    organisation.
+  </p>
+
+  <div class="footer-links">
+
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="ministries.html">Ministries</a>
+    <a href="missions.html">Missions</a>
+    <a href="events.html">Events</a>
+    <a href="media.html">Media</a>
+    <a href="prayer.html">Prayer</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Use</a>
+    <a href="disclaimer.html">Disclaimer</a>
+
+  </div>
+
+  <div class="copyright">
+    © 2026 Kingdom Heritage Network Global Missions.
+    All rights reserved.
+  </div>
+
+</footer>
+
+
+<script>
+
+  function toggleMenu() {
+    document.getElementById("nav").classList.toggle("active");
+  }
+
+</script>
+
+</body>
+</html>
