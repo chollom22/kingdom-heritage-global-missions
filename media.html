@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Media | Kingdom Heritage Network Global Missions</title>
+
+  <meta name="description" content="Media page of Kingdom Heritage Network Global Missions for ministry videos, photographs, broadcasts and other official media content.">
+
+  <meta name="theme-color" content="#173b8f">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+      color: #222;
+      background: #fff;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .brand img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 3px;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+    }
+
+    nav a {
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #f5c542;
+    }
+
+    .menu-btn {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 6px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(35px, 6vw, 58px);
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      max-width: 750px;
+      margin: auto;
+      font-size: 18px;
+    }
+
+    section {
+      padding: 65px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      color: #173b8f;
+      font-size: 32px;
+    }
+
+    .line {
+      width: 65px;
+      height: 4px;
+      background: #f5c542;
+      margin: 12px auto;
+      border-radius: 5px;
+    }
+
+    .section-title p {
+      max-width: 750px;
+      margin: auto;
+      color: #666;
+    }
+
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    .media-card {
+      background: #f7f9ff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 7px 24px rgba(0,0,0,0.07);
+      border-top: 5px solid #5b2a86;
+    }
+
+    .media-icon {
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #173b8f, #5b2a86);
+      color: white;
+      font-size: 58px;
+    }
+
+    .media-content {
+      padding: 25px;
+      text-align: center;
+    }
+
+    .media-content h3 {
+      color: #173b8f;
+      margin-bottom: 10px;
+    }
+
+    .media-content p {
+      color: #555;
+      margin-bottom: 18px;
+    }
+
+    .media-button {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 25px;
+      background: #173b8f;
+      color: white;
+      font-weight: bold;
+    }
+
+    .media-button:hover {
+      background: #5b2a86;
+    }
+
+    .notice {
+      max-width: 850px;
+      margin: 40px auto 0;
+      padding: 25px;
+      background: #fff8df;
+      border-left: 5px solid #f5c542;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .social-section {
+      background: #f7f9ff;
+    }
+
+    .social-box {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .social-box h3 {
+      color: #173b8f;
+      margin-bottom: 12px;
+    }
+
+    .featured {
+      background: #173b8f;
+      color: white;
+    }
+
+    .featured .section-title h2 {
+      color: white;
+    }
+
+    .featured .section-title p {
+      color: #e5e8f1;
+    }
+
+    .broadcast-box {
+      max-width: 850px;
+      margin: auto;
+      background: rgba(255,255,255,0.1);
+      padding: 35px;
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .broadcast-box h3 {
+      color: #f5c542;
+      margin-bottom: 12px;
+      font-size: 25px;
+    }
+
+    footer {
+      background: #111a35;
+      color: white;
+      padding: 40px 20px 20px;
+      text-align: center;
+    }
+
+    footer h3 {
+      color: #f5c542;
+      margin-bottom: 15px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    footer a {
+      color: #dfe3ef;
+    }
+
+    footer a:hover {
+      color: #f5c542;
+    }
+
+    .copyright {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 20px;
+      margin-top: 20px;
+      color: #b9bdca;
+      font-size: 13px;
+    }
+
+    @media (max-width: 850px) {
+
+      .media-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+
+      .menu-btn {
+        display: block;
+      }
+
+      nav {
+        display: none;
+        position: absolute;
+        top: 79px;
+        left: 0;
+        right: 0;
+        background: #173b8f;
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      nav a {
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+      }
+
+      .brand {
+        font-size: 11px;
+      }
+
+      .brand img {
+        width: 48px;
+        height: 48px;
+      }
+
+      .media-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 50px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="nav-container">
+
+    <a href="index.html" class="brand">
+      <img src="logo.png"
+           alt="Kingdom Heritage Network Global Missions logo">
+      <span>Kingdom Heritage Network Global Missions</span>
+    </a>
+
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="missions.html">Missions</a>
+      <a href="events.html">Events</a>
+      <a href="media.html">Media</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <img src="logo.png"
+       alt="Kingdom Heritage Network Global Missions">
+
+  <h1>Media</h1>
+
+  <p>
+    Official media and broadcast content from
+    Kingdom Heritage Network Global Missions.
+  </p>
+
+</section>
+
+
+<section>
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Media Centre</h2>
+
+      <div class="line"></div>
+
+      <p>
+        This section provides a central place for official
+        ministry media content.
+      </p>
+
+    </div>
+
+
+    <div class="media-grid">
+
+      <div class="media-card">
+
+        <div class="media-icon">▶️</div>
+
+        <div class="media-content">
+
+          <h3>Videos</h3>
+
+          <p>
+            Ministry videos and other official video content
+            can be published here.
+          </p>
+
+          <a class="media-button" href="#">
+            Coming Soon
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <div class="media-card">
+
+        <div class="media-icon">📷</div>
+
+        <div class="media-content">
+
+          <h3>Photos</h3>
+
+          <p>
+            Official ministry photographs and visual
+            records can be displayed here.
+          </p>
+
+          <a class="media-button" href="#">
+            Coming Soon
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <div class="media-card">
+
+        <div class="media-icon">📡</div>
+
+        <div class="media-content">
+
+          <h3>Broadcast</h3>
+
+          <p>
+            Official ministry broadcasts and media updates
+            can be made available here.
+          </p>
+
+          <a class="media-button" href="#">
+            Coming Soon
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="notice">
+
+      <strong>Media notice:</strong>
+
+      Media content will be added as official materials become
+      available. This page does not claim that any particular
+      programme, broadcast or social-media account currently
+      exists unless it is officially published by the ministry.
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="featured">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Ministry Broadcast</h2>
+
+      <div class="line"></div>
+
+      <p>
+        A dedicated space for future official broadcasts.
+      </p>
+
+    </div>
+
+
+    <div class="broadcast-box">
+
+      <h3>Official Broadcast Centre</h3>
+
+      <p>
+        Live streams, recorded broadcasts and other official
+        media can be connected to this section when they are
+        available.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="social-section">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Official Online Channels</h2>
+
+      <div class="line"></div>
+
+    </div>
+
+
+    <div class="social-box">
+
+      <h3>Social Media & Online Platforms</h3>
+
+      <p>
+        Official social-media and online platform links can be
+        added here once the ministry's verified accounts and
+        channels are provided.
+      </p>
+
+      <br>
+
+      <p>
+        No unverified social-media accounts are represented
+        as official on this website.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+
+  <h3>Kingdom Heritage Network Global Missions</h3>
+
+  <p>
+    An interdenominational, not-for-profit and non-political
+    organisation.
+  </p>
+
+  <div class="footer-links">
+
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="ministries.html">Ministries</a>
+    <a href="missions.html">Missions</a>
+    <a href="events.html">Events</a>
+    <a href="media.html">Media</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Use</a>
+    <a href="disclaimer.html">Disclaimer</a>
+
+  </div>
+
+  <div class="copyright">
+
+    © 2026 Kingdom Heritage Network Global Missions.
+    All rights reserved.
+
+  </div>
+
+</footer>
+
+
+<script>
+
+  function toggleMenu() {
+    document.getElementById("nav").classList.toggle("active");
+  }
+
+</script>
+
+</body>
+</html>
