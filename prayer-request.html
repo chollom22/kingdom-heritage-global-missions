@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Submit a prayer request to Kingdom Heritage Network Global Missions."
+  >
+
+  <title>
+    Prayer Request | Kingdom Heritage Network Global Missions
+  </title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f9fc;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(
+        135deg,
+        #0645a5,
+        #55258f
+      );
+      color: white;
+      padding: 15px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: white;
+    }
+
+    .brand img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: white;
+      padding: 3px;
+    }
+
+    .brand-text h1 {
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      opacity: 0.9;
+      margin-top: 3px;
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 11px;
+      border-radius: 6px;
+      font-size: 13px;
+      transition: 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .hero {
+      background:
+        linear-gradient(
+          rgba(5,45,110,0.88),
+          rgba(76,31,130,0.88)
+        ),
+        url("logo.png") center/contain no-repeat;
+
+      min-height: 270px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 40px 20px;
+    }
+
+    .hero-content {
+      max-width: 750px;
+    }
+
+    .hero h2 {
+      font-size: 38px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      max-width: 650px;
+      margin: auto;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 45px auto;
+      padding: 0 20px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .intro h3 {
+      color: #0645a5;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .intro p {
+      color: #555;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .scripture {
+      background: white;
+      border-left: 5px solid #55258f;
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 8px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .scripture strong {
+      display: block;
+      color: #0645a5;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .form-card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+      color: #333;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #d4d9e2;
+      border-radius: 7px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #0645a5;
+      box-shadow: 0 0 0 3px rgba(6,69,165,0.08);
+    }
+
+    textarea {
+      min-height: 170px;
+      resize: vertical;
+    }
+
+    .optional {
+      font-weight: normal;
+      color: #777;
+      font-size: 12px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 10px 0 20px;
+    }
+
+    .checkbox-group input {
+      width: auto;
+      margin-top: 5px;
+    }
+
+    .checkbox-group label {
+      font-weight: normal;
+      margin: 0;
+      color: #555;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      background: linear-gradient(
+        135deg,
+        #0645a5,
+        #55258f
+      );
+      color: white;
+      padding: 14px 20px;
+      border-radius: 7px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .success {
+      display: none;
+      background: #e9f8ee;
+      color: #176b35;
+      border: 1px solid #b8e6c6;
+      padding: 15px;
+      border-radius: 7px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .notice {
+      margin-top: 25px;
+      background: #fff8e5;
+      border-left: 5px solid #e0a400;
+      padding: 18px;
+      border-radius: 7px;
+      color: #5d4b00;
+      font-size: 14px;
+    }
+
+    footer {
+      background: #10172a;
+      color: white;
+      margin-top: 50px;
+      padding: 35px 20px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .footer-links a {
+      color: #ddd;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    @media (max-width: 700px) {
+
+      .header-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      nav {
+        justify-content: center;
+      }
+
+      .brand {
+        justify-content: center;
+      }
+
+      .hero {
+        min-height: 230px;
+      }
+
+      .hero h2 {
+        font-size: 30px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      main {
+        margin: 30px auto;
+      }
+
+      .form-card {
+        padding: 20px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+
+  <header>
+
+    <div class="header-inner">
+
+      <a
+        href="index.html"
+        class="brand"
+      >
+
+        <img
+          src="logo.png"
+          alt="Kingdom Heritage Network Global Missions Logo"
+        >
+
+        <div class="brand-text">
+
+          <h1>
+            Kingdom Heritage Network Global Missions
+          </h1>
+
+          <p>
+            Accurate dispensation of the word, true worship and intercession.
+          </p>
+
+        </div>
+
+      </a>
+
+      <nav>
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="channel.html">
+          Channel
+        </a>
+
+        <a href="mp3.html">
+          Audio
+        </a>
+
+        <a href="publishing.html">
+          Publications
+        </a>
+
+        <a href="elibrary.html">
+          E-Library
+        </a>
+
+        <a
+          href="prayer-request.html"
+          class="active"
+        >
+          Prayer
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <h2>
+        Prayer Request
+      </h2>
+
+      <p>
+        Share your prayer request with Kingdom Heritage Network Global Missions.
+        Our prayer team is committed to standing with you in prayer.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- MAIN -->
+
+  <main>
+
+    <div class="intro">
+
+      <h3>
+        Submit Your Prayer Request
+      </h3>
+
+      <p>
+        Whatever you are trusting God for, you can share your request with us.
+        We believe in the power of prayer and intercession.
+      </p>
+
+    </div>
+
+
+    <!-- SCRIPTURE -->
+
+    <div class="scripture">
+
+      <strong>
+        Hebrews 4:16 — KJV
+      </strong>
+
+      <p>
+        “Let us therefore come boldly unto the throne of grace,
+        that we may obtain mercy, and find grace to help in time of need.”
+      </p>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="form-card">
+
+      <div
+        class="success"
+        id="successMessage"
+      >
+        Your prayer request has been submitted successfully.
+        Thank you for allowing us to stand with you in prayer.
+      </div>
+
+
+      <form id="prayerForm">
+
+        <div class="form-group">
+
+          <label for="name">
+            Name *
+          </label>
+
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your name"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="contact">
+
+            Email or Phone
+
+            <span class="optional">
+              (Optional)
+            </span>
+
+          </label>
+
+          <input
+            type="text"
+            id="contact"
+            name="contact"
+            placeholder="Enter your email or phone number"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="category">
+            Prayer Category *
+          </label>
+
+          <select
+            id="category"
+            name="category"
+            required
+          >
+
+            <option value="">
+              Select a category
+            </option>
+
+            <option value="Salvation">
+              Salvation
+            </option>
+
+            <option value="Healing">
+              Healing
+            </option>
+
+            <option value="Family">
+              Family
+            </option>
+
+            <option value="Marriage">
+              Marriage
+            </option>
+
+            <option value="Career">
+              Career / Business
+            </option>
+
+            <option value="Education">
+              Education
+            </option>
+
+            <option value="Financial">
+              Financial
+            </option>
+
+            <option value="Spiritual Growth">
+              Spiritual Growth
+            </option>
+
+            <option value="Ministry">
+              Ministry
+            </option>
+
+            <option value="Thanksgiving">
+              Thanksgiving
+            </option>
+
+            <option value="Other">
+              Other
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="request">
+            Prayer Request *
+          </label>
+
+          <textarea
+            id="request"
+            name="request"
+            placeholder="Write your prayer request here..."
+            required
+          ></textarea>
+
+        </div>
+
+
+        <div class="checkbox-group">
+
+          <input
+            type="checkbox"
+            id="private"
+            name="private"
+          >
+
+          <label for="private">
+
+            Keep my prayer request private.
+
+            <br>
+
+            Your request will not be publicly displayed.
+
+          </label>
+
+        </div>
+
+
+        <button type="submit">
+          Submit Prayer Request
+        </button>
+
+      </form>
+
+
+      <div class="notice">
+
+        <strong>
+          Please Note:
+        </strong>
+
+        <br>
+
+        Please do not submit passwords, bank details,
+        financial account information, identification numbers,
+        or other highly sensitive personal information through
+        this form.
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="footer-inner">
+
+      <div class="footer-links">
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="channel.html">
+          Channel
+        </a>
+
+        <a href="mp3.html">
+          Audio
+        </a>
+
+        <a href="publishing.html">
+          Publications
+        </a>
+
+        <a href="elibrary.html">
+          E-Library
+        </a>
+
+        <a href="prayer-request.html">
+          Prayer
+        </a>
+
+      </div>
+
+      <p>
+        &copy;
+        <span id="year"></span>
+        Kingdom Heritage Network Global Missions.
+        All rights reserved.
+      </p>
+
+    </div>
+
+  </footer>
+
+
+  <!-- JAVASCRIPT -->
+
+  <script>
+
+    /*
+    ==========================================
+    YEAR
+    ==========================================
+    */
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+
+    /*
+    ==========================================
+    PRAYER FORM
+    ==========================================
+    */
+
+    document
+      .getElementById("prayerForm")
+      .addEventListener(
+        "submit",
+        function(event) {
+
+          event.preventDefault();
+
+
+          const successMessage =
+            document.getElementById(
+              "successMessage"
+            );
+
+
+          successMessage.style.display =
+            "block";
+
+
+          this.reset();
+
+
+          successMessage.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+
+        }
+      );
+
+  </script>
+
+</body>
+  </html>
