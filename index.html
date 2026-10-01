@@ -6,7 +6,7 @@
 
   <title>Kingdom Heritage Network Global Missions</title>
 
-  <meta name="description" content="Kingdom Heritage Network Global Missions — an interdenominational, non-profit and non-political ministry committed to equipping believers, establishing destinies and advancing God's program.">
+  <meta name="description" content="Kingdom Heritage Network Global Missions — an interdenominational, not-for-profit and non-political ministry committed to equipping believers, establishing destinies and advancing God's program.">
 
   <meta name="theme-color" content="#173b8f">
 
@@ -33,53 +33,145 @@
       color: inherit;
     }
 
-    /* HEADER */
+    /* ================= HEADER ================= */
+
     header {
       position: sticky;
       top: 0;
       z-index: 1000;
       background: linear-gradient(135deg, #123b8f, #5b2a86);
       color: white;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 15px rgba(0,0,0,0.22);
     }
 
-    .nav-container {
-      max-width: 1200px;
+    .top-header {
+      max-width: 1250px;
       margin: auto;
-      padding: 12px 20px;
+      padding: 10px 15px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      gap: 15px;
     }
 
     .brand {
+      min-width: 180px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-weight: bold;
-      font-size: 15px;
+      font-size: 13px;
     }
 
     .brand img {
-      width: 58px;
-      height: 58px;
+      width: 50px;
+      height: 50px;
       object-fit: contain;
       background: white;
       border-radius: 50%;
       padding: 3px;
+      flex-shrink: 0;
+    }
+
+    /* TOP HORIZONTAL ICON BAR */
+
+    .icon-bar {
+      display: flex;
+      align-items: stretch;
+      gap: 7px;
+      overflow-x: auto;
+      flex: 1;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .icon-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .top-icon {
+      min-width: 91px;
+      padding: 7px 6px;
+      border-radius: 12px;
+      text-align: center;
+      color: white;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      transition: 0.25s;
+      flex-shrink: 0;
+    }
+
+    .top-icon:hover {
+      background: rgba(255,255,255,0.18);
+      transform: translateY(-2px);
+    }
+
+    .top-icon .icon {
+      width: 35px;
+      height: 35px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: white;
+      font-size: 20px;
+    }
+
+    .top-icon:nth-child(1) .icon {
+      color: #173b8f;
+    }
+
+    .top-icon:nth-child(2) .icon {
+      color: #087f8c;
+    }
+
+    .top-icon:nth-child(3) .icon {
+      color: #7b2cbf;
+    }
+
+    .top-icon:nth-child(4) .icon {
+      color: #b8860b;
+    }
+
+    .top-icon:nth-child(5) .icon {
+      color: #07562f;
+    }
+
+    .top-icon:nth-child(6) .icon {
+      color: #d62828;
+    }
+
+    .top-icon span {
+      display: block;
+      font-size: 10px;
+      font-weight: bold;
+      line-height: 1.2;
+      margin-top: 5px;
+      white-space: normal;
+    }
+
+    /* MENU */
+
+    .menu-btn {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+      padding: 5px;
     }
 
     nav {
+      max-width: 1250px;
+      margin: auto;
+      padding: 7px 15px 10px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      border-top: 1px solid rgba(255,255,255,0.12);
     }
 
     nav a {
       color: white;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       transition: 0.3s;
     }
@@ -88,13 +180,8 @@
       color: #f5c542;
     }
 
-    .menu-btn {
-      display: none;
-      font-size: 28px;
-      cursor: pointer;
-    }
+    /* ================= HERO ================= */
 
-    /* HERO */
     .hero {
       min-height: 85vh;
       display: flex;
@@ -169,7 +256,8 @@
       box-shadow: 0 7px 18px rgba(0,0,0,0.2);
     }
 
-    /* GENERAL */
+    /* ================= GENERAL ================= */
+
     section {
       padding: 75px 20px;
     }
@@ -205,7 +293,8 @@
       color: #666;
     }
 
-    /* ABOUT */
+    /* ================= ABOUT ================= */
+
     .about {
       background: #f7f9ff;
     }
@@ -229,7 +318,8 @@
       margin-bottom: 15px;
     }
 
-    /* OBJECTIVES */
+    /* ================= OBJECTIVES ================= */
+
     .objectives {
       background: white;
     }
@@ -260,7 +350,8 @@
       margin-bottom: 10px;
     }
 
-    /* MINISTRIES */
+    /* ================= MINISTRIES ================= */
+
     .ministries {
       background: linear-gradient(180deg, #f7f9ff, #ffffff);
     }
@@ -290,7 +381,8 @@
       margin-bottom: 10px;
     }
 
-    /* INFORMATION */
+    /* ================= INFORMATION ================= */
+
     .info-section {
       background: #173b8f;
       color: white;
@@ -322,13 +414,14 @@
       margin-bottom: 10px;
     }
 
-    /* CONTACT */
+    /* ================= CONTACT ================= */
+
     .contact {
       background: #fff;
     }
 
     .contact-box {
-      max-width: 850px;
+      max-width: 900px;
       margin: auto;
       background: #f7f9ff;
       padding: 35px;
@@ -341,7 +434,39 @@
       margin-bottom: 15px;
     }
 
-    /* FOOTER */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .contact-item {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    }
+
+    .contact-item .contact-icon {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .contact-item h4 {
+      color: #173b8f;
+      margin-bottom: 5px;
+    }
+
+    .contact-item a {
+      color: #5b2a86;
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    /* ================= FOOTER ================= */
+
     footer {
       background: #111a35;
       color: white;
@@ -381,20 +506,45 @@
       color: #b9bdca;
     }
 
-    /* MOBILE */
+    /* ================= MOBILE ================= */
+
     @media (max-width: 800px) {
 
-      .nav-container {
-        padding: 10px 15px;
+      .top-header {
+        padding: 8px 10px;
+        gap: 8px;
       }
 
       .brand {
-        font-size: 12px;
+        min-width: auto;
+      }
+
+      .brand span {
+        display: none;
       }
 
       .brand img {
-        width: 48px;
-        height: 48px;
+        width: 46px;
+        height: 46px;
+      }
+
+      .icon-bar {
+        gap: 5px;
+      }
+
+      .top-icon {
+        min-width: 78px;
+        padding: 6px 4px;
+      }
+
+      .top-icon .icon {
+        width: 31px;
+        height: 31px;
+        font-size: 17px;
+      }
+
+      .top-icon span {
+        font-size: 9px;
       }
 
       .menu-btn {
@@ -404,13 +554,14 @@
       nav {
         display: none;
         position: absolute;
-        top: 68px;
+        top: 64px;
         left: 0;
         right: 0;
         background: #173b8f;
-        padding: 20px;
+        padding: 15px 20px;
         flex-direction: column;
         align-items: stretch;
+        gap: 0;
       }
 
       nav.active {
@@ -418,7 +569,7 @@
       }
 
       nav a {
-        padding: 10px;
+        padding: 11px;
         border-bottom: 1px solid rgba(255,255,255,0.12);
       }
 
@@ -426,7 +577,8 @@
       .objective-grid,
       .ministry-grid,
       .info-grid,
-      .footer-grid {
+      .footer-grid,
+      .contact-grid {
         grid-template-columns: 1fr;
       }
 
@@ -447,31 +599,70 @@
 
 <body>
 
-<!-- HEADER -->
+<!-- ================= HEADER ================= -->
+
 <header>
-  <div class="nav-container">
+
+  <div class="top-header">
 
     <a href="#home" class="brand">
-      <!-- Replace the src below with your uploaded logo file if needed -->
       <img src="logo.png" alt="Kingdom Heritage Network Global Missions logo">
       <span>Kingdom Heritage Network Global Missions</span>
     </a>
 
+    <!-- TOP HORIZONTAL ICON BAR -->
+
+    <div class="icon-bar">
+
+      <a href="channel.html" class="top-icon">
+        <div class="icon">📺</div>
+        <span>Channel</span>
+      </a>
+
+      <a href="mp3.html" class="top-icon">
+        <div class="icon">🎧</div>
+        <span>MP3 Messages Download</span>
+      </a>
+
+      <a href="publishing.html" class="top-icon">
+        <div class="icon">📝</div>
+        <span>Publishing Page</span>
+      </a>
+
+      <a href="biography.html" class="top-icon">
+        <div class="icon">👤</div>
+        <span>Biography / Founder</span>
+      </a>
+
+      <a href="elibrary.html" class="top-icon">
+        <div class="icon">📖</div>
+        <span>Church E-Library</span>
+      </a>
+
+      <a href="prayer-request.html" class="top-icon">
+        <div class="icon">🙏</div>
+        <span>Prayer Request</span>
+      </a>
+
+    </div>
+
     <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-    <nav id="mainNav">
-      <a href="#home" onclick="closeMenu()">Home</a>
-      <a href="#about" onclick="closeMenu()">About</a>
-      <a href="#objectives" onclick="closeMenu()">Objectives</a>
-      <a href="#ministries" onclick="closeMenu()">Ministries</a>
-      <a href="#contact" onclick="closeMenu()">Contact</a>
-    </nav>
-
   </div>
+
+  <nav id="mainNav">
+    <a href="#home" onclick="closeMenu()">Home</a>
+    <a href="#about" onclick="closeMenu()">About</a>
+    <a href="#objectives" onclick="closeMenu()">Objectives</a>
+    <a href="#ministries" onclick="closeMenu()">Ministries</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+  </nav>
+
 </header>
 
 
-<!-- HERO -->
+<!-- ================= HERO ================= -->
+
 <section class="hero" id="home">
 
   <div class="hero-content">
@@ -500,7 +691,8 @@
 </section>
 
 
-<!-- ABOUT -->
+<!-- ================= ABOUT ================= -->
+
 <section class="about" id="about">
 
   <div class="container">
@@ -574,7 +766,8 @@
 </section>
 
 
-<!-- OBJECTIVES -->
+<!-- ================= OBJECTIVES ================= -->
+
 <section class="objectives" id="objectives">
 
   <div class="container">
@@ -646,7 +839,8 @@
 </section>
 
 
-<!-- MINISTRIES -->
+<!-- ================= MINISTRIES ================= -->
+
 <section class="ministries" id="ministries">
 
   <div class="container">
@@ -666,85 +860,56 @@
     <div class="ministry-grid">
 
       <div class="ministry-card">
-
         <div class="ministry-icon">✝️</div>
-
         <h3>Faith & Salvation</h3>
-
         <p>
           Helping souls become established in the faith after salvation.
         </p>
-
       </div>
 
-
       <div class="ministry-card">
-
         <div class="ministry-icon">🌍</div>
-
         <h3>Missions</h3>
-
         <p>
           Equipping believers with missionary power and supporting
           the advancement of God's program.
         </p>
-
       </div>
 
-
       <div class="ministry-card">
-
         <div class="ministry-icon">🙏</div>
-
         <h3>Intercession</h3>
-
         <p>
           Consistent intercession for territories and the preservation
           of God's heritage over them.
         </p>
-
       </div>
 
-
       <div class="ministry-card">
-
         <div class="ministry-icon">🌱</div>
-
         <h3>Destiny</h3>
-
         <p>
           Establishing great destinies and equipping them for
           the move of God.
         </p>
-
       </div>
 
-
       <div class="ministry-card">
-
         <div class="ministry-icon">📖</div>
-
         <h3>Believer Equipping</h3>
-
         <p>
           Helping believers understand and play their role in
           God's program.
         </p>
-
       </div>
 
-
       <div class="ministry-card">
-
         <div class="ministry-icon">🤝</div>
-
         <h3>Kingdom Service</h3>
-
         <p>
           Supporting activities that contribute to the attainment
           of the ministry's objectives.
         </p>
-
       </div>
 
     </div>
@@ -754,7 +919,8 @@
 </section>
 
 
-<!-- ORGANISATION INFORMATION -->
+<!-- ================= ORGANISATION INFORMATION ================= -->
+
 <section class="info-section">
 
   <div class="container">
@@ -774,33 +940,18 @@
     <div class="info-grid">
 
       <div class="info-card">
-
         <h3>Legal Status</h3>
-
-        <p>
-          Incorporated Trustee
-        </p>
-
+        <p>Incorporated Trustee</p>
       </div>
 
       <div class="info-card">
-
         <h3>Nature</h3>
-
-        <p>
-          Interdenominational Ministry
-        </p>
-
+        <p>Interdenominational Ministry</p>
       </div>
 
       <div class="info-card">
-
         <h3>Registration</h3>
-
-        <p>
-          IT No. 9440936
-        </p>
-
+        <p>IT No. 9440936</p>
       </div>
 
     </div>
@@ -810,7 +961,8 @@
 </section>
 
 
-<!-- CONTACT -->
+<!-- ================= CONTACT ================= -->
+
 <section class="contact" id="contact">
 
   <div class="container">
@@ -832,19 +984,42 @@
       <h3>Registered Address</h3>
 
       <p>
-        HIGH BRIDGE ACADEMY INTERNATIONAL,
-        OPPOSITE YELWA CLUB,
-        BUKURU,
-        PLATEAU STATE,
+        HIGH BRIDGE ACADEMY INTERNATIONAL,<br>
+        OPPOSITE YELWA CLUB,<br>
+        BUKURU,<br>
+        PLATEAU STATE,<br>
         NIGERIA.
       </p>
 
-      <br>
+      <div class="contact-grid">
 
-      <p>
-        For ministry enquiries, please use the official contact
-        channels provided by the ministry.
-      </p>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <h4>Phone</h4>
+          <a href="tel:08130024220">08130024220</a><br>
+          <a href="tel:09048974503">09048974503</a>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <h4>Email</h4>
+          <a href="mailto:kingdomheritageglobal@gmail.com">
+            kingdomheritageglobal@gmail.com
+          </a>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">💬</div>
+          <h4>Prayer 
+                    < class="contact-item">
+          <div class="contact-icon">💬</div>
+          <h4>Prayer Request</h4>
+          <a href="prayer-request.html">
+            Send Prayer Request
+          </a>
+        </div>
+
+      </div>
 
     </div>
 
@@ -853,7 +1028,8 @@
 </section>
 
 
-<!-- FOOTER -->
+<!-- ================= FOOTER ================= -->
+
 <footer>
 
   <div class="footer-grid">
@@ -891,19 +1067,14 @@
 
     <div>
 
-      <h3>Policies</h3>
+      <h3>Ministry Pages</h3>
 
-      <p>
-        <a href="privacy.html">Privacy Policy</a>
-      </p>
-
-      <p>
-        <a href="terms.html">Terms of Use</a>
-      </p>
-
-      <p>
-        <a href="disclaimer.html">Disclaimer</a>
-      </p>
+      <p><a href="channel.html">Channel</a></p>
+      <p><a href="mp3.html">MP3 Messages</a></p>
+      <p><a href="publishing.html">Publishing</a></p>
+      <p><a href="biography.html">Founder Biography</a></p>
+      <p><a href="elibrary.html">Church E-Library</a></p>
+      <p><a href="prayer-request.html">Prayer Request</a></p>
 
     </div>
 
@@ -912,8 +1083,17 @@
 
   <div class="footer-bottom">
 
-    © 2026 Kingdom Heritage Network Global Missions.
-    All rights reserved.
+    <p>
+      © 2026 Kingdom Heritage Network Global Missions.
+      All rights reserved.
+    </p>
+
+    <p style="margin-top:8px;">
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms of Use</a> |
+      <a href="disclaimer.html">Disclaimer</a> |
+      <a href="cookies.html">Cookie Policy</a>
+    </p>
 
   </div>
 
@@ -933,4 +1113,4 @@
 </script>
 
 </body>
-  </html>
+                    </html>
