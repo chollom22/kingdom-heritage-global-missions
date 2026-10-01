@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Learn about the history, founder and trustees of Kingdom Heritage Network Global Missions."
+  >
+
+  <title>
+    Biography | Kingdom Heritage Network Global Missions
+  </title>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f9fc;
+      color: #222;
+      line-height: 1.7;
+    }
+
+
+    header {
+      background: linear-gradient(
+        135deg,
+        #0645a5,
+        #55258f
+      );
+
+      color: white;
+      padding: 15px 20px;
+
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      box-shadow:
+        0 3px 12px rgba(0,0,0,0.15);
+    }
+
+
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 15px;
+    }
+
+
+    .brand {
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+
+      color: white;
+      text-decoration: none;
+    }
+
+
+    .brand img {
+      width: 52px;
+      height: 52px;
+
+      object-fit: contain;
+
+      border-radius: 50%;
+
+      background: white;
+
+      padding: 3px;
+    }
+
+
+    .brand-text h1 {
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+
+    .brand-text p {
+      font-size: 11px;
+      opacity: 0.9;
+      margin-top: 3px;
+    }
+
+
+    nav {
+      display: flex;
+
+      gap: 7px;
+
+      flex-wrap: wrap;
+
+      justify-content: flex-end;
+    }
+
+
+    nav a {
+      color: white;
+
+      text-decoration: none;
+
+      padding: 8px 10px;
+
+      border-radius: 6px;
+
+      font-size: 13px;
+
+      transition: 0.3s;
+    }
+
+
+    nav a:hover,
+    nav a.active {
+      background:
+        rgba(255,255,255,0.18);
+    }
+
+
+    .hero {
+      background:
+        linear-gradient(
+          rgba(5,45,110,0.90),
+          rgba(76,31,130,0.90)
+        );
+
+      min-height: 300px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-align: center;
+
+      color: white;
+
+      padding: 45px 20px;
+    }
+
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+
+    .hero h2 {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+
+    .hero p {
+      font-size: 17px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+
+    main {
+      max-width: 1050px;
+
+      margin: 45px auto;
+
+      padding: 0 20px;
+    }
+
+
+    .section {
+      background: white;
+
+      margin-bottom: 35px;
+
+      padding: 32px;
+
+      border-radius: 12px;
+
+      box-shadow:
+        0 5px 20px rgba(0,0,0,0.07);
+    }
+
+
+    .section-title {
+      text-align: center;
+
+      margin-bottom: 25px;
+    }
+
+
+    .section-title h3 {
+      color: #0645a5;
+
+      font-size: 29px;
+
+      margin-bottom: 8px;
+    }
+
+
+    .section-title p {
+      color: #666;
+
+      font-size: 15px;
+    }
+
+
+    .history-content p {
+      margin-bottom: 17px;
+    }
+
+
+    .history-content p:last-child {
+      margin-bottom: 0;
+    }
+
+
+    .founder {
+      display: grid;
+
+      grid-template-columns:
+        250px 1fr;
+
+      gap: 30px;
+
+      align-items: start;
+    }
+
+
+    .founder-photo {
+      width: 100%;
+
+      min-height: 270px;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0645a5,
+          #55258f
+        );
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      color: white;
+
+      text-align: center;
+
+      font-size: 55px;
+    }
+
+
+    .founder-photo img {
+      width: 100%;
+
+      height: 100%;
+
+      min-height: 270px;
+
+      object-fit: cover;
+
+      border-radius: 12px;
+    }
+
+
+    .founder-info h4 {
+      color: #55258f;
+
+      font-size: 25px;
+
+      margin-bottom: 5px;
+    }
+
+
+    .founder-title {
+      color: #0645a5;
+
+      font-weight: bold;
+
+      margin-bottom: 15px;
+    }
+
+
+    .founder-info p {
+      margin-bottom: 15px;
+    }
+
+
+    .trustees-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 20px;
+    }
+
+
+    .trustee-card {
+      border: 1px solid #e2e6ef;
+
+      border-radius: 10px;
+
+      overflow: hidden;
+
+      background: #fff;
+
+      transition: 0.3s;
+    }
+
+
+    .trustee-card:hover {
+      transform: translateY(-3px);
+
+      box-shadow:
+        0 7px 20px rgba(0,0,0,0.09);
+    }
+
+
+    .trustee-photo {
+      height: 220px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0645a5,
+          #55258f
+        );
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      color: white;
+
+      font-size: 45px;
+    }
+
+
+    .trustee-photo img {
+      width: 100%;
+
+      height: 220px;
+
+      object-fit: cover;
+    }
+
+
+    .trustee-info {
+      padding: 20px;
+    }
+
+
+    .trustee-info h4 {
+      color: #0645a5;
+
+      font-size: 19px;
+
+      margin-bottom: 5px;
+    }
+
+
+    .trustee-role {
+      color: #55258f;
+
+      font-weight: bold;
+
+      font-size: 14px;
+
+      margin-bottom: 10px;
+    }
+
+
+    .trustee-info p {
+      font-size: 14px;
+
+      color: #555;
+    }
+
+
+    .vision-box {
+      background:
+        linear-gradient(
+          135deg,
+          #0645a5,
+          #55258f
+        );
+
+      color: white;
+
+      padding: 30px;
+
+      border-radius: 12px;
+
+      text-align: center;
+    }
+
+
+    .vision-box h3 {
+      font-size: 26px;
+
+      margin-bottom: 12px;
+    }
+
+
+    .vision-box p {
+      max-width: 750px;
+
+      margin: auto;
+
+      font-size: 16px;
+    }
+
+
+    footer {
+      background: #10172a;
+
+      color: white;
+
+      margin-top: 50px;
+
+      padding: 35px 20px;
+    }
+
+
+    .footer-inner {
+      max-width: 1100px;
+
+      margin: auto;
+
+      text-align: center;
+    }
+
+
+    .footer-links {
+      display: flex;
+
+      justify-content: center;
+
+      flex-wrap: wrap;
+
+      gap: 15px;
+
+      margin-bottom: 18px;
+    }
+
+
+    .footer-links a {
+      color: #ddd;
+
+      text-decoration: none;
+
+      font-size: 14px;
+    }
+
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+
+    footer p {
+      font-size: 13px;
+
+      color: #aaa;
+    }
+
+
+    @media (max-width: 800px) {
+
+      .header-inner {
+        flex-direction: column;
+
+        text-align: center;
+      }
+
+
+      nav {
+        justify-content: center;
+      }
+
+
+      .founder {
+        grid-template-columns: 1fr;
+      }
+
+
+      .founder-photo {
+        max-width: 300px;
+
+        margin: auto;
+      }
+
+
+      .trustees-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+    }
+
+
+    @media (max-width: 550px) {
+
+      .hero h2 {
+        font-size: 30px;
+      }
+
+
+      .hero p {
+        font-size: 15px;
+      }
+
+
+      .section {
+        padding: 22px 18px;
+      }
+
+
+      .trustees-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- HEADER -->
+
+  <header>
+
+    <div class="header-inner">
+
+
+      <a
+        href="index.html"
+        class="brand"
+      >
+
+        <img
+          src="logo.png"
+          alt="Kingdom Heritage Network Global Missions Logo"
+        >
+
+
+        <div class="brand-text">
+
+          <h1>
+            Kingdom Heritage Network Global Missions
+          </h1>
+
+          <p>
+            Accurate dispensation of the word, true worship and intercession.
+          </p>
+
+        </div>
+
+      </a>
+
+
+      <nav>
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="channel.html">
+          Channel
+        </a>
+
+        <a href="mp3.html">
+          Audio
+        </a>
+
+        <a href="publishing.html">
+          Publications
+        </a>
+
+        <a href="elibrary.html">
+          E-Library
+        </a>
+
+        <a href="prayer-request.html">
+          Prayer
+        </a>
+
+        <a
+          href="biography.html"
+          class="active"
+        >
+          Biography
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <h2>
+        Our Biography
+      </h2>
+
+      <p>
+        Discover the history, leadership and people
+        behind Kingdom Heritage Network Global Missions.
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <main>
+
+
+    <!-- CHURCH HISTORY -->
+
+    <section class="section">
+
+      <div class="section-title">
+
+        <h3>
+          Church History
+        </h3>
+
+        <p>
+          The journey and development of the ministry.
+        </p>
+
+      </div>
+
+
+      <div class="history-content">
+
+        <p>
+          <strong>
+            Kingdom Heritage Network Global Missions
+          </strong>
+          is a Christian ministry established to advance
+          the Gospel of Jesus Christ through the accurate
+          teaching of God's Word, true worship, prayer,
+          intercession and Christian service.
+        </p>
+
+
+        <p>
+          The ministry was founded with a vision to help
+          believers understand the Scriptures, grow in
+          their relationship with God and faithfully
+          communicate the message of the Gospel.
+        </p>
+
+
+        <p>
+          Through teaching, worship, prayer meetings,
+          evangelism, publications, media broadcasts and
+          other ministry activities, Kingdom Heritage
+          Network Global Missions seeks to serve the
+          Church and make the Word of God accessible
+          to people in different communities and nations.
+        </p>
+
+
+        <!-- REPLACE THIS TEXT -->
+
+        <p>
+          <strong>
+            Ministry History:
+          </strong>
+          Replace this section with the official history
+          of the ministry, including the year it was
+          established, the circumstances surrounding its
+          establishment, major milestones, locations,
+          ministry activities and other important
+          historical information.
+        </p>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- FOUNDER -->
+
+    <section class="section">
+
+      <div class="section-title">
+
+        <h3>
+          The Founder
+        </h3>
+
+        <p>
+          Information about the founder of the ministry.
+        </p>
+
+      </div>
+
+
+      <div class="founder">
+
+
+        <div class="founder-photo">
+
+          <!--
+          Replace the placeholder below with:
+
+          <img
+            src="founder.jpg"
+            alt="Founder of Kingdom Heritage Network Global Missions"
+          >
+          -->
+
+          👤
+
+        </div>
+
+
+        <div class="founder-info">
+
+          <h4>
+            Founder Name
+          </h4>
+
+          <div class="founder-title">
+            Founder / General Overseer
+          </div>
+
+
+          <p>
+            This section contains the biography of the
+            founder of Kingdom Heritage Network Global
+            Missions.
+          </p>
+
+
+          <p>
+            Add the founder's educational background,
+            Christian journey, ministry calling,
+            leadership experience, missionary work,
+            publications, teachings and other relevant
+            information here.
+          </p>
+
+
+          <p>
+            Add any other official information that the
+            ministry would like visitors to know about
+            the founder.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- TRUSTEES -->
+
+    <section class="section">
+
+      <div class="section-title">
+
+        <h3>
+          Members of the Board of Trustees
+        </h3>
+
+        <p>
+          Meet the members of the Board of Trustees
+          responsible for providing governance and
+          oversight for the ministry.
+        </p>
+
+      </div>
+
+
+      <div class="trustees-grid">
+
+
+        <!-- TRUSTEE 1 -->
+
+        <div class="trustee-card">
+
+          <div class="trustee-photo">
+
+            <!--
+            Replace with:
+
+            <img
+              src="trustee-1.jpg"
+              alt="Trustee Name"
+            >
+            -->
+
+            👤
+
+          </div>
+
+
+          <div class="trustee-info">
+
+            <h4>
+              Trustee Name
+            </h4>
+
+            <div class="trustee-role">
+              Chairman
+            </div>
+
+            <p>
+              Add the official biography and relevant
+              information about this trustee here.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- TRUSTEE 2 -->
+
+        <div class="trustee-card">
+
+          <div class="trustee-photo">
+
+            <!--
+            Replace with:
+
+            <img
+              src="trustee-2.jpg"
+              alt="Trustee Name"
+            >
+            -->
+
+            👤
+
+          </div>
+
+
+          <div class="trustee-info">
+
+            <h4>
+              Trustee Name
+            </h4>
+
+            <div class="trustee-role">
+              Secretary
+            </div>
+
+            <p>
+              Add the official biography and relevant
+              information about this trustee here.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- TRUSTEE 3 -->
+
+        <div class="trustee-card">
+
+          <div class="trustee-photo">
+
+            <!--
+            Replace with:
+
+            <img
+              src="trustee-3.jpg"
+              alt="Trustee Name"
+            >
+            -->
+
+            👤
+
+          </div>
+
+
+          <div class="trustee-info">
+
+            <h4>
+              Trustee Name
+            </h4>
+
+            <div class="trustee-role">
+              Member
+            </div>
+
+            <p>
+              Add the official biography and relevant
+              information about this trustee here.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- TRUSTEE 4 -->
+
+        <div class="trustee-card">
+
+          <div class="trustee-photo">
+
+            <!--
+            Replace with:
+
+            <img
+              src="trustee-4.jpg"
+              alt="Trustee Name"
+            >
+            -->
+
+            👤
+
+          </div>
+
+
+          <div class="trustee-info">
+
+            <h4>
+              Trustee Name
+            </h4>
+
+            <div class="trustee-role">
+              Member
+            </div>
+
+            <p>
+              Add the official biography and relevant
+              information about this trustee here.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- TRUSTEE 5 -->
+
+        <div class="trustee-card">
+
+          <div class="trustee-photo">
+
+            <!--
+            Replace with:
+
+            <img
+              src="trustee-5.jpg"
+              alt="Trustee Name"
+            >
+            -->
+
+            👤
+
+          </div>
+
+
+          <div class="trustee-info">
+
+            <h4>
+              Trustee Name
+            </h4>
+
+            <div class="trustee-role">
+              Member
+            </div>
+
+            <p>
+              Add the official biography and relevant
+              information about this trustee here.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- TRUSTEE 6 -->
+
+        <div class="trustee-card">
+
+          <div class="trustee-photo">
+
+            <!--
+            Replace with:
+
+            <img
+              src="trustee-6.jpg"
+              alt="Trustee Name"
+            >
+            -->
+
+            👤
+
+          </div>
+
+
+          <div class="trustee-info">
+
+            <h4>
+              Trustee Name
+            </h4>
+
+            <div class="trustee-role">
+              Member
+            </div>
+
+            <p>
+              Add the official biography and relevant
+              information about this trustee here.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- VISION -->
+
+    <section class="section">
+
+      <div class="vision-box">
+
+        <h3>
+          Our Ministry Focus
+        </h3>
+
+        <p>
+          Accurate dispensation of the Word, true worship
+          and intercession, with a commitment to making
+          Christ known and serving God's people.
+        </p>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="footer-inner">
+
+
+      <div class="footer-links">
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="channel.html">
+          Channel
+        </a>
+
+        <a href="mp3.html">
+          Audio
+        </a>
+
+        <a href="publishing.html">
+          Publications
+        </a>
+
+        <a href="elibrary.html">
+          E-Library
+        </a>
+
+        <a href="prayer-request.html">
+          Prayer
+        </a>
+
+        <a href="biography.html">
+          Biography
+        </a>
+
+      </div>
+
+
+      <p>
+
+        &copy;
+
+        <span id="year"></span>
+
+        Kingdom Heritage Network Global Missions.
+
+        All rights reserved.
+
+      </p>
+
+    </div>
+
+  </footer>
+
+
+
+  <script>
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+  </script>
+
+
+</body>
+  </html>
