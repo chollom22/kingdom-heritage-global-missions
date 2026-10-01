@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Kingdom Heritage Network Global Missions E-Library. Access church materials, PDF documents, slide presentations, Bible study resources and other Christian online libraries."
+  >
+
+  <meta
+    name="keywords"
+    content="Kingdom Heritage Network Global Missions, E-Library, church materials, Christian library, Bible study, PDF, PowerPoint, Christian resources"
+  >
+
+  <meta
+    name="author"
+    content="Kingdom Heritage Network Global Missions"
+  >
+
+  <title>
+    E-Library | Kingdom Heritage Network Global Missions
+  </title>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    body {
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f7f9ff,
+          #ffffff
+        );
+
+      color: #222;
+
+      line-height: 1.6;
+    }
+
+
+    /* =================================
+       HEADER
+    ================================= */
+
+    header {
+
+      background:
+        linear-gradient(
+          135deg,
+          #082567,
+          #43206b
+        );
+
+      color: white;
+
+      padding: 17px 15px;
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 1000;
+
+      box-shadow:
+        0 3px 15px
+        rgba(0,0,0,0.18);
+    }
+
+
+    .header-container {
+
+      max-width: 1150px;
+
+      margin: auto;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 15px;
+    }
+
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+    }
+
+
+    .brand img {
+
+      width: 55px;
+
+      height: 55px;
+
+      object-fit: contain;
+
+      border-radius: 50%;
+
+      background: white;
+
+      padding: 3px;
+    }
+
+
+    .brand-text h1 {
+
+      font-size: 18px;
+
+      line-height: 1.25;
+    }
+
+
+    .brand-text p {
+
+      font-size: 12px;
+
+      opacity: 0.9;
+
+      margin-top: 3px;
+    }
+
+
+    /* =================================
+       NAVIGATION
+    ================================= */
+
+    nav {
+
+      display: flex;
+
+      gap: 7px;
+
+      flex-wrap: wrap;
+
+      justify-content: flex-end;
+    }
+
+
+    nav a {
+
+      color: white;
+
+      text-decoration: none;
+
+      padding: 8px 11px;
+
+      border-radius: 7px;
+
+      font-size: 13px;
+
+      transition: 0.3s;
+    }
+
+
+    nav a:hover {
+
+      background:
+        rgba(255,255,255,0.17);
+    }
+
+
+    nav a.active {
+
+      background: white;
+
+      color: #38205f;
+
+      font-weight: bold;
+    }
+
+
+    /* =================================
+       HERO
+    ================================= */
+
+    .hero {
+
+      background:
+        linear-gradient(
+          135deg,
+          #0a327d,
+          #5b2a86
+        );
+
+      color: white;
+
+      text-align: center;
+
+      padding:
+        60px 20px
+        50px;
+    }
+
+
+    .hero-icon {
+
+      font-size: 52px;
+
+      margin-bottom: 12px;
+    }
+
+
+    .hero h2 {
+
+      font-size: 34px;
+
+      margin-bottom: 12px;
+    }
+
+
+    .hero p {
+
+      max-width: 760px;
+
+      margin: auto;
+
+      font-size: 16px;
+
+      opacity: 0.95;
+    }
+
+
+    /* =================================
+       MAIN
+    ================================= */
+
+    main {
+
+      max-width: 1150px;
+
+      margin: auto;
+
+      padding:
+        45px 18px
+        70px;
+    }
+
+
+    .intro {
+
+      text-align: center;
+
+      max-width: 850px;
+
+      margin:
+        0 auto
+        42px;
+    }
+
+
+    .intro h2 {
+
+      color: #38205f;
+
+      font-size: 28px;
+
+      margin-bottom: 10px;
+    }
+
+
+    .intro p {
+
+      color: #555;
+
+      font-size: 15px;
+    }
+
+
+    /* =================================
+       TWO MAIN LIBRARY SPACES
+    ================================= */
+
+    .library-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0, 1fr)
+        );
+
+      gap: 28px;
+    }
+
+
+    .library-card {
+
+      background: white;
+
+      border-radius: 16px;
+
+      padding: 32px 25px;
+
+      border:
+        1px solid #e5e5e5;
+
+      box-shadow:
+        0 7px 25px
+        rgba(30,30,80,0.08);
+
+      transition:
+        transform 0.25s,
+        box-shadow 0.25s;
+    }
+
+
+    .library-card:hover {
+
+      transform:
+        translateY(-5px);
+
+      box-shadow:
+        0 12px 32px
+        rgba(30,30,80,0.13);
+    }
+
+
+    .library-icon {
+
+      width: 72px;
+
+      height: 72px;
+
+      border-radius: 50%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 37px;
+
+      margin-bottom: 18px;
+
+      background:
+        #eee9f8;
+    }
+
+
+    .library-card h3 {
+
+      color: #38205f;
+
+      font-size: 23px;
+
+      margin-bottom: 10px;
+    }
+
+
+    .library-card > p {
+
+      color: #5c5c5c;
+
+      font-size: 14px;
+
+      margin-bottom: 22px;
+    }
+
+
+    /* =================================
+       CHURCH MATERIALS
+    ================================= */
+
+    .material-list {
+
+      display: grid;
+
+      gap: 11px;
+    }
+
+
+    .material-item {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding: 13px;
+
+      border-radius: 9px;
+
+      background: #f7f7fa;
+
+      border:
+        1px solid #eeeeee;
+
+      text-decoration: none;
+
+      color: #333;
+
+      transition: 0.25s;
+    }
+
+
+    .material-item:hover {
+
+      background: #eeeafa;
+
+      border-color: #dcd3ee;
+    }
+
+
+    .material-icon {
+
+      width: 40px;
+
+      height: 40px;
+
+      border-radius: 8px;
+
+      background: #38205f;
+
+      color: white;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 20px;
+
+      flex-shrink: 0;
+    }
+
+
+    .material-info {
+
+      flex: 1;
+    }
+
+
+    .material-info strong {
+
+      display: block;
+
+      font-size: 14px;
+
+      margin-bottom: 2px;
+    }
+
+
+    .material-info span {
+
+      display: block;
+
+      font-size: 11px;
+
+      color: #777;
+    }
+
+
+    .arrow {
+
+      font-size: 18px;
+
+      color: #38205f;
+    }
+
+
+    /* =================================
+       ONLINE LIBRARIES
+    ================================= */
+
+    .online-library-list {
+
+      display: grid;
+
+      gap: 12px;
+    }
+
+
+    .online-library {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 13px;
+
+      padding: 15px;
+
+      background: #f7f7fa;
+
+      border:
+        1px solid #eeeeee;
+
+      border-radius: 10px;
+
+      text-decoration: none;
+
+      color: #222;
+
+      transition: 0.25s;
+    }
+
+
+    .online-library:hover {
+
+      background: #eeeafa;
+
+      transform:
+        translateX(3px);
+    }
+
+
+    .online-icon {
+
+      width: 43px;
+
+      height: 43px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background: #0a327d;
+
+      color: white;
+
+      border-radius: 9px;
+
+      font-size: 20px;
+
+      flex-shrink: 0;
+    }
+
+
+    .online-info {
+
+      flex: 1;
+    }
+
+
+    .online-info strong {
+
+      display: block;
+
+      font-size: 14px;
+
+      margin-bottom: 2px;
+    }
+
+
+    .online-info span {
+
+      font-size: 11px;
+
+      color: #777;
+    }
+
+
+    /* =================================
+       INFORMATION BOX
+    ================================= */
+
+    .notice {
+
+      margin-top: 35px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f0f3ff,
+          #f8f1ff
+        );
+
+      border:
+        1px solid #e2def0;
+
+      border-radius: 14px;
+
+      padding: 25px;
+
+      text-align: center;
+    }
+
+
+    .notice h3 {
+
+      color: #38205f;
+
+      margin-bottom: 7px;
+    }
+
+
+    .notice p {
+
+      color: #555;
+
+      font-size: 13px;
+
+      max-width: 800px;
+
+      margin: auto;
+    }
+
+
+    /* =================================
+       FOOTER
+    ================================= */
+
+    footer {
+
+      background: #11182e;
+
+      color: white;
+
+      text-align: center;
+
+      padding: 35px 18px;
+    }
+
+
+    footer h3 {
+
+      font-size: 18px;
+
+      margin-bottom: 8px;
+    }
+
+
+    footer p {
+
+      color: #d7d9e4;
+
+      font-size: 13px;
+
+      margin-bottom: 7px;
+    }
+
+
+    .footer-links {
+
+      margin-top: 15px;
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 15px;
+
+      flex-wrap: wrap;
+    }
+
+
+    .footer-links a {
+
+      color: white;
+
+      text-decoration: none;
+
+      font-size: 13px;
+    }
+
+
+    .footer-links a:hover {
+
+      text-decoration: underline;
+    }
+
+
+    /* =================================
+       MOBILE
+    ================================= */
+
+    @media (max-width: 750px) {
+
+      .header-container {
+
+        flex-direction: column;
+
+        text-align: center;
+      }
+
+
+      .brand {
+
+        justify-content: center;
+      }
+
+
+      nav {
+
+        justify-content: center;
+      }
+
+
+      .hero {
+
+        padding:
+          45px 18px
+          40px;
+      }
+
+
+      .hero h2 {
+
+        font-size: 28px;
+      }
+
+
+      .hero p {
+
+        font-size: 14px;
+      }
+
+
+      main {
+
+        padding:
+          35px 14px
+          55px;
+      }
+
+
+      .library-grid {
+
+        grid-template-columns: 1fr;
+      }
+
+
+      .library-card {
+
+        padding: 26px 20px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- =================================
+       HEADER
+  ================================= -->
+
+  <header>
+
+    <div class="header-container">
+
+
+      <div class="brand">
+
+        <img
+          src="logo.png"
+          alt="Kingdom Heritage Network Global Missions Logo"
+        >
+
+        <div class="brand-text">
+
+          <h1>
+            Kingdom Heritage Network Global Missions
+          </h1>
+
+          <p>
+            Accurate dispensation of the word, true worship and intercession
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <nav>
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="channel.html">
+          Channel
+        </a>
+
+        <a href="mp3.html">
+          Audio
+        </a>
+
+        <a href="publishing.html">
+          Publications
+        </a>
+
+        <a
+          href="elibrary.html"
+          class="active"
+        >
+          E-Library
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =================================
+       HERO
+  ================================= -->
+
+  <section class="hero">
+
+    <div class="hero-icon">
+      📚
+    </div>
+
+
+    <h2>
+      E-Library
+    </h2>
+
+
+    <p>
+      Access church materials and discover useful Christian
+      online libraries for Bible study, spiritual growth and
+      Christian education.
+    </p>
+
+  </section>
+
+
+
+  <!-- =================================
+       MAIN
+  ================================= -->
+
+  <main>
+
+
+    <section class="intro">
+
+      <h2>
+        Kingdom Heritage E-Library
+      </h2>
+
+
+      <p>
+        Our E-Library provides access to ministry materials and
+        selected Christian online resources. Church materials
+        published by the ministry will be added here for easy access.
+      </p>
+
+    </section>
+
+
+
+    <!-- =================================
+         TWO LIBRARY SPACES
+    ================================= -->
+
+    <section class="library-grid">
+
+
+      <!-- =================================
+           SPACE 1
+      ================================= -->
+
+      <div class="library-card">
+
+        <div class="library-icon">
+          📂
+        </div>
+
+
+        <h3>
+          Church Materials
+        </h3>
+
+
+        <p>
+          Access church and ministry materials including PDF
+          documents, Bible study materials, PowerPoint slides,
+          teaching notes and other downloadable resources.
+        </p>
+
+
+        <div
+          class="material-list"
+          id="churchMaterials"
+        ></div>
+
+      </div>
+
+
+
+      <!-- =================================
+           SPACE 2
+      ================================= -->
+
+      <div class="library-card">
+
+        <div class="library-icon">
+          🌐
+        </div>
+
+
+        <h3>
+          Other Christian Online Libraries
+        </h3>
+
+
+        <p>
+          Explore selected external Christian libraries and
+          online resources that can support Bible study,
+          Christian education and spiritual learning.
+        </p>
+
+
+        <div
+          class="online-library-list"
+          id="onlineLibraries"
+        ></div>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         NOTICE
+    ================================= -->
+
+    <section class="notice">
+
+      <h3>
+        📖 Growing the E-Library
+      </h3>
+
+
+      <p>
+        More church materials, teaching resources, study documents
+        and useful Christian library links will be added as the
+        ministry develops this section.
+      </p>
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- =================================
+       FOOTER
+  ================================= -->
+
+  <footer>
+
+    <h3>
+      Kingdom Heritage Network Global Missions
+    </h3>
+
+
+    <p>
+      Accurate dispensation of the word,
+      true worship and intercession.
+    </p>
+
+
+    <p>
+      ©
+      <span id="year"></span>
+      Kingdom Heritage Network Global Missions.
+      All rights reserved.
+    </p>
+
+
+    <div class="footer-links">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="channel.html">
+        Channel
+      </a>
+
+      <a href="mp3.html">
+        Audio
+      </a>
+
+      <a href="publishing.html">
+        Publications
+      </a>
+
+      <a href="elibrary.html">
+        E-Library
+      </a>
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- =================================
+       JAVASCRIPT
+  ================================= -->
+
+  <script>
+
+
+    /*
+    ==========================================
+    CHURCH MATERIALS
+
+    These are temporary examples.
+
+    Later these can be loaded automatically
+    from Firebase.
+    ==========================================
+    */
+
+
+    const churchMaterials = [
+
+      {
+        title:
+          "Bible Study Materials",
+
+        type:
+          "PDF",
+
+        icon:
+          "📄",
+
+        url:
+          "materials/bible-study-materials.pdf"
+      },
+
+
+      {
+        title:
+          "Teaching Presentation",
+
+        type:
+          "PowerPoint / Slides",
+
+        icon:
+          "📊",
+
+        url:
+          "materials/teaching-presentation.pptx"
+      },
+
+
+      {
+        title:
+          "Prayer and Intercession Guide",
+
+        type:
+          "PDF",
+
+        icon:
+          "🙏",
+
+        url:
+          "materials/prayer-intercession-guide.pdf"
+      },
+
+
+      {
+        title:
+          "Church Teaching Notes",
+
+        type:
+          "PDF",
+
+        icon:
+          "📖",
+
+        url:
+          "materials/church-teaching-notes.pdf"
+      }
+
+    ];
+
+
+
+    /*
+    ==========================================
+    OTHER CHRISTIAN ONLINE LIBRARIES
+
+    Add verified websites here.
+
+    ==========================================
+    */
+
+
+    const onlineLibraries = [
+
+      {
+        name:
+          "Bible Study Resources",
+
+        description:
+          "Online Christian and Bible study resources.",
+
+        icon:
+          "📖",
+
+        url:
+          "#"
+      },
+
+
+      {
+        name:
+          "Christian Digital Library",
+
+        description:
+          "Christian books, teaching and study resources.",
+
+        icon:
+          "📚",
+
+        url:
+          "#"
+      },
+
+
+      {
+        name:
+          "Bible Research Library",
+
+        description:
+          "Bible reference and research materials.",
+
+        icon:
+          "🔎",
+
+        url:
+          "#"
+      }
+
+    ];
+
+
+
+    /*
+    ==========================================
+    DISPLAY CHURCH MATERIALS
+    ==========================================
+    */
+
+    function displayChurchMaterials() {
+
+      const container =
+        document.getElementById(
+          "churchMaterials"
+        );
+
+
+      container.innerHTML = "";
+
+
+      churchMaterials.forEach(
+        material => {
+
+          const item =
+            document.createElement(
+              "a"
+            );
+
+
+          item.className =
+            "material-item";
+
+
+          item.href =
+            material.url;
+
+
+          item.target =
+            "_blank";
+
+
+          item.rel =
+            "noopener";
+
+
+          item.innerHTML = `
+
+            <div class="material-icon">
+
+              ${material.icon}
+
+            </div>
+
+
+            <div class="material-info">
+
+              <strong>
+
+                ${escapeHTML(
+                  material.title
+                )}
+
+              </strong>
+
+              <span>
+
+                ${escapeHTML(
+                  material.type
+                )}
+
+              </span>
+
+            </div>
+
+
+            <div class="arrow">
+              →
+            </div>
+
+          `;
+
+
+          container.appendChild(
+            item
+          );
+
+        }
+      );
+
+    }
+
+
+
+    /*
+    ==========================================
+    DISPLAY ONLINE LIBRARIES
+    ==========================================
+    */
+
+    function displayOnlineLibraries() {
+
+      const container =
+        document.getElementById(
+          "onlineLibraries"
+        );
+
+
+      container.innerHTML = "";
+
+
+      onlineLibraries.forEach(
+        library => {
+
+          const item =
+            document.createElement(
+              "a"
+            );
+
+
+          item.className =
+            "online-library";
+
+
+          item.href =
+            library.url;
+
+
+          item.target =
+            "_blank";
+
+
+          item.rel =
+            "noopener";
+
+
+          item.innerHTML = `
+
+            <div class="online-icon">
+
+              ${library.icon}
+
+            </div>
+
+
+            <div class="online-info">
+
+              <strong>
+
+                ${escapeHTML(
+                  library.name
+                )}
+
+              </strong>
+
+
+              <span>
+
+                ${escapeHTML(
+                  library.description
+                )}
+
+              </span>
+
+            </div>
+
+
+            <div class="arrow">
+              →
+            </div>
+
+          `;
+
+
+          container.appendChild(
+            item
+          );
+
+        }
+      );
+
+    }
+
+
+
+    /*
+    ==========================================
+    SECURITY HELPER
+    ==========================================
+    */
+
+    function escapeHTML(value) {
+
+      return String(value)
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+
+    /*
+    ==========================================
+    YEAR
+    ==========================================
+    */
+
+    document.getElementById(
+      "year"
+    ).textContent =
+      new Date().getFullYear();
+
+
+
+    /*
+    ==========================================
+    INITIAL LOAD
+    ==========================================
+    */
+
+    displayChurchMaterials();
+
+    displayOnlineLibraries();
+
+
+  </script>
+
+
+</body>
+  </html>
