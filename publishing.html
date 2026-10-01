@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Official publications of Kingdom Heritage Network Global Missions, including teachings, articles, devotionals, ministry materials and other publications."
+  >
+
+  <meta
+    name="keywords"
+    content="Kingdom Heritage Network Global Missions, publications, Christian publications, ministry teachings, articles, devotionals, Bible teaching"
+  >
+
+  <meta name="author" content="Kingdom Heritage Network Global Missions">
+
+  <title>
+    Publications | Kingdom Heritage Network Global Missions
+  </title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f8f9ff,
+          #ffffff
+        );
+
+      color: #202020;
+
+      line-height: 1.6;
+    }
+
+
+    /* ==============================
+       HEADER
+    ============================== */
+
+    header {
+
+      background:
+        linear-gradient(
+          135deg,
+          #082567,
+          #43206b
+        );
+
+      color: white;
+
+      padding: 18px 15px;
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 1000;
+
+      box-shadow:
+        0 3px 15px
+        rgba(0,0,0,0.18);
+    }
+
+
+    .header-container {
+
+      max-width: 1150px;
+
+      margin: auto;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 15px;
+    }
+
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+    }
+
+
+    .brand img {
+
+      width: 55px;
+
+      height: 55px;
+
+      object-fit: contain;
+
+      border-radius: 50%;
+
+      background: white;
+
+      padding: 3px;
+    }
+
+
+    .brand-text h1 {
+
+      font-size: 18px;
+
+      line-height: 1.2;
+    }
+
+
+    .brand-text p {
+
+      font-size: 12px;
+
+      opacity: 0.9;
+
+      margin-top: 3px;
+    }
+
+
+    /* ==============================
+       NAVIGATION
+    ============================== */
+
+    nav {
+
+      display: flex;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+
+      justify-content: flex-end;
+    }
+
+
+    nav a {
+
+      color: white;
+
+      text-decoration: none;
+
+      padding: 8px 11px;
+
+      border-radius: 7px;
+
+      font-size: 13px;
+
+      transition: 0.3s;
+    }
+
+
+    nav a:hover {
+
+      background:
+        rgba(255,255,255,0.18);
+    }
+
+
+    nav a.active {
+
+      background: white;
+
+      color: #38205f;
+
+      font-weight: bold;
+    }
+
+
+    /* ==============================
+       HERO
+    ============================== */
+
+    .hero {
+
+      background:
+        linear-gradient(
+          135deg,
+          #0a327d,
+          #5b2a86
+        );
+
+      color: white;
+
+      padding:
+        65px 20px
+        55px;
+
+      text-align: center;
+    }
+
+
+    .hero-icon {
+
+      font-size: 50px;
+
+      margin-bottom: 12px;
+    }
+
+
+    .hero h2 {
+
+      font-size: 34px;
+
+      margin-bottom: 12px;
+    }
+
+
+    .hero p {
+
+      max-width: 750px;
+
+      margin: auto;
+
+      font-size: 16px;
+
+      opacity: 0.95;
+    }
+
+
+    /* ==============================
+       MAIN
+    ============================== */
+
+    main {
+
+      max-width: 1150px;
+
+      margin: auto;
+
+      padding:
+        45px 18px
+        70px;
+    }
+
+
+    .intro {
+
+      text-align: center;
+
+      max-width: 850px;
+
+      margin:
+        0 auto
+        40px;
+    }
+
+
+    .intro h2 {
+
+      color: #38205f;
+
+      margin-bottom: 10px;
+
+      font-size: 27px;
+    }
+
+
+    .intro p {
+
+      color: #555;
+
+      font-size: 15px;
+    }
+
+
+    /* ==============================
+       SEARCH
+    ============================== */
+
+    .tools {
+
+      display: flex;
+
+      gap: 12px;
+
+      flex-wrap: wrap;
+
+      margin-bottom: 30px;
+
+      justify-content: center;
+    }
+
+
+    .search-box {
+
+      flex: 1;
+
+      min-width: 240px;
+
+      max-width: 550px;
+    }
+
+
+    .search-box input {
+
+      width: 100%;
+
+      padding: 13px 15px;
+
+      border:
+        1px solid #d6d6d6;
+
+      border-radius: 9px;
+
+      font-size: 15px;
+
+      outline: none;
+
+      background: white;
+    }
+
+
+    .search-box input:focus {
+
+      border-color: #43206b;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(67,32,107,0.08);
+    }
+
+
+    .category-filter select {
+
+      padding: 13px 14px;
+
+      border:
+        1px solid #d6d6d6;
+
+      border-radius: 9px;
+
+      background: white;
+
+      font-size: 14px;
+
+      min-width: 170px;
+    }
+
+
+    /* ==============================
+       PUBLICATION GRID
+    ============================== */
+
+    .publication-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(280px, 1fr)
+        );
+
+      gap: 24px;
+    }
+
+
+    .publication-card {
+
+      background: white;
+
+      border-radius: 13px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 5px 22px
+        rgba(30,30,80,0.08);
+
+      border:
+        1px solid #eeeeee;
+
+      transition:
+        transform 0.25s,
+        box-shadow 0.25s;
+    }
+
+
+    .publication-card:hover {
+
+      transform:
+        translateY(-4px);
+
+      box-shadow:
+        0 10px 30px
+        rgba(30,30,80,0.13);
+    }
+
+
+    .publication-cover {
+
+      height: 190px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0a327d,
+          #6b318e
+        );
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      color: white;
+
+      font-size: 55px;
+
+      overflow: hidden;
+    }
+
+
+    .publication-cover img {
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+
+    .publication-content {
+
+      padding: 21px;
+    }
+
+
+    .publication-category {
+
+      display: inline-block;
+
+      background: #eee8f7;
+
+      color: #4a2370;
+
+      padding: 5px 9px;
+
+      border-radius: 20px;
+
+      font-size: 11px;
+
+      font-weight: bold;
+
+      margin-bottom: 10px;
+
+      text-transform: uppercase;
+    }
+
+
+    .publication-content h3 {
+
+      color: #222;
+
+      font-size: 20px;
+
+      line-height: 1.3;
+
+      margin-bottom: 8px;
+    }
+
+
+    .publication-meta {
+
+      color: #777;
+
+      font-size: 12px;
+
+      margin-bottom: 12px;
+    }
+
+
+    .publication-description {
+
+      color: #555;
+
+      font-size: 14px;
+
+      margin-bottom: 18px;
+    }
+
+
+    .publication-actions {
+
+      display: flex;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+    }
+
+
+    .btn {
+
+      display: inline-block;
+
+      text-decoration: none;
+
+      padding: 9px 13px;
+
+      border-radius: 7px;
+
+      font-size: 13px;
+
+      font-weight: bold;
+
+      border: none;
+
+      cursor: pointer;
+
+      transition: 0.3s;
+    }
+
+
+    .btn-read {
+
+      background: #38205f;
+
+      color: white;
+    }
+
+
+    .btn-read:hover {
+
+      background: #25143f;
+    }
+
+
+    .btn-download {
+
+      background: #0b5d39;
+
+      color: white;
+    }
+
+
+    .btn-download:hover {
+
+      background: #07482c;
+    }
+
+
+    .btn-share {
+
+      background: #edf1fa;
+
+      color: #173c77;
+    }
+
+
+    .btn-share:hover {
+
+      background: #dce4f6;
+    }
+
+
+    /* ==============================
+       EMPTY STATE
+    ============================== */
+
+    .empty-state {
+
+      display: none;
+
+      text-align: center;
+
+      padding: 55px 20px;
+
+      color: #777;
+    }
+
+
+    .empty-state .icon {
+
+      font-size: 45px;
+
+      margin-bottom: 10px;
+    }
+
+
+    /* ==============================
+       FEATURED PUBLICATION
+    ============================== */
+
+    .featured {
+
+      margin-top: 55px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f0f3ff,
+          #f8f1ff
+        );
+
+      border-radius: 15px;
+
+      padding: 30px;
+
+      border:
+        1px solid #e4e1ef;
+    }
+
+
+    .featured h2 {
+
+      color: #38205f;
+
+      margin-bottom: 10px;
+    }
+
+
+    .featured p {
+
+      color: #555;
+
+      margin-bottom: 18px;
+
+      max-width: 800px;
+    }
+
+
+    /* ==============================
+       FOOTER
+    ============================== */
+
+    footer {
+
+      background: #11182e;
+
+      color: white;
+
+      padding: 35px 18px;
+
+      text-align: center;
+    }
+
+
+    footer h3 {
+
+      margin-bottom: 8px;
+
+      font-size: 18px;
+    }
+
+
+    footer p {
+
+      color: #d7d9e4;
+
+      font-size: 13px;
+
+      margin-bottom: 7px;
+    }
+
+
+    .footer-links {
+
+      margin-top: 15px;
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 15px;
+
+      flex-wrap: wrap;
+    }
+
+
+    .footer-links a {
+
+      color: #ffffff;
+
+      text-decoration: none;
+
+      font-size: 13px;
+    }
+
+
+    .footer-links a:hover {
+
+      text-decoration: underline;
+    }
+
+
+    /* ==============================
+       MOBILE
+    ============================== */
+
+    @media (max-width: 700px) {
+
+      .header-container {
+
+        flex-direction: column;
+
+        text-align: center;
+      }
+
+
+      .brand {
+
+        justify-content: center;
+      }
+
+
+      nav {
+
+        justify-content: center;
+      }
+
+
+      .hero {
+
+        padding:
+          45px 18px
+          40px;
+      }
+
+
+      .hero h2 {
+
+        font-size: 27px;
+      }
+
+
+      .hero p {
+
+        font-size: 14px;
+      }
+
+
+      main {
+
+        padding:
+          35px 14px
+          55px;
+      }
+
+
+      .publication-grid {
+
+        grid-template-columns:
+          1fr;
+      }
+
+
+      .featured {
+
+        padding: 23px;
+      }
+
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- ==============================
+       HEADER
+  ============================== -->
+
+  <header>
+
+    <div class="header-container">
+
+      <div class="brand">
+
+        <img
+          src="logo.png"
+          alt="Kingdom Heritage Network Global Missions Logo"
+        >
+
+        <div class="brand-text">
+
+          <h1>
+            Kingdom Heritage Network Global Missions
+          </h1>
+
+          <p>
+            Accurate dispensation of the word, true worship and intercession
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <nav>
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a href="channel.html">
+          Channel
+        </a>
+
+        <a href="mp3.html">
+          Audio
+        </a>
+
+        <a href="publishing.html" class="active">
+          Publications
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- ==============================
+       HERO
+  ============================== -->
+
+  <section class="hero">
+
+    <div class="hero-icon">
+      📚
+    </div>
+
+    <h2>
+      Ministry Publications
+    </h2>
+
+    <p>
+      Explore publications from Kingdom Heritage Network Global Missions,
+      including teachings, articles, devotionals, Bible studies and
+      other ministry materials.
+    </p>
+
+  </section>
+
+
+
+  <!-- ==============================
+       MAIN
+  ============================== -->
+
+  <main>
+
+
+    <section class="intro">
+
+      <h2>
+        Publications
+      </h2>
+
+      <p>
+        This section contains official publications released by
+        Kingdom Heritage Network Global Missions for spiritual growth,
+        biblical understanding, Christian education and ministry development.
+      </p>
+
+    </section>
+
+
+
+    <!-- ==============================
+         SEARCH & FILTER
+    ============================== -->
+
+    <div class="tools">
+
+      <div class="search-box">
+
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search publications..."
+          oninput="filterPublications()"
+        >
+
+      </div>
+
+
+      <div class="category-filter">
+
+        <select
+          id="categoryFilter"
+          onchange="filterPublications()"
+        >
+
+          <option value="all">
+            All Categories
+          </option>
+
+          <option value="teaching">
+            Teaching
+          </option>
+
+          <option value="article">
+            Article
+          </option>
+
+          <option value="devotional">
+            Devotional
+          </option>
+
+          <option value="bible study">
+            Bible Study
+          </option>
+
+          <option value="ministry">
+            Ministry
+          </option>
+
+          <option value="book">
+            Book
+          </option>
+
+          <option value="other">
+            Other
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ==============================
+         PUBLICATION LIST
+    ============================== -->
+
+    <div
+      class="publication-grid"
+      id="publicationGrid"
+    ></div>
+
+
+    <div
+      class="empty-state"
+      id="emptyState"
+    >
+
+      <div class="icon">
+        📚
+      </div>
+
+      <h3>
+        No publications found
+      </h3>
+
+      <p>
+        Try another search term or category.
+      </p>
+
+    </div>
+
+
+
+    <!-- ==============================
+         FEATURED
+    ============================== -->
+
+    <section class="featured">
+
+      <h2>
+        About Our Publications
+      </h2>
+
+      <p>
+        Kingdom Heritage Network Global Missions uses its publications
+        to communicate biblical teachings, ministry insights, Christian
+        education and materials that support believers in their walk
+        with God.
+      </p>
+
+      <p>
+        New publications will be added to this page as they are
+        officially released by the ministry.
+      </p>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- ==============================
+       FOOTER
+  ============================== -->
+
+  <footer>
+
+    <h3>
+      Kingdom Heritage Network Global Missions
+    </h3>
+
+    <p>
+      Accurate dispensation of the word,
+      true worship and intercession.
+    </p>
+
+    <p>
+      © <span id="year"></span>
+      Kingdom Heritage Network Global Missions.
+      All rights reserved.
+    </p>
+
+
+    <div class="footer-links">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="channel.html">
+        Channel
+      </a>
+
+      <a href="mp3.html">
+        Audio
+      </a>
+
+      <a href="publishing.html">
+        Publications
+      </a>
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- ==============================
+       JAVASCRIPT
+  ============================== -->
+
+  <script>
+
+
+    /*
+    ==========================================
+    SAMPLE PUBLICATIONS
+
+    These will later be replaced with
+    publications loaded automatically
+    from Firebase.
+    ==========================================
+    */
+
+
+    const publications = [
+
+      {
+
+        id: 1,
+
+        title:
+          "The Power of Faith",
+
+        category:
+          "Teaching",
+
+        author:
+          "Kingdom Heritage Network Global Missions",
+
+        date:
+          "2026-09-01",
+
+        description:
+          "A biblical teaching on faith, trust in God and walking according to the Word of God.",
+
+        cover:
+          "",
+
+        file:
+          "publications/the-power-of-faith.pdf"
+
+      },
+
+
+      {
+
+        id: 2,
+
+        title:
+          "Accurate Dispensation of the Word",
+
+        category:
+          "Bible Study",
+
+        author:
+          "Kingdom Heritage Network Global Missions",
+
+        date:
+          "2026-09-05",
+
+        description:
+          "A study focusing on the importance of rightly understanding and communicating the Word of God.",
+
+        cover:
+          "",
+
+        file:
+          "publications/accurate-dispensation-of-the-word.pdf"
+
+      },
+
+
+      {
+
+        id: 3,
+
+        title:
+          "True Worship and Intercession",
+
+        category:
+          "Teaching",
+
+        author:
+          "Kingdom Heritage Network Global Missions",
+
+        date:
+          "2026-09-10",
+
+        description:
+          "A ministry teaching on worship, prayer and intercession according to biblical principles.",
+
+        cover:
+          "",
+
+        file:
+          "publications/true-worship-and-intercession.pdf"
+
+      }
+
+    ];
+
+
+
+    /*
+    ==========================================
+    DISPLAY PUBLICATIONS
+    ==========================================
+    */
+
+    function displayPublications(list) {
+
+      const grid =
+        document.getElementById(
+          "publicationGrid"
+        );
+
+      const empty =
+        document.getElementById(
+          "emptyState"
+        );
+
+
+      grid.innerHTML = "";
+
+
+      if (!list.length) {
+
+        empty.style.display = "block";
+
+        return;
+
+      }
+
+
+      empty.style.display = "none";
+
+
+      list.forEach(publication => {
+
+        const card =
+          document.createElement("article");
+
+        card.className =
+          "publication-card";
+
+
+        const coverHTML =
+          publication.cover
+
+          ?
+
+          `<img
+              src="${escapeHTML(publication.cover)}"
+              alt="${escapeHTML(publication.title)}"
+           >`
+
+          :
+
+          `📖`;
+
+
+        card.innerHTML = `
+
+          <div class="publication-cover">
+
+            ${coverHTML}
+
+          </div>
+
+
+          <div class="publication-content">
+
+            <span class="publication-category">
+
+              ${escapeHTML(
+                publication.category
+              )}
+
+            </span>
+
+
+            <h3>
+
+              ${escapeHTML(
+                publication.title
+              )}
+
+            </h3>
+
+
+            <div class="publication-meta">
+
+              By
+              ${escapeHTML(
+                publication.author
+              )}
+
+              •
+
+              ${formatDate(
+                publication.date
+              )}
+
+            </div>
+
+
+            <p class="publication-description">
+
+              ${escapeHTML(
+                publication.description
+              )}
+
+            </p>
+
+
+            <div class="publication-actions">
+
+              <a
+                class="btn btn-read"
+                href="${escapeHTML(publication.file)}"
+                target="_blank"
+                rel="noopener"
+              >
+
+                📖 Read
+
+              </a>
+
+
+              <a
+                class="btn btn-download"
+                href="${escapeHTML(publication.file)}"
+                download
+              >
+
+                ⬇️ Download
+
+              </a>
+
+
+              <button
+                class="btn btn-share"
+                onclick="sharePublication(${publication.id})"
+              >
+
+                🔗 Share
+
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+
+        grid.appendChild(card);
+
+      });
+
+    }
+
+
+
+    /*
+    ==========================================
+    SEARCH + CATEGORY FILTER
+    ==========================================
+    */
+
+    function filterPublications() {
+
+      const search =
+        document
+          .getElementById("searchInput")
+          .value
+          .toLowerCase()
+          .trim();
+
+
+      const category =
+        document
+          .getElementById("categoryFilter")
+          .value
+          .toLowerCase();
+
+
+      const filtered =
+        publications.filter(
+          publication => {
+
+            const matchesSearch =
+
+              publication.title
+                .toLowerCase()
+                .includes(search)
+
+              ||
+
+              publication.description
+                .toLowerCase()
+                .includes(search)
+
+              ||
+
+              publication.author
+                .toLowerCase()
+                .includes(search);
+
+
+            const matchesCategory =
+
+              category === "all"
+
+              ||
+
+              publication.category
+                .toLowerCase()
+                === category;
+
+
+            return (
+              matchesSearch &&
+              matchesCategory
+            );
+
+          }
+        );
+
+
+      displayPublications(filtered);
+
+    }
+
+
+
+    /*
+    ==========================================
+    SHARE PUBLICATION
+    ==========================================
+    */
+
+    async function sharePublication(id) {
+
+      const publication =
+        publications.find(
+          item => item.id === id
+        );
+
+
+      if (!publication) return;
+
+
+      const shareData = {
+
+        title:
+          publication.title,
+
+        text:
+      publication.description,
+
+    url:
+      window.location.href
+
+  };
+
+
+  try {
+
+    if (
+      navigator.share
+    ) {
+
+      await navigator.share(
+        shareData
+      );
+
+    } else {
+
+      await navigator.clipboard.writeText(
+        window.location.href
+      );
+
+      alert(
+        "Publication link copied."
+      );
+
+    }
+
+  } catch (error) {
+
+    console.log(
+      "Share cancelled."
+    );
+
+  }
+
+}
+
+
+
+/*
+==========================================
+DATE FORMAT
+==========================================
+*/
+
+function formatDate(date) {
+
+  if (!date) return "";
+
+  const d =
+    new Date(date);
+
+
+  return d.toLocaleDateString(
+    "en-NG",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    }
+  );
+
+}
+
+
+
+/*
+==========================================
+SECURITY HELPER
+==========================================
+*/
+
+function escapeHTML(value) {
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+
+/*
+==========================================
+YEAR
+==========================================
+*/
+
+document.getElementById(
+  "year"
+).textContent =
+  new Date().getFullYear();
+
+
+
+/*
+==========================================
+INITIAL LOAD
+==========================================
+*/
+
+displayPublications(
+  publications
+);
+
+
+</script>
+
+</body>
+</html>
