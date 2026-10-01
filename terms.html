@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Terms of Use | Kingdom Heritage Network Global Missions</title>
+
+  <meta name="description" content="Terms of Use for the Kingdom Heritage Network Global Missions website.">
+
+  <meta name="theme-color" content="#173b8f">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.8;
+      color: #222;
+      background: #f7f9ff;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .brand img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 3px;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+    }
+
+    nav a {
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #f5c542;
+    }
+
+    .menu-btn {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #123b8f, #5b2a86);
+      color: white;
+      text-align: center;
+      padding: 70px 20px;
+    }
+
+    .hero img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      background: white;
+      border-radius: 50%;
+      padding: 5px;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 52px);
+      margin-bottom: 10px;
+    }
+
+    .content {
+      max-width: 950px;
+      margin: 45px auto;
+      padding: 0 20px;
+    }
+
+    .terms {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+    .terms h2 {
+      color: #173b8f;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    .terms h2:first-child {
+      margin-top: 0;
+    }
+
+    .terms p {
+      margin-bottom: 15px;
+      color: #444;
+    }
+
+    .terms ul {
+      margin: 10px 0 20px 25px;
+      color: #444;
+    }
+
+    .terms li {
+      margin-bottom: 8px;
+    }
+
+    .highlight {
+      background: #fff8df;
+      border-left: 5px solid #f5c542;
+      padding: 20px;
+      margin: 25px 0;
+      border-radius: 8px;
+    }
+
+    footer {
+      background: #111a35;
+      color: white;
+      padding: 40px 20px 20px;
+      text-align: center;
+    }
+
+    footer h3 {
+      color: #f5c542;
+      margin-bottom: 15px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    footer a {
+      color: #dfe3ef;
+    }
+
+    footer a:hover {
+      color: #f5c542;
+    }
+
+    .copyright {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 20px;
+      margin-top: 20px;
+      color: #b9bdca;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+
+      .menu-btn {
+        display: block;
+      }
+
+      nav {
+        display: none;
+        position: absolute;
+        top: 79px;
+        left: 0;
+        right: 0;
+        background: #173b8f;
+        flex-direction: column;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      nav a {
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+      }
+
+      .brand {
+        font-size: 11px;
+      }
+
+      .brand img {
+        width: 48px;
+        height: 48px;
+      }
+
+      .terms {
+        padding: 25px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="nav-container">
+
+    <a href="index.html" class="brand">
+      <img src="logo.png"
+           alt="Kingdom Heritage Network Global Missions logo">
+      <span>Kingdom Heritage Network Global Missions</span>
+    </a>
+
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="missions.html">Missions</a>
+      <a href="events.html">Events</a>
+      <a href="media.html">Media</a>
+      <a href="prayer.html">Prayer</a>
+      <a href="give.html">Give</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <img src="logo.png"
+       alt="Kingdom Heritage Network Global Missions">
+
+  <h1>Terms of Use</h1>
+
+  <p>
+    Terms governing the use of this website.
+  </p>
+
+</section>
+
+
+<main class="content">
+
+  <article class="terms">
+
+    <h2>1. Acceptance of These Terms</h2>
+
+    <p>
+      By accessing or using the Kingdom Heritage Network Global
+      Missions website, you agree to use the website responsibly
+      and in accordance with these Terms of Use.
+    </p>
+
+    <p>
+      If you do not agree with these terms, please discontinue
+      use of the website.
+    </p>
+
+
+    <h2>2. Purpose of the Website</h2>
+
+    <p>
+      This website provides information about Kingdom Heritage
+      Network Global Missions, its stated objectives, ministry
+      activities, media information, events and other official
+      information made available through the website.
+    </p>
+
+
+    <h2>3. Acceptable Use</h2>
+
+    <p>
+      Visitors agree not to use this website:
+    </p>
+
+    <ul>
+      <li>For unlawful purposes.</li>
+      <li>To interfere with the operation or security of the website.</li>
+      <li>To attempt unauthorised access to website systems.</li>
+      <li>To upload harmful or malicious material.</li>
+      <li>To impersonate the ministry or another person.</li>
+      <li>To misuse information obtained through the website.</li>
+    </ul>
+
+
+    <h2>4. Website Content</h2>
+
+    <p>
+      Reasonable efforts are made to provide useful and accurate
+      information. However, information on the website may be
+      updated, changed or removed without prior notice.
+    </p>
+
+    <p>
+      Official information should be distinguished from
+      temporary announcements, external links and other
+      third-party material.
+    </p>
+
+
+    <h2>5. Intellectual Property</h2>
+
+    <p>
+      Unless otherwise indicated, website text, graphics,
+      logos and other original materials published by Kingdom
+      Heritage Network Global Missions are intended for the
+      organisation's website and communications.
+    </p>
+
+    <p>
+      Visitors should not reproduce, modify or commercially
+      exploit protected materials without appropriate
+      permission.
+    </p>
+
+
+    <h2>6. External Websites</h2>
+
+    <p>
+      The website may contain links to external websites or
+      services. These websites are operated independently,
+      and Kingdom Heritage Network Global Missions does not
+      control their content, availability or policies.
+    </p>
+
+
+    <h2>7. User-Submitted Information</h2>
+
+    <p>
+      Where the website provides forms or other methods for
+      submitting information, users are responsible for
+      ensuring that the information they provide is lawful,
+      accurate and appropriate.
+    </p>
+
+
+    <h2>8. Donations and Giving</h2>
+
+    <p>
+      Where giving or donation facilities are made available,
+      visitors should use only payment instructions officially
+      published or confirmed by Kingdom Heritage Network
+      Global Missions.
+    </p>
+
+    <p>
+      The ministry is not responsible for payments made to
+      unofficial accounts or persons claiming to represent
+      the organisation.
+    </p>
+
+
+    <h2>9. Availability of the Website</h2>
+
+    <p>
+      We may modify, suspend or discontinue any part of the
+      website when necessary for maintenance, security,
+      improvements or other legitimate reasons.
+    </p>
+
+
+    <h2>10. Disclaimer</h2>
+
+    <p>
+      Website information is provided for general informational
+      purposes. Nothing on this website should be interpreted
+      as a guarantee of a particular outcome or as professional
+      legal, medical, financial or other specialised advice.
+    </p>
+
+
+    <h2>11. Limitation of Responsibility</h2>
+
+    <p>
+      To the extent permitted by applicable law, Kingdom
+      Heritage Network Global Missions will not be responsible
+      for losses arising from reliance on information,
+      interruptions to website availability, or third-party
+      websites and services.
+    </p>
+
+
+    <h2>12. Changes to These Terms</h2>
+
+    <p>
+      These Terms of Use may be updated when the website,
+      services or applicable requirements change. Updated
+      terms will be published on this page.
+    </p>
+
+
+    <div class="highlight">
+
+      <strong>Important:</strong>
+
+      Additional terms may be provided for specific services
+      if the website later introduces features such as online
+      payments, registrations, accounts, subscriptions,
+      donations or other interactive services.
+
+    </div>
+
+
+    <h2>13. Contact</h2>
+
+    <p>
+      For questions concerning these Terms of Use, please use
+      the official information provided on the
+      <a href="contact.html"
+         style="color:#173b8f;font-weight:bold;">
+        Contact page
+      </a>.
+    </p>
+
+
+    <p>
+      <strong>Last updated:</strong> September 2026
+    </p>
+
+  </article>
+
+</main>
+
+
+<footer>
+
+  <h3>Kingdom Heritage Network Global Missions</h3>
+
+  <p>
+    An interdenominational, not-for-profit and non-political
+    organisation.
+  </p>
+
+  <div class="footer-links">
+
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="ministries.html">Ministries</a>
+    <a href="missions.html">Missions</a>
+    <a href="events.html">Events</a>
+    <a href="media.html">Media</a>
+    <a href="prayer.html">Prayer</a>
+    <a href="give.html">Give</a>
+    <a href="contact.html">Contact</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Use</a>
+    <a href="disclaimer.html">Disclaimer</a>
+
+  </div>
+
+  <div class="copyright">
+    © 2026 Kingdom Heritage Network Global Missions.
+    All rights reserved.
+  </div>
+
+</footer>
+
+
+<script>
+  function toggleMenu() {
+    document.getElementById("nav").classList.toggle("active");
+  }
+</script>
+
+</body>
+</html>
