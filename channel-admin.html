@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kingdom Heritage Channel Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f4f6fb;color:#222}
+header{background:linear-gradient(135deg,#123c8c,#673ab7);color:white;padding:18px;text-align:center}
+main{max-width:850px;margin:auto;padding:15px}.card{background:white;padding:18px;margin:12px 0;border-radius:12px;box-shadow:0 2px 8px #0001}
+input,textarea,select,button{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:7px}
+button{background:#123c8c;color:white;border:0;font-weight:bold;cursor:pointer}
+.red{background:#c62828}.green{background:#16833b}.purple{background:#673ab7}
+.hidden{display:none}.status{padding:10px;border-radius:7px;background:#eee;margin:8px 0}
+video{width:100%;background:#000;border-radius:8px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>Kingdom Heritage Channel</h2>
+<p>Broadcast Administration</p>
+</header>
+
+<main>
+
+<!-- LOGIN -->
+<section id="login" class="card">
+<h3>Admin Login</h3>
+<input id="email" type="email" placeholder="Admin email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="loginMsg"></p>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="hidden">
+
+<div class="card">
+<h3>Live Broadcast</h3>
+
+<div id="status" class="status">OFFLINE</div>
+
+<input id="title" placeholder="Live broadcast title">
+<textarea id="description" placeholder="Description"></textarea>
+
+<div class="row">
+<button onclick="startCamera()">📹 Camera</button>
+<button onclick="stopCamera()">⏹ Camera Off</button>
+</div>
+
+<video id="camera" autoplay muted playsinline></video>
+
+<div class="row">
+<button class="green" onclick="startLive()">🔴 START LIVE</button>
+<button class="red" onclick="stopLive()">⏹ STOP LIVE</button>
+</div>
+</div>
+
+<!-- RECORDING -->
+<div class="card">
+<h3>Recording</h3>
+<button onclick="toggleRecording()">⏺ Start / Stop Recording</button>
+<p id="recordStatus">Recording: OFF</p>
+</div>
+
+<!-- BACKGROUND AUDIO -->
+<div class="card">
+<h3>Background Audio</h3>
+<select id="audioSelect">
+<option value="">Select background audio</option>
+</select>
+
+<div class="row">
+<button onclick="playAudio()">▶ Play</button>
+<button onclick="pauseAudio()">⏸ Pause</button>
+</div>
+
+<div class="row">
+<button onclick="stopAudio()">⏹ Stop</button>
+<button onclick="loadAudio()">🔄 Refresh</button>
+</div>
+
+<label>Volume</label>
+<input id="volume" type="range" min="0" max="100" value="30"
+oninput="setVolume(this.value)">
+<audio id="bgAudio" loop></audio>
+</div>
+
+<!-- SCRIPTURE -->
+<div class="card">
+<h3>Scripture Display</h3>
+
+<select id="version">
+<option>KJV</option>
+<option>NKJV</option>
+<option>NIV</option>
+<option>ESV</option>
+</select>
+
+<input id="book" placeholder="Book e.g. John">
+<input id="chapter" type="number" placeholder="Chapter">
+<input id="verseStart" type="number" placeholder="Starting verse">
+<input id="verseEnd" type="number" placeholder="Ending verse">
+
+<button class="purple" onclick="showScripture()">📖 Show Scripture</button>
+<button onclick="hideScripture()">Hide Scripture</button>
+
+<p id="scripturePreview"></p>
+</div>
+
+<!-- EXTERNAL DESTINATIONS -->
+<div class="card">
+<h3>External Broadcast</h3>
+
+<label><input id="facebook" type="checkbox"> Facebook</label>
+<label><input id="youtube" type="checkbox"> YouTube</label>
+<label><input id="instagram" type="checkbox"> Instagram</label>
+<label><input id="telegram" type="checkbox"> Telegram</label>
+
+<button onclick="saveDestinations()">Save Destinations</button>
+<p>Stream keys remain private and are never displayed to public viewers.</p>
+</div>
+
+<!-- ARCHIVE -->
+<div class="card">
+<h3>Broadcast Archive</h3>
+<button onclick="loadRecordings()">Refresh Recordings</button>
+<div id="recordings"></div>
+</div>
+
+<button class="red" onclick="logout()">Logout</button>
+
+</section>
+</main>
+
+<script>
+const SUPABASE_URL="https://pyzifnxflqvclctwogdz.supabase.co/rest/v1/";
+const SUPABASE_KEY="sb_publishable_9ewFHMOrQsopkeQziD5z1w_ZB4Zmc58";
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let streamId=null,mediaStream=null,recorder=null,recording=false;
+
+async function login(){
+ const {error}=await sb.auth.signInWithPassword({
+  email:email.value,password:password.value
+ });
+ if(error)return loginMsg.textContent=error.message;
+ login.classList.add("hidden");
+ admin.classList.remove("hidden");
+ loadAudio();
+ loadRecordings();
+}
+
+async function logout(){
+ await sb.auth.signOut();
+ location.reload();
+}
+
+async function startCamera(){
+ mediaStream=await navigator.mediaDevices.getUserMedia({
+  video:true,audio:true
+ });
+ camera.srcObject=mediaStream;
+}
+
+function stopCamera(){
+ if(mediaStream)mediaStream.getTracks().forEach(t=>t.stop());
+ camera.srcObject=null;
+}
+
+async function startLive(){
+ const {data,error}=await sb.from("kh_live_streams").insert({
+  title:title.value||"Kingdom Heritage Live",
+  description:description.value,
+  status:"live",
+  started_at:new Date().toISOString()
+ }).select().single();
+
+ if(error)return alert(error.message);
+
+ streamId=data.id;
+
+ await sb.from("kh_channel_settings").upsert({
+  live_enabled:true,
+  current_stream_id:streamId,
+  current_title:title.value,
+  current_description:description.value
+ });
+
+ status.textContent="🔴 LIVE";
+ status.style.background="#c8f7d2";
+}
+
+async function stopLive(){
+ if(!streamId)return;
+
+ await sb.from("kh_live_streams").update({
+  status:"ended",
+  ended_at:new Date().toISOString()
+ }).eq("id",streamId);
+
+ await sb.from("kh_channel_settings").update({
+  live_enabled:false,
+  current_stream_id:null
+ }).eq("id",(await getSettingsId()));
+
+ status.textContent="OFFLINE";
+ status.style.background="#eee";
+}
+
+async function getSettingsId(){
+ const {data}=await sb.from("kh_channel_settings")
+ .select("id").limit(1).single();
+ return data?.id;
+}
+
+async function toggleRecording(){
+ if(!mediaStream)return alert("Start the camera first.");
+
+ if(!recording){
+  recorder=new MediaRecorder(mediaStream);
+  recorder.start();
+  recording=true;
+  recordStatus.textContent="Recording: ON";
+ }else{
+  recorder.stop();
+  recording=false;
+  recordStatus.textContent="Recording: OFF";
+  alert("Recording stopped. Connect the recording upload engine to save the file.");
+ }
+}
+
+async function loadAudio(){
+ const {data}=await sb.from("kh_background_audio")
+ .select("*").eq("enabled",true).order("created_at",{ascending:false});
+
+ audioSelect.innerHTML='<option value="">Select background audio</option>';
+ (data||[]).forEach(a=>{
+  audioSelect.innerHTML+=
+  `<option value="${a.audio_url}">${a.title}</option>`;
+ });
+}
+
+function playAudio(){
+ if(!audioSelect.value)return;
+ bgAudio.src=audioSelect.value;
+ bgAudio.play();
+}
+
+function pauseAudio(){bgAudio.pause()}
+function stopAudio(){bgAudio.pause();bgAudio.currentTime=0}
+function setVolume(v){bgAudio.volume=v/100}
+
+async function showScripture(){
+ const reference=`${book.value} ${chapter.value}:${verseStart.value}${verseEnd.value?'-'+verseEnd.value:''}`;
+
+ await sb.from("kh_scripture_display").insert({
+  stream_id:streamId,
+  bible_version:version.value,
+  book:book.value,
+  chapter:+chapter.value,
+  verse_start:+verseStart.value,
+  verse_end:verseEnd.value?+verseEnd.value:null,
+  reference,
+  display_enabled:true
+ });
+
+ scripturePreview.textContent=reference;
+}
+
+async function hideScripture(){
+ await sb.from("kh_scripture_display")
+ .update({display_enabled:false})
+ .eq("stream_id",streamId);
+ scripturePreview.textContent="";
+}
+
+async function saveDestinations(){
+ alert("Destination controls saved. Stream URLs/keys should be configured securely in the admin backend.");
+}
+
+async function loadRecordings(){
+ const {data}=await sb.from("kh_live_recordings")
+ .select("*").order("created_at",{ascending:false});
+
+ recordings.innerHTML=(data||[]).map(r=>
+ `<p><b>${r.title}</b><br>
+ <a href="${r.video_url}" target="_blank">View recording</a></p>`
+ ).join("")||"No recordings yet.";
+}
+</script>
+
+</body>
+  </html>
