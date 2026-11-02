@@ -203,28 +203,62 @@ function stopCamera(){
  camera.srcObject=null;
 }
 
-async function startLive(){
- const {data,error}=await sb.from("kh_live_streams").insert({
-  title:title.value||"Kingdom Heritage Live",
-  description:description.value,
-  status:"live",
-  started_at:new Date().toISOString()
- }).select().single();
 
- if(error)return alert(error.message);
+async function startLive() {
+    const statusBox = document.getElementById("status");
+    const titleInput = document.getElementById("title");
+    const descriptionInput = document.getElementById("description");
 
- streamId=data.id;
+    try {
+        statusBox.textContent = "Connecting to broadcast...";
+        
+        const { data: sessionData, error: sessionError } =
+            await sb.auth.getSession();
 
- await sb.from("kh_channel_settings").upsert({
-  live_enabled:true,
-  current_stream_id:streamId,
-  current_title:title.value,
-  current_description:description.value
- });
+        if (sessionError) throw sessionError;
 
- status.textContent="🔴 LIVE";
- status.style.background="#c8f7d2";
+        if (!sessionData.session) {
+            throw new Error("Please log in again.");
+        }
+
+        const { data, error } = await sb
+            .from("kh_live_streams")
+            .insert({
+                title: titleInput.value || "Kingdom Heritage Live",
+                description: descriptionInput.value,
+                status: "live",
+                started_at: new Date().toISOString()
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        streamId = data.id;
+
+        const { error: settingsError } = await sb
+            .from("kh_channel_settings")
+            .upsert({
+                live_enabled: true,
+                current_stream_id: streamId,
+                current_title: titleInput.value || "Kingdom Heritage Live",
+                current_description: descriptionInput.value
+            });
+
+        if (settingsError) throw settingsError;
+
+        statusBox.textContent = "🔴 LIVE";
+        statusBox.style.background = "#c8f7d2";
+
+        alert("Broadcast status successfully activated!");
+
+    } catch (error) {
+        console.error("Start Live Error:", error);
+        statusBox.textContent = "Broadcast failed: " + error.message;
+        alert("START LIVE ERROR: " + error.message);
+    }
 }
+    
 
 async function stopLive(){
  if(!streamId)return;
