@@ -32,7 +32,7 @@ video{width:100%;background:#000;border-radius:8px}
 <h3>Admin Login</h3>
 <input id="email" type="email" placeholder="Admin email">
 <input id="password" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
+<button onclick="adminLogin()">Login</button>
 <p id="loginMsg"></p>
 </section>
 
@@ -144,15 +144,30 @@ const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 let streamId=null,mediaStream=null,recorder=null,recording=false;
 
-async function login(){
- const {error}=await sb.auth.signInWithPassword({
-  email:email.value,password:password.value
- });
- if(error)return loginMsg.textContent=error.message;
- login.classList.add("hidden");
- admin.classList.remove("hidden");
- loadAudio();
- loadRecordings();
+async function adminLogin() {
+    const emailValue = document.getElementById("email").value;
+    const passwordValue = document.getElementById("password").value;
+    const message = document.getElementById("loginMsg");
+
+    message.textContent = "Signing in...";
+
+    const { data, error } = await sb.auth.signInWithPassword({
+        email: emailValue,
+        password: passwordValue
+    });
+
+    if (error) {
+        message.textContent = error.message;
+        return;
+    }
+
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("admin").classList.remove("hidden");
+
+    message.textContent = "";
+
+    loadAudio();
+    loadRecordings();
 }
 
 async function logout(){
