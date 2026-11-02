@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prayer Admin | KHNGM</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:15px Arial,sans-serif;background:#f3f5fa;color:#222;line-height:1.6}
+header{background:linear-gradient(135deg,#123b8f,#5b2a86);color:white;padding:18px}
+.head,.container{max-width:1050px;margin:auto}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.container{padding:25px 15px}
+.panel,.request,.stat{background:white;padding:20px;border-radius:12px;margin-bottom:18px;box-shadow:0 3px 15px #0000000d}
+.login{max-width:420px;margin:60px auto}
+h2,h3{color:#173b8f;margin-bottom:10px}
+input,select,textarea{width:100%;padding:12px;margin:8px 0 14px;border:1px solid #ddd;border-radius:7px;font-size:15px}
+textarea{min-height:85px}
+button{padding:11px 16px;border:0;border-radius:7px;background:#173b8f;color:white;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+button:hover{background:#5b2a86}
+.logout,.delete{background:#b52b37}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat strong{display:block;font-size:27px;color:#173b8f}
+.stat span,.small{font-size:13px;color:#777}
+.request{border-left:5px solid #5b2a86}
+.request p{margin:7px 0;overflow-wrap:anywhere}
+.status{display:inline-block;background:#fff1ce;color:#805700;padding:4px 10px;border-radius:20px;font-size:12px;margin:8px 0}
+.answered{background:#d9f5e3;color:#176b35}
+.progress{background:#e1eaff;color:#174b9a}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.hidden{display:none!important}
+.error{color:#b52b37}
+.success{color:#16733a}
+@media(max-width:650px){.stats{grid-template-columns:repeat(2,1fr)}.actions button{flex:1}}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="head">
+<h3 style="color:white">KHNGM | Prayer Admin</h3>
+<button id="logout" class="logout hidden">Logout</button>
+</div>
+</header>
+
+<main class="container">
+
+<section id="login" class="panel login">
+<h2>Administrator Login</h2>
+<p class="small">Kingdom Heritage Network Global Missions</p>
+
+<form id="loginForm">
+<input type="email" id="email" value="chollomgodfreychoji@gmail.com" required placeholder="Email">
+<input type="password" id="password" required placeholder="Password">
+<button id="loginBtn" style="width:100%">Login</button>
+</form>
+<p id="loginMessage" class="error"></p>
+</section>
+
+<section id="dashboard" class="hidden">
+
+<div class="panel">
+<h2>Prayer Request Dashboard</h2>
+<p id="adminInfo" class="small"></p>
+<p id="notice"></p>
+</div>
+
+<div class="stats">
+<div class="stat"><strong id="total">0</strong><span>Total Requests</span></div>
+<div class="stat"><strong id="pending">0</strong><span>Pending</span></div>
+<div class="stat"><strong id="progressCount">0</strong><span>In Progress</span></div>
+<div class="stat"><strong id="answered">0</strong><span>Answered</span></div>
+</div>
+
+<div class="panel">
+<h3>Manage Prayer Requests</h3>
+<input id="search" type="search" placeholder="Search name, email or prayer point">
+<select id="filter">
+<option value="All">All Requests</option>
+<option>Pending</option>
+<option>In Progress</option>
+<option>Answered</option>
+</select>
+<button id="refresh">Refresh Requests</button>
+</div>
+
+<div id="requests"></div>
+</section>
+
+</main>
+
+<script>
+const URL="https://bmiechymiyedubezhcqk.supabase.co";
+const KEY="YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+const db=window.supabase.createClient(URL,KEY);
+const $=id=>document.getElementById(id);
+
+let records=[];
+
+function showLogin(){
+  $("login").classList.remove("hidden");
+  $("dashboard").classList.add("hidden");
+  $("logout").classList.add("hidden");
+}
+
+async function initialize(){
+  const {data:{session}}=await db.auth.getSession();
+  if(!session){showLogin();return;}
+
+  const {data:admin,error}=await db
+    .from("prayer_admins")
+    .select("email,role")
+    .eq("user_id",session.user.id)
+    .maybeSingle();
+
+  if(error||!admin){
+    await db.auth.signOut();
+    showLogin();
+    $("loginMessage").textContent="Access denied. Unauthorized administrator.";
+    return;
+  }
+
+  $("login").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("logout").classList.remove("hidden");
+  $("adminInfo").textContent=`${admin.email} | ${admin.role}`;
+
+  loadRequests();
+}
+
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  $("loginMessage").textContent="Signing in...";
+  $("loginBtn").disabled=true;
+
+  const {error}=await db.auth.signInWithPassword({
+    email:$("email").value.trim(),
+    password:$("password").value
+  });
+
+  $("loginBtn").disabled=false;
+
+  if(error){
+    $("loginMessage").textContent=error.message;
+    return;
+  }
+
+  $("loginMessage").textContent="";
+  await initialize();
+});
+
+async function loadRequests(){
+  $("requests").textContent="Loading prayer requests...";
+
+  const {data,error}=await db
+    .from("prayer_requests")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    $("requests").textContent="Error: "+error.message;
+    return;
+  }
+
+  records=data||[];
+  statistics();
+  displayRequests();
+}
+
+function statistics(){
+  $("total").textContent=records.length;
+  $("pending").textContent=records.filter(r=>r.status==="Pending").length;
+  $("progressCount").textContent=records.filter(r=>r.status==="In Progress").length;
+  $("answered").textContent=records.filter(r=>r.status==="Answered").length;
+}
+
+function element(tag,value,className){
+  const el=document.createElement(tag);
+  el.textContent=value??"";
+  if(className)el.className=className;
+  return el;
+}
+
+function displayRequests(){
+  const list=$("requests");
+  list.replaceChildren();
+
+  const term=$("search").value.toLowerCase();
+  const filter=$("filter").value;
+
+  const filtered=records.filter(r=>{
+    const matches=[r.full_name,r.email,r.phone,r.prayer_category,r.prayer_request]
+      .some(v=>String(v||"").toLowerCase().includes(term));
+
+    return matches&&(filter==="All"||r.status===filter);
+  });
+
+  if(!filtered.length){
+    list.textContent="No prayer requests found.";
+    return;
+  }
+
+  filtered.forEach(r=>{
+    const card=element("article","","request");
+
+    card.appendChild(element("h3",r.full_name));
+    card.appendChild(element("p","Category: "+r.prayer_category));
+    card.appendChild(element("p","Email: "+(r.email||"Not provided")));
+    card.appendChild(element("p","Phone: "+(r.phone||"Not provided")));
+    card.appendChild(element("p","Confidential: "+(r.is_confidential?"Yes":"No")));
+    card.appendChild(element("p","Prayer Point: "+r.prayer_request));
+    card.appendChild(element("p","Submitted: "+new Date(r.created_at).toLocaleString(),"small"));
+
+    const statusClass=r.status==="Answered"?"status answered":
+      r.status==="In Progress"?"status progress":"status";
+
+    card.appendChild(element("span",r.status,statusClass));
+
+    card.appendChild(element("h4","Update Status"));
+
+    const status=document.createElement("select");
+
+    ["Pending","In Progress","Answered"].forEach(s=>{
+      const option=element("option",s);
+      option.value=s;
+      option.selected=s===r.status;
+      status.appendChild(option);
+    });
+
+    card.appendChild(status);
+    card.appendChild(element("h4","Private Admin Notes"));
+
+    const notes=document.createElement("textarea");
+    notes.placeholder="Write internal notes...";
+    notes.value=r.admin_notes||"";
+    card.appendChild(notes);
+
+    const actions=element("div","","actions");
+    const save=element("button","Save Changes");
+    const remove=element("button","Delete Request","delete");
+
+    save.onclick=()=>updateRequest(r.id,status.value,notes.value,save);
+    remove.onclick=()=>deleteRequest(r.id);
+
+    actions.append(save,remove);
+    card.appendChild(actions);
+    list.appendChild(card);
+  });
+}
+
+async function updateRequest(id,status,notes,button){
+  button.disabled=true;
+
+  const {error}=await db
+    .from("prayer_requests")
+    .update({status,admin_notes:notes})
+    .eq("id",id);
+
+  button.disabled=false;
+
+  if(error){
+    alert("Update failed: "+error.message);
+    return;
+  }
+
+  $("notice").textContent="Request updated successfully.";
+  $("notice").className="success";
+  await loadRequests();
+}
+
+async function deleteRequest(id){
+  if(!confirm("Permanently delete this prayer request?"))return;
+
+  const {error}=await db
+    .from("prayer_requests")
+    .delete()
+    .eq("id",id);
+
+  if(error){
+    alert("Delete failed: "+error.message);
+    return;
+  }
+
+  $("notice").textContent="Prayer request deleted.";
+  $("notice").className="success";
+  await loadRequests();
+}
+
+$("search").addEventListener("input",displayRequests);
+$("filter").addEventListener("change",displayRequests);
+$("refresh").addEventListener("click",loadRequests);
+
+$("logout").addEventListener("click",async()=>{
+  await db.auth.signOut();
+  showLogin();
+});
+
+initialize();
+</script>
+
+</body>
+  </html>
+  
