@@ -48,9 +48,11 @@ video{width:100%;background:#000;border-radius:8px}
 <textarea id="description" placeholder="Description"></textarea>
 
 <div class="row">
-<button onclick="startCamera()">📹 Camera</button>
-<button onclick="stopCamera()">⏹ Camera Off</button>
+<button onclick="startCamera('user')">🤳 Front Camera</button>
+<button onclick="startCamera('environment')">📷 Back Camera</button>
 </div>
+
+<button class="red" onclick="stopCamera()">⏹ Camera Off</button>
 
 <video id="camera" autoplay muted playsinline></video>
 
@@ -175,12 +177,26 @@ async function logout(){
  location.reload();
 }
 
-async function startCamera(){
- mediaStream=await navigator.mediaDevices.getUserMedia({
-  video:true,audio:true
- });
- camera.srcObject=mediaStream;
-}
+async function startCamera(mode = 'environment') {
+    try {
+        if (mediaStream) {
+            mediaStream.getTracks().forEach(track => track.stop());
+        }
+
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: { ideal: mode }
+            },
+            audio: true
+        });
+
+        camera.srcObject = mediaStream;
+        await camera.play();
+
+    } catch (error) {
+        alert("Camera error: " + error.message);
+    }
+    }
 
 function stopCamera(){
  if(mediaStream)mediaStream.getTracks().forEach(t=>t.stop());
