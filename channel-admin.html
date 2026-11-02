@@ -330,16 +330,52 @@ async function toggleRecording(){
  }
 }
 
-async function loadAudio(){
- const {data}=await sb.from("kh_background_audio")
- .select("*").eq("enabled",true).order("created_at",{ascending:false});
 
- audioSelect.innerHTML='<option value="">Select background audio</option>';
- (data||[]).forEach(a=>{
-  audioSelect.innerHTML+=
-  `<option value="${a.audio_url}">${a.title}</option>`;
- });
+async function loadAudio() {
+    const audioSelect = document.getElementById("audioSelect");
+
+    audioSelect.innerHTML =
+        '<option value="">Loading audio...</option>';
+
+    try {
+        const { data, error } = await sb
+            .from("kh_background_audio")
+            .select("*")
+            .eq("enabled", true)
+            .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        audioSelect.innerHTML =
+            '<option value="">Select background audio</option>';
+
+        if (!data || data.length === 0) {
+            audioSelect.innerHTML +=
+                '<option value="">No enabled audio found</option>';
+
+            alert("Connection successful, but no enabled audio tracks were found.");
+            return;
+        }
+
+        data.forEach(audio => {
+            const option = document.createElement("option");
+            option.value = audio.audio_url;
+            option.textContent = audio.title;
+            audioSelect.appendChild(option);
+        });
+
+        alert(data.length + " audio track(s) loaded successfully.");
+
+    } catch (error) {
+        console.error("Audio loading error:", error);
+
+        audioSelect.innerHTML =
+            '<option value="">Audio loading failed</option>';
+
+        alert("AUDIO ERROR: " + error.message);
+    }
 }
+    
 
 function playAudio(){
  if(!audioSelect.value)return;
