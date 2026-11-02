@@ -1,24 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="description" content="Submit a prayer request to Kingdom Heritage Network Global Missions.">
 
-  <meta
-    name="description"
-    content="Submit a prayer request to Kingdom Heritage Network Global Missions."
-  >
-
-  <title>
-    Prayer Request | Kingdom Heritage Network Global Missions
-  </title>
+  <title>Prayer Request | Kingdom Heritage Network Global Missions</title>
 
   <style>
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -33,11 +24,7 @@
     }
 
     header {
-      background: linear-gradient(
-        135deg,
-        #0645a5,
-        #55258f
-      );
+      background: linear-gradient(135deg, #0645a5, #55258f);
       color: white;
       padding: 15px 20px;
       position: sticky;
@@ -106,12 +93,8 @@
 
     .hero {
       background:
-        linear-gradient(
-          rgba(5,45,110,0.88),
-          rgba(76,31,130,0.88)
-        ),
+        linear-gradient(rgba(5,45,110,0.88), rgba(76,31,130,0.88)),
         url("logo.png") center/contain no-repeat;
-
       min-height: 270px;
       display: flex;
       align-items: center;
@@ -247,11 +230,7 @@
     button {
       width: 100%;
       border: none;
-      background: linear-gradient(
-        135deg,
-        #0645a5,
-        #55258f
-      );
+      background: linear-gradient(135deg, #0645a5, #55258f);
       color: white;
       padding: 14px 20px;
       border-radius: 7px;
@@ -266,15 +245,31 @@
       transform: translateY(-1px);
     }
 
-    .success {
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .success,
+    .error-message {
       display: none;
-      background: #e9f8ee;
-      color: #176b35;
-      border: 1px solid #b8e6c6;
       padding: 15px;
       border-radius: 7px;
       margin-bottom: 20px;
       text-align: center;
+    }
+
+    .success {
+      background: #e9f8ee;
+      color: #176b35;
+      border: 1px solid #b8e6c6;
+    }
+
+    .error-message {
+      background: #fff0f0;
+      color: #a21c1c;
+      border: 1px solid #f1baba;
     }
 
     .notice {
@@ -324,7 +319,6 @@
     }
 
     @media (max-width: 700px) {
-
       .header-inner {
         flex-direction: column;
         text-align: center;
@@ -357,176 +351,104 @@
       .form-card {
         padding: 20px;
       }
-
     }
-
   </style>
 </head>
 
 <body>
 
   <!-- HEADER -->
-
   <header>
-
     <div class="header-inner">
 
-      <a
-        href="index.html"
-        class="brand"
-      >
-
-        <img
-          src="logo.png"
-          alt="Kingdom Heritage Network Global Missions Logo"
-        >
+      <a href="index.html" class="brand">
+        <img src="logo.png"
+          alt="Kingdom Heritage Network Global Missions Logo">
 
         <div class="brand-text">
-
-          <h1>
-            Kingdom Heritage Network Global Missions
-          </h1>
-
-          <p>
-            Accurate dispensation of the word, true worship and intercession.
-          </p>
-
+          <h1>Kingdom Heritage Network Global Missions</h1>
+          <p>Accurate dispensation of the word, true worship and intercession.</p>
         </div>
-
       </a>
 
       <nav>
-
-        <a href="index.html">
-          Home
-        </a>
-
-        <a href="channel.html">
-          Channel
-        </a>
-
-        <a href="mp3.html">
-          Audio
-        </a>
-
-        <a href="publishing.html">
-          Publications
-        </a>
-
-        <a href="elibrary.html">
-          E-Library
-        </a>
-
-        <a
-          href="prayer-request.html"
-          class="active"
-        >
-          Prayer
-        </a>
-
+        <a href="index.html">Home</a>
+        <a href="channel.html">Channel</a>
+        <a href="mp3.html">Audio</a>
+        <a href="publishing.html">Publications</a>
+        <a href="elibrary.html">E-Library</a>
+        <a href="prayer-request.html" class="active">Prayer</a>
       </nav>
 
     </div>
-
   </header>
 
-
   <!-- HERO -->
-
   <section class="hero">
-
     <div class="hero-content">
-
-      <h2>
-        Prayer Request
-      </h2>
+      <h2>Prayer Request</h2>
 
       <p>
         Share your prayer request with Kingdom Heritage Network Global Missions.
         Our prayer team is committed to standing with you in prayer.
       </p>
-
     </div>
-
   </section>
 
-
   <!-- MAIN -->
-
   <main>
 
     <div class="intro">
-
-      <h3>
-        Submit Your Prayer Request
-      </h3>
+      <h3>Submit Your Prayer Request</h3>
 
       <p>
         Whatever you are trusting God for, you can share your request with us.
         We believe in the power of prayer and intercession.
       </p>
-
     </div>
 
-
     <!-- SCRIPTURE -->
-
     <div class="scripture">
-
-      <strong>
-        Hebrews 4:16 — KJV
-      </strong>
+      <strong>Hebrews 4:16 — KJV</strong>
 
       <p>
         “Let us therefore come boldly unto the throne of grace,
         that we may obtain mercy, and find grace to help in time of need.”
       </p>
-
     </div>
 
-
     <!-- FORM -->
-
     <div class="form-card">
 
-      <div
-        class="success"
-        id="successMessage"
-      >
+      <div class="success" id="successMessage"
+        role="status" aria-live="polite">
         Your prayer request has been submitted successfully.
         Thank you for allowing us to stand with you in prayer.
       </div>
 
+      <div class="error-message" id="errorMessage"
+        role="alert" aria-live="assertive"></div>
 
       <form id="prayerForm">
 
         <div class="form-group">
-
-          <label for="name">
-            Name *
-          </label>
+          <label for="name">Name *</label>
 
           <input
             type="text"
             id="name"
             name="name"
             placeholder="Enter your name"
+            minlength="2"
+            maxlength="120"
             required
           >
-
         </div>
 
-
         <div class="form-group">
-
           <label for="contact">
-
             Email or Phone
-
-            <span class="optional">
-              (Optional)
-            </span>
-
+            <span class="optional">(Optional)</span>
           </label>
 
           <input
@@ -535,171 +457,84 @@
             name="contact"
             placeholder="Enter your email or phone number"
           >
-
         </div>
 
-
         <div class="form-group">
+          <label for="category">Prayer Category *</label>
 
-          <label for="category">
-            Prayer Category *
-          </label>
-
-          <select
-            id="category"
-            name="category"
-            required
-          >
-
-            <option value="">
-              Select a category
-            </option>
-
-            <option value="Salvation">
-              Salvation
-            </option>
-
-            <option value="Healing">
-              Healing
-            </option>
-
-            <option value="Family">
-              Family
-            </option>
-
-            <option value="Marriage">
-              Marriage
-            </option>
-
-            <option value="Career">
-              Career / Business
-            </option>
-
-            <option value="Education">
-              Education
-            </option>
-
-            <option value="Financial">
-              Financial
-            </option>
-
-            <option value="Spiritual Growth">
-              Spiritual Growth
-            </option>
-
-            <option value="Ministry">
-              Ministry
-            </option>
-
-            <option value="Thanksgiving">
-              Thanksgiving
-            </option>
-
-            <option value="Other">
-              Other
-            </option>
-
+          <select id="category" name="category" required>
+            <option value="">Select a category</option>
+            <option value="Salvation">Salvation</option>
+            <option value="Healing">Healing</option>
+            <option value="Family">Family</option>
+            <option value="Marriage">Marriage</option>
+            <option value="Career">Career / Business</option>
+            <option value="Education">Education</option>
+            <option value="Financial">Financial</option>
+            <option value="Spiritual Growth">Spiritual Growth</option>
+            <option value="Ministry">Ministry</option>
+            <option value="Thanksgiving">Thanksgiving</option>
+            <option value="Other">Other</option>
           </select>
-
         </div>
 
-
         <div class="form-group">
-
-          <label for="request">
-            Prayer Request *
-          </label>
+          <label for="request">Prayer Request *</label>
 
           <textarea
             id="request"
             name="request"
             placeholder="Write your prayer request here..."
+            minlength="5"
+            maxlength="10000"
             required
           ></textarea>
-
         </div>
 
-
         <div class="checkbox-group">
-
           <input
             type="checkbox"
             id="private"
             name="private"
+            checked
           >
 
           <label for="private">
-
             Keep my prayer request private.
-
             <br>
-
             Your request will not be publicly displayed.
-
           </label>
-
         </div>
 
-
-        <button type="submit">
+        <button type="submit" id="submitButton">
           Submit Prayer Request
         </button>
 
       </form>
 
-
       <div class="notice">
-
-        <strong>
-          Please Note:
-        </strong>
-
+        <strong>Please Note:</strong>
         <br>
-
         Please do not submit passwords, bank details,
         financial account information, identification numbers,
         or other highly sensitive personal information through
         this form.
-
       </div>
 
     </div>
-
   </main>
 
-
   <!-- FOOTER -->
-
   <footer>
-
     <div class="footer-inner">
 
       <div class="footer-links">
-
-        <a href="index.html">
-          Home
-        </a>
-
-        <a href="channel.html">
-          Channel
-        </a>
-
-        <a href="mp3.html">
-          Audio
-        </a>
-
-        <a href="publishing.html">
-          Publications
-        </a>
-
-        <a href="elibrary.html">
-          E-Library
-        </a>
-
-        <a href="prayer-request.html">
-          Prayer
-        </a>
-
+        <a href="index.html">Home</a>
+        <a href="channel.html">Channel</a>
+        <a href="mp3.html">Audio</a>
+        <a href="publishing.html">Publications</a>
+        <a href="elibrary.html">E-Library</a>
+        <a href="prayer-request.html">Prayer</a>
       </div>
 
       <p>
@@ -710,61 +545,174 @@
       </p>
 
     </div>
-
   </footer>
 
+  <!-- SUPABASE LIBRARY -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- JAVASCRIPT -->
-
+  <!-- SUPABASE CONNECTION AND FORM SUBMISSION -->
   <script>
 
-    /*
-    ==========================================
-    YEAR
-    ==========================================
-    */
+    // SUPABASE CONFIGURATION
+
+    const SUPABASE_URL =
+      "https://pyzifnxflqvclctwogdz.supabase.co";
+
+    // Replace with the Publishable key from this project.
+
+    const SUPABASE_KEY =
+      "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    // FOOTER YEAR
 
     document.getElementById("year").textContent =
       new Date().getFullYear();
 
+    // FORM ELEMENTS
 
-    /*
-    ==========================================
-    PRAYER FORM
-    ==========================================
-    */
+    const prayerForm =
+      document.getElementById("prayerForm");
 
-    document
-      .getElementById("prayerForm")
-      .addEventListener(
-        "submit",
-        function(event) {
+    const submitButton =
+      document.getElementById("submitButton");
 
-          event.preventDefault();
+    const successMessage =
+      document.getElementById("successMessage");
 
+    const errorMessage =
+      document.getElementById("errorMessage");
 
-          const successMessage =
-            document.getElementById(
-              "successMessage"
-            );
+    // SUBMIT PRAYER REQUEST
 
+    prayerForm.addEventListener("submit", async function(event) {
 
-          successMessage.style.display =
-            "block";
+      event.preventDefault();
 
+      successMessage.style.display = "none";
+      errorMessage.style.display = "none";
 
-          this.reset();
+      const fullName =
+        document.getElementById("name").value.trim();
 
+      const contact =
+        document.getElementById("contact").value.trim();
 
-          successMessage.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
+      const category =
+        document.getElementById("category").value;
 
+      const prayerRequest =
+        document.getElementById("request").value.trim();
+
+      const isConfidential =
+        document.getElementById("private").checked;
+
+      // VALIDATION
+
+      if (fullName.length < 2) {
+        errorMessage.textContent =
+          "Please enter your full name.";
+
+        errorMessage.style.display = "block";
+        return;
+      }
+
+      if (prayerRequest.length < 5) {
+        errorMessage.textContent =
+          "Please enter a prayer request of at least 5 characters.";
+
+        errorMessage.style.display = "block";
+        return;
+      }
+
+      // SEPARATE EMAIL AND PHONE
+
+      let email = null;
+      let phone = null;
+
+      if (contact.includes("@")) {
+        email = contact;
+      } else if (contact !== "") {
+        phone = contact;
+      }
+
+      // DISABLE BUTTON WHILE SUBMITTING
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Submitting...";
+
+      try {
+
+        // SAVE REQUEST TO SUPABASE
+        // No SELECT permission is required.
+
+        const { error } = await supabaseClient
+          .from("prayer_requests")
+          .insert([
+            {
+              full_name: fullName,
+              email: email,
+              phone: phone,
+              prayer_category: category,
+              prayer_request: prayerRequest,
+              is_confidential: isConfidential
+            }
+          ]);
+
+        if (error) {
+          throw error;
         }
-      );
+
+        // SHOW SUCCESS ONLY AFTER SUPABASE CONFIRMS
+
+        successMessage.textContent =
+          "Your prayer request has been submitted successfully. Thank you for allowing us to stand with you in prayer.";
+
+        successMessage.style.display = "block";
+
+        // RESET FORM
+
+        prayerForm.reset();
+
+        // KEEP PRIVACY CHECKED BY DEFAULT
+
+        document.getElementById("private").checked = true;
+
+        successMessage.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+      } catch (error) {
+
+        console.error("Prayer submission error:", error);
+
+        errorMessage.textContent =
+          "Your prayer request could not be submitted. Please try again. Details: " +
+          error.message;
+
+        errorMessage.style.display = "block";
+
+        errorMessage.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+      } finally {
+
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit Prayer Request";
+
+      }
+
+    });
 
   </script>
 
 </body>
-  </html>
+            </html>
+            
