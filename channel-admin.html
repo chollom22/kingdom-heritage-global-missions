@@ -260,22 +260,53 @@ async function startLive() {
 }
     
 
-async function stopLive(){
- if(!streamId)return;
 
- await sb.from("kh_live_streams").update({
-  status:"ended",
-  ended_at:new Date().toISOString()
- }).eq("id",streamId);
+async function stopLive() {
+    const statusBox = document.getElementById("status");
 
- await sb.from("kh_channel_settings").update({
-  live_enabled:false,
-  current_stream_id:null
- }).eq("id",(await getSettingsId()));
+    try {
+        if (!streamId) {
+            throw new Error("No active broadcast found. Start a broadcast first.");
+        }
 
- status.textContent="OFFLINE";
- status.style.background="#eee";
+        statusBox.textContent = "Stopping broadcast...";
+
+        // End the live stream record
+        const { error: streamError } = await sb
+            .from("kh_live_streams")
+            .update({
+                status: "ended",
+                ended_at: new Date().toISOString()
+            })
+            .eq("id", streamId);
+
+        if (streamError) throw streamError;
+
+        // Turn off the broadcast setting
+        const { error: settingsError } = await sb
+            .from("kh_channel_settings")
+            .update({
+                live_enabled: false,
+                current_stream_id: null
+            })
+            .eq("current_stream_id", streamId);
+
+        if (settingsError) throw settingsError;
+
+        streamId = null;
+
+        statusBox.textContent = "OFFLINE";
+        statusBox.style.background = "#eee";
+
+        alert("Broadcast successfully stopped!");
+
+    } catch (error) {
+        console.error("Stop Live Error:", error);
+        statusBox.textContent = "Stop failed: " + error.message;
+        alert("STOP LIVE ERROR: " + error.message);
+    }
 }
+    
 
 async function getSettingsId(){
  const {data}=await sb.from("kh_channel_settings")
