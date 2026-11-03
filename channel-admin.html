@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,18 +7,26 @@
 <title>Kingdom Heritage Channel Admin</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f4f6fb;color:#222}
-header{background:linear-gradient(135deg,#123c8c,#673ab7);color:white;padding:18px;text-align:center}
-main{max-width:850px;margin:auto;padding:15px}.card{background:white;padding:18px;margin:12px 0;border-radius:12px;box-shadow:0 2px 8px #0001}
-input,textarea,select,button{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:7px}
-button{background:#123c8c;color:white;border:0;font-weight:bold;cursor:pointer}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f4f6fb;color:#222}
+header{background:linear-gradient(135deg,#123c8c,#673ab7);color:white;padding:12px;text-align:center}
+main{max-width:850px;margin:auto;padding:10px}
+.card{background:white;padding:15px;margin:10px 0;border-radius:12px;box-shadow:0 2px 8px #0001}
+input,textarea,select,button{width:100%;padding:11px;margin:5px 0;border:1px solid #ddd;border-radius:7px}
+button{background:#123c8c;color:white;border:0;font-weight:bold}
 .red{background:#c62828}.green{background:#16833b}.purple{background:#673ab7}
-.hidden{display:none}.status{padding:10px;border-radius:7px;background:#eee;margin:8px 0}
-video{width:100%;background:#000;border-radius:8px}
+.hidden{display:none}
+.status{padding:10px;border-radius:7px;background:#eee;margin:8px 0}
+video{width:100%;height:30vh;max-height:250px;object-fit:contain;background:#000;border-radius:8px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.small{font-size:12px;color:#666}
+.audio-item{padding:10px;background:#f1f3f8;border-radius:8px;margin:8px 0;overflow-wrap:anywhere}
+
+/* Fixed live screen */
+.live-screen{position:sticky;top:0;z-index:100;background:#f4f6fb;padding:4px 0}
+.live-screen .card{margin-top:4px}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -27,7 +36,6 @@ video{width:100%;background:#000;border-radius:8px}
 
 <main>
 
-<!-- LOGIN -->
 <section id="login" class="card">
 <h3>Admin Login</h3>
 <input id="email" type="email" placeholder="Admin email">
@@ -36,98 +44,88 @@ video{width:100%;background:#000;border-radius:8px}
 <p id="loginMsg"></p>
 </section>
 
-<!-- ADMIN -->
 <section id="admin" class="hidden">
 
+<!-- FIXED LIVE SCREEN -->
+<div class="live-screen">
 <div class="card">
 <h3>Live Broadcast</h3>
-
 <div id="status" class="status">OFFLINE</div>
-
 <input id="title" placeholder="Live broadcast title">
 <textarea id="description" placeholder="Description"></textarea>
-
 <div class="row">
 <button onclick="startCamera('user')">🤳 Front Camera</button>
 <button onclick="startCamera('environment')">📷 Back Camera</button>
 </div>
-
 <button class="red" onclick="stopCamera()">⏹ Camera Off</button>
-
 <video id="camera" autoplay muted playsinline></video>
-
 <div class="row">
 <button class="green" onclick="startLive()">🔴 START LIVE</button>
 <button class="red" onclick="stopLive()">⏹ STOP LIVE</button>
 </div>
+<p class="small">Live status is stored in the database. A separate streaming connection is required to transmit video and audio to viewers.</p>
+</div>
 </div>
 
-<!-- RECORDING -->
+<!-- REMAINING SCROLLABLE FUNCTIONS -->
+
 <div class="card">
 <h3>Recording</h3>
 <button onclick="toggleRecording()">⏺ Start / Stop Recording</button>
 <p id="recordStatus">Recording: OFF</p>
 </div>
 
-<!-- BACKGROUND AUDIO -->
 <div class="card">
-<h3>Background Audio</h3>
+<h3>Background Music</h3>
+<label>Music title</label>
+<input id="musicTitle" placeholder="Enter music title">
+<label>Select audio file from phone</label>
+<input id="musicFile" type="file" accept="audio/*,.mp3,.m4a,.wav,.aac,.ogg">
+<button class="green" onclick="uploadBackgroundMusic()">⬆ Upload Background Music</button>
+<p id="uploadStatus"></p>
+<hr>
+<h4>Available Music</h4>
 <select id="audioSelect">
-<option value="">Select background audio</option>
+<option value="">Select background music</option>
 </select>
-
 <div class="row">
 <button onclick="playAudio()">▶ Play</button>
 <button onclick="pauseAudio()">⏸ Pause</button>
 </div>
-
 <div class="row">
-<button onclick="stopAudio()">⏹ Stop</button>
+<button class="red" onclick="stopAudio()">⏹ Stop</button>
 <button onclick="loadAudio()">🔄 Refresh</button>
 </div>
-
 <label>Volume</label>
-<input id="volume" type="range" min="0" max="100" value="30"
-oninput="setVolume(this.value)">
+<input id="volume" type="range" min="0" max="100" value="30" oninput="setVolume(this.value)">
 <audio id="bgAudio" loop></audio>
+<p class="small">Playback is currently on the admin device. Music mixing into the public live stream still needs a streaming connection.</p>
 </div>
 
-<!-- SCRIPTURE -->
 <div class="card">
 <h3>Scripture Display</h3>
-
 <select id="version">
-<option>KJV</option>
-<option>NKJV</option>
-<option>NIV</option>
-<option>ESV</option>
+<option>KJV</option><option>NKJV</option><option>NIV</option><option>ESV</option>
 </select>
-
 <input id="book" placeholder="Book e.g. John">
 <input id="chapter" type="number" placeholder="Chapter">
 <input id="verseStart" type="number" placeholder="Starting verse">
 <input id="verseEnd" type="number" placeholder="Ending verse">
-
 <button class="purple" onclick="showScripture()">📖 Show Scripture</button>
 <button onclick="hideScripture()">Hide Scripture</button>
-
 <p id="scripturePreview"></p>
 </div>
 
-<!-- EXTERNAL DESTINATIONS -->
 <div class="card">
 <h3>External Broadcast</h3>
-
 <label><input id="facebook" type="checkbox"> Facebook</label>
 <label><input id="youtube" type="checkbox"> YouTube</label>
 <label><input id="instagram" type="checkbox"> Instagram</label>
 <label><input id="telegram" type="checkbox"> Telegram</label>
-
 <button onclick="saveDestinations()">Save Destinations</button>
-<p>Stream keys remain private and are never displayed to public viewers.</p>
+<p class="small">Stream keys must remain private and be configured securely in a broadcast backend.</p>
 </div>
 
-<!-- ARCHIVE -->
 <div class="card">
 <h3>Broadcast Archive</h3>
 <button onclick="loadRecordings()">Refresh Recordings</button>
@@ -135,296 +133,318 @@ oninput="setVolume(this.value)">
 </div>
 
 <button class="red" onclick="logout()">Logout</button>
-
 </section>
 </main>
 
 <script>
-const SUPABASE_URL = "https://pyzifnxflqvclctwogdz.supabase.co";
+const SUPABASE_URL="https://pyzifnxflqvclctwogdz.supabase.co";
 const SUPABASE_KEY="sb_publishable_9ewFHMOrQsopkeQziD5z1w_ZB4Zmc58";
+const MUSIC_BUCKET="kh-background-music";
+const MUSIC_TABLE="kh_background_music";
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
 
 let streamId=null,mediaStream=null,recorder=null,recording=false;
 
-async function adminLogin() {
-    const emailValue = document.getElementById("email").value;
-    const passwordValue = document.getElementById("password").value;
-    const message = document.getElementById("loginMsg");
-
-    message.textContent = "Signing in...";
-
-    const { data, error } = await sb.auth.signInWithPassword({
-        email: emailValue,
-        password: passwordValue
-    });
-
-    if (error) {
-        message.textContent = error.message;
-        return;
-    }
-
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("admin").classList.remove("hidden");
-
-    message.textContent = "";
-
-    loadAudio();
-    loadRecordings();
+// LOGIN
+async function adminLogin(){
+ $("loginMsg").textContent="Signing in...";
+ try{
+  const {error}=await sb.auth.signInWithPassword({
+   email:$("email").value.trim(),
+   password:$("password").value
+  });
+  if(error)throw error;
+  $("login").classList.add("hidden");
+  $("admin").classList.remove("hidden");
+  await loadAudio();
+  await loadRecordings();
+ }catch(e){$("loginMsg").textContent=e.message}
 }
 
 async function logout(){
+ if(mediaStream)stopCamera();
  await sb.auth.signOut();
  location.reload();
 }
 
-async function startCamera(mode = 'environment') {
-    try {
-        if (mediaStream) {
-            mediaStream.getTracks().forEach(track => track.stop());
-        }
-
-        mediaStream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: { ideal: mode }
-            },
-            audio: true
-        });
-
-        camera.srcObject = mediaStream;
-        await camera.play();
-
-    } catch (error) {
-        alert("Camera error: " + error.message);
-    }
-    }
+// CAMERA
+async function startCamera(mode="environment"){
+ try{
+  stopCamera();
+  mediaStream=await navigator.mediaDevices.getUserMedia({
+   video:{facingMode:{ideal:mode}},audio:true
+  });
+  $("camera").srcObject=mediaStream;
+  await $("camera").play();
+ }catch(e){alert("Camera error: "+e.message)}
+}
 
 function stopCamera(){
- if(mediaStream)mediaStream.getTracks().forEach(t=>t.stop());
- camera.srcObject=null;
+ if(mediaStream){
+  mediaStream.getTracks().forEach(t=>t.stop());
+  mediaStream=null;
+ }
+ $("camera").srcObject=null;
 }
 
+// START LIVE STATUS
+async function startLive(){
+ try{
+  if(!mediaStream)throw new Error("Start your camera first.");
+  $("status").textContent="Connecting...";
+  const {data:s,error:se}=await sb.auth.getSession();
+  if(se)throw se;
+  if(!s.session)throw new Error("Please log in again.");
 
-async function startLive() {
-    const statusBox = document.getElementById("status");
-    const titleInput = document.getElementById("title");
-    const descriptionInput = document.getElementById("description");
+  const {data,error}=await sb.from("kh_live_streams").insert({
+   title:$("title").value||"Kingdom Heritage Live",
+   description:$("description").value,
+   status:"live",
+   started_at:new Date().toISOString()
+  }).select().single();
 
-    try {
-        statusBox.textContent = "Connecting to broadcast...";
-        
-        const { data: sessionData, error: sessionError } =
-            await sb.auth.getSession();
+  if(error)throw error;
+  streamId=data.id;
 
-        if (sessionError) throw sessionError;
+  const {error:settingsError}=await sb.from("kh_channel_settings").upsert({
+   live_enabled:true,
+   current_stream_id:streamId,
+   current_title:$("title").value||"Kingdom Heritage Live",
+   current_description:$("description").value
+  });
 
-        if (!sessionData.session) {
-            throw new Error("Please log in again.");
-        }
+  if(settingsError)throw settingsError;
 
-        const { data, error } = await sb
-            .from("kh_live_streams")
-            .insert({
-                title: titleInput.value || "Kingdom Heritage Live",
-                description: descriptionInput.value,
-                status: "live",
-                started_at: new Date().toISOString()
-            })
-            .select()
-            .single();
-
-        if (error) throw error;
-
-        streamId = data.id;
-
-        const { error: settingsError } = await sb
-            .from("kh_channel_settings")
-            .upsert({
-                live_enabled: true,
-                current_stream_id: streamId,
-                current_title: titleInput.value || "Kingdom Heritage Live",
-                current_description: descriptionInput.value
-            });
-
-        if (settingsError) throw settingsError;
-
-        statusBox.textContent = "🔴 LIVE";
-        statusBox.style.background = "#c8f7d2";
-
-        alert("Broadcast status successfully activated!");
-
-    } catch (error) {
-        console.error("Start Live Error:", error);
-        statusBox.textContent = "Broadcast failed: " + error.message;
-        alert("START LIVE ERROR: " + error.message);
-    }
-}
-    
-
-
-async function stopLive() {
-    const statusBox = document.getElementById("status");
-
-    try {
-        if (!streamId) {
-            throw new Error("No active broadcast found. Start a broadcast first.");
-        }
-
-        statusBox.textContent = "Stopping broadcast...";
-
-        // End the live stream record
-        const { error: streamError } = await sb
-            .from("kh_live_streams")
-            .update({
-                status: "ended",
-                ended_at: new Date().toISOString()
-            })
-            .eq("id", streamId);
-
-        if (streamError) throw streamError;
-
-        // Turn off the broadcast setting
-        const { error: settingsError } = await sb
-            .from("kh_channel_settings")
-            .update({
-                live_enabled: false,
-                current_stream_id: null
-            })
-            .eq("current_stream_id", streamId);
-
-        if (settingsError) throw settingsError;
-
-        streamId = null;
-
-        statusBox.textContent = "OFFLINE";
-        statusBox.style.background = "#eee";
-
-        alert("Broadcast successfully stopped!");
-
-    } catch (error) {
-        console.error("Stop Live Error:", error);
-        statusBox.textContent = "Stop failed: " + error.message;
-        alert("STOP LIVE ERROR: " + error.message);
-    }
-}
-    
-
-async function getSettingsId(){
- const {data}=await sb.from("kh_channel_settings")
- .select("id").limit(1).single();
- return data?.id;
-}
-
-async function toggleRecording(){
- if(!mediaStream)return alert("Start the camera first.");
-
- if(!recording){
-  recorder=new MediaRecorder(mediaStream);
-  recorder.start();
-  recording=true;
-  recordStatus.textContent="Recording: ON";
- }else{
-  recorder.stop();
-  recording=false;
-  recordStatus.textContent="Recording: OFF";
-  alert("Recording stopped. Connect the recording upload engine to save the file.");
+  $("status").textContent="🔴 LIVE";
+  $("status").style.background="#c8f7d2";
+  alert("Broadcast status successfully activated!");
+ }catch(e){
+  $("status").textContent="Broadcast failed: "+e.message;
+  alert("START LIVE ERROR: "+e.message);
  }
 }
 
+// STOP LIVE STATUS
+async function stopLive(){
+ try{
+  if(!streamId)throw new Error("No active broadcast found.");
+  $("status").textContent="Stopping broadcast...";
 
-async function loadAudio() {
-    const audioSelect = document.getElementById("audioSelect");
+  const {error}=await sb.from("kh_live_streams").update({
+   status:"ended",
+   ended_at:new Date().toISOString()
+  }).eq("id",streamId);
+  if(error)throw error;
 
-    audioSelect.innerHTML =
-        '<option value="">Loading audio...</option>';
+  const {error:se}=await sb.from("kh_channel_settings").update({
+   live_enabled:false,
+   current_stream_id:null
+  }).eq("current_stream_id",streamId);
+  if(se)throw se;
 
-    try {
-        const { data, error } = await sb
-            .from("kh_background_audio")
-            .select("*")
-            .eq("enabled", true)
-            .order("created_at", { ascending: false });
-
-        if (error) throw error;
-
-        audioSelect.innerHTML =
-            '<option value="">Select background audio</option>';
-
-        if (!data || data.length === 0) {
-            audioSelect.innerHTML +=
-                '<option value="">No enabled audio found</option>';
-
-            alert("Connection successful, but no enabled audio tracks were found.");
-            return;
-        }
-
-        data.forEach(audio => {
-            const option = document.createElement("option");
-            option.value = audio.audio_url;
-            option.textContent = audio.title;
-            audioSelect.appendChild(option);
-        });
-
-        alert(data.length + " audio track(s) loaded successfully.");
-
-    } catch (error) {
-        console.error("Audio loading error:", error);
-
-        audioSelect.innerHTML =
-            '<option value="">Audio loading failed</option>';
-
-        alert("AUDIO ERROR: " + error.message);
-    }
-}
-    
-
-function playAudio(){
- if(!audioSelect.value)return;
- bgAudio.src=audioSelect.value;
- bgAudio.play();
+  streamId=null;
+  $("status").textContent="OFFLINE";
+  $("status").style.background="#eee";
+  alert("Broadcast successfully stopped!");
+ }catch(e){alert("STOP LIVE ERROR: "+e.message)}
 }
 
-function pauseAudio(){bgAudio.pause()}
-function stopAudio(){bgAudio.pause();bgAudio.currentTime=0}
-function setVolume(v){bgAudio.volume=v/100}
+// RECORDING
+async function toggleRecording(){
+ if(!mediaStream)return alert("Start the camera first.");
+ if(!recording){
+  try{
+   recorder=new MediaRecorder(mediaStream);
+   recorder.start();
+   recording=true;
+   $("recordStatus").textContent="Recording: ON";
+  }catch(e){alert("Recording error: "+e.message)}
+ }else{
+  recorder.stop();
+  recording=false;
+  $("recordStatus").textContent="Recording: OFF";
+  alert("Recording stopped. File upload is not yet connected.");
+ }
+}
 
+// UPLOAD BACKGROUND MUSIC
+async function uploadBackgroundMusic(){
+ const file=$("musicFile").files[0];
+ const status=$("uploadStatus");
+
+ if(!file)return alert("Select an audio file first.");
+ if(!file.type.startsWith("audio/")&&!/\.(mp3|m4a|wav|aac|ogg|flac)$/i.test(file.name))
+  return alert("Select a supported audio file.");
+ if(file.size>50*1024*1024)return alert("Maximum file size is 50 MB.");
+
+ const {data:s,error:se}=await sb.auth.getSession();
+ if(se||!s.session)return alert("Please log in again.");
+
+ const title=$("musicTitle").value.trim()||file.name.replace(/\.[^/.]+$/,"");
+ const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+ const path=Date.now()+"_"+Math.random().toString(36).slice(2)+"_"+safeName;
+
+ status.textContent="Uploading music...";
+
+ try{
+  const {error:ue}=await sb.storage.from(MUSIC_BUCKET).upload(path,file,{
+   contentType:file.type||"application/octet-stream",
+   upsert:false
+  });
+  if(ue)throw ue;
+
+  const {data:urlData}=sb.storage.from(MUSIC_BUCKET).getPublicUrl(path);
+  const audioUrl=urlData.publicUrl;
+
+  const {error:de}=await sb.from(MUSIC_TABLE).insert({
+   title:title,audio_url:audioUrl,enabled:true
+  });
+
+  if(de){
+   await sb.storage.from(MUSIC_BUCKET).remove([path]);
+   throw de;
+  }
+
+  status.textContent="Music uploaded successfully!";
+  $("musicTitle").value="";
+  $("musicFile").value="";
+  await loadAudio();
+  alert("Background music uploaded successfully!");
+ }catch(e){
+  console.error(e);
+  status.textContent="Upload failed: "+e.message;
+  alert("MUSIC UPLOAD ERROR: "+e.message);
+ }
+}
+
+// LOAD MUSIC
+async function loadAudio(){
+ const select=$("audioSelect");
+ select.innerHTML='<option value="">Loading music...</option>';
+ try{
+  const {data,error}=await sb.from(MUSIC_TABLE)
+   .select("id,title,audio_url,enabled,created_at")
+   .eq("enabled",true).order("created_at",{ascending:false});
+  if(error)throw error;
+
+  select.innerHTML='<option value="">Select background music</option>';
+  if(!data||!data.length){
+   select.innerHTML+='<option value="">No enabled music found</option>';
+   return;
+  }
+
+  data.forEach(item=>{
+   const option=document.createElement("option");
+   option.value=item.audio_url;
+   option.textContent=item.title;
+   select.appendChild(option);
+  });
+ }catch(e){
+  select.innerHTML='<option value="">Music loading failed</option>';
+  alert("MUSIC ERROR: "+e.message);
+ }
+}
+
+// AUDIO CONTROLS
+async function playAudio(){
+ const player=$("bgAudio");
+ const url=$("audioSelect").value;
+ if(!url)return alert("Select background music first.");
+ try{
+  if(player.src!==url){
+   player.pause();
+   player.src=url;
+   player.load();
+  }
+  await player.play();
+ }catch(e){alert("Playback error: "+e.message)}
+}
+
+function pauseAudio(){$("bgAudio").pause()}
+function stopAudio(){
+ const p=$("bgAudio");
+ p.pause();p.currentTime=0;
+}
+function setVolume(v){$("bgAudio").volume=v/100}
+
+// SCRIPTURE
 async function showScripture(){
- const reference=`${book.value} ${chapter.value}:${verseStart.value}${verseEnd.value?'-'+verseEnd.value:''}`;
+ if(!streamId)return alert("Start a broadcast first.");
+ const book=$("book").value.trim();
+ const chapter=Number($("chapter").value);
+ const start=Number($("verseStart").value);
+ const end=$("verseEnd").value?Number($("verseEnd").value):null;
+ if(!book||!chapter||!start)return alert("Enter the scripture details.");
 
- await sb.from("kh_scripture_display").insert({
-  stream_id:streamId,
-  bible_version:version.value,
-  book:book.value,
-  chapter:+chapter.value,
-  verse_start:+verseStart.value,
-  verse_end:verseEnd.value?+verseEnd.value:null,
-  reference,
-  display_enabled:true
- });
-
- scripturePreview.textContent=reference;
+ const reference=book+" "+chapter+":"+start+(end?"-"+end:"");
+ try{
+  const {error}=await sb.from("kh_scripture_display").insert({
+   stream_id:streamId,
+   bible_version:$("version").value,
+   book:book,
+   chapter:chapter,
+   verse_start:start,
+   verse_end:end,
+   reference:reference,
+   display_enabled:true
+  });
+  if(error)throw error;
+  $("scripturePreview").textContent=reference;
+ }catch(e){alert("SCRIPTURE ERROR: "+e.message)}
 }
 
 async function hideScripture(){
- await sb.from("kh_scripture_display")
- .update({display_enabled:false})
- .eq("stream_id",streamId);
- scripturePreview.textContent="";
+ if(!streamId)return alert("No active broadcast.");
+ try{
+  const {error}=await sb.from("kh_scripture_display")
+   .update({display_enabled:false}).eq("stream_id",streamId);
+  if(error)throw error;
+  $("scripturePreview").textContent="";
+ }catch(e){alert("SCRIPTURE ERROR: "+e.message)}
 }
 
+// DESTINATIONS
 async function saveDestinations(){
- alert("Destination controls saved. Stream URLs/keys should be configured securely in the admin backend.");
+ alert("Destination controls are placeholders. A streaming backend is required.");
 }
 
+// RECORDINGS
 async function loadRecordings(){
- const {data}=await sb.from("kh_live_recordings")
- .select("*").order("created_at",{ascending:false});
-
- recordings.innerHTML=(data||[]).map(r=>
- `<p><b>${r.title}</b><br>
- <a href="${r.video_url}" target="_blank">View recording</a></p>`
- ).join("")||"No recordings yet.";
+ const container=$("recordings");
+ try{
+  const {data,error}=await sb.from("kh_live_recordings")
+   .select("*").order("created_at",{ascending:false});
+  if(error)throw error;
+  container.innerHTML="";
+  if(!data||!data.length){
+   container.textContent="No recordings yet.";
+   return;
+  }
+  data.forEach(r=>{
+   const item=document.createElement("div");
+   item.className="audio-item";
+   const heading=document.createElement("strong");
+   heading.textContent=r.title||"Untitled recording";
+   item.appendChild(heading);
+   if(r.video_url){
+    const link=document.createElement("a");
+    link.href=r.video_url;
+    link.target="_blank";
+    link.rel="noopener";
+    link.textContent="View recording";
+    item.appendChild(document.createElement("br"));
+    item.appendChild(link);
+   }
+   container.appendChild(item);
+  });
+ }catch(e){
+  container.textContent="Recording loading failed: "+e.message;
+ }
 }
-</script>
 
+$("bgAudio").volume=0.3;
+</script>
 </body>
-  </html>
+    </html>
+    
