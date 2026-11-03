@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kingdom Heritage KJV Bible Importer</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5fb;color:#222;font-family:Arial,sans-serif}
+header{background:linear-gradient(135deg,#123c8c,#673ab7);color:#fff;padding:20px 14px;text-align:center}
+main{max-width:720px;margin:auto;padding:12px}
+.card{background:#fff;padding:16px;margin:12px 0;border-radius:12px;box-shadow:0 2px 9px #0002}
+input,button{width:100%;padding:13px;margin:7px 0;border:1px solid #d6d9e2;border-radius:8px;font-size:16px}
+button{border:0;background:#123c8c;color:#fff;font-weight:bold}
+button:disabled{opacity:.55}
+.green{background:#16833b}.red{background:#b3261e}
+.small{font-size:13px;color:#555;line-height:1.5}
+#progressBox{height:14px;background:#e5e7eb;border-radius:20px;overflow:hidden}
+#progressBar{height:100%;width:0;background:#16833b;transition:width .2s}
+#log{white-space:pre-wrap;overflow-wrap:anywhere;background:#101827;color:#d8e5ff;padding:12px;border-radius:8px;max-height:260px;overflow:auto;font-size:12px}
+.status{padding:10px;background:#eef2ff;border-radius:8px;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+<h2>Kingdom Heritage Network</h2>
+<p>KJV Bible Database Importer</p>
+</header>
+<main>
+<div class="card">
+<h3>1. Administrator Login</h3>
+<p class="small">Sign in with the same active Kingdom Heritage administrator account used for Channel Admin.</p>
+<input id="email" type="email" autocomplete="username" placeholder="Administrator email">
+<input id="password" type="password" autocomplete="current-password" placeholder="Password">
+<button id="loginBtn" onclick="login()">Sign in</button>
+<p id="loginStatus" class="small"></p>
+</div>
+
+<div class="card">
+<h3>2. Import the King James Version</h3>
+<p class="small">This importer downloads the 66 KJV book files from the public-domain Midvash Bible dataset and stores the verse text in your Supabase table <b>kh_bible_verses</b>. It sends small batches and can safely be run again if an import is interrupted; existing verses are skipped.</p>
+<div class="status" id="authStatus">Not signed in.</div>
+<div style="margin:12px 0"><div id="progressBox"><div id="progressBar"></div></div></div>
+<p id="progressText" class="small">0 of 66 books completed.</p>
+<button class="green" id="importBtn" onclick="startImport()" disabled>START KJV IMPORT</button>
+<button class="red" id="logoutBtn" onclick="logout()" disabled>Sign out</button>
+</div>
+
+<div class="card">
+<h3>Import activity</h3>
+<div id="log">Waiting for administrator login.</div>
+<p id="finalStatus" class="small"></p>
+</div>
+
+<div class="card">
+<h3>Dataset information</h3>
+<p class="small">Source: <a href="https://github.com/midvash/bible-data" target="_blank" rel="noopener">Midvash open Bible data repository</a>. The repository identifies its KJV text as public domain and provides one JSON file per book. The importer stores the KJV version code as KJV and uses the full English book names.</p>
+<p class="small">An internet connection is needed during this one-time import. After the verses are stored, your channel page can retrieve the verse text from Supabase rather than from an external Bible API.</p>
+</div>
+</main>
+
+<script>
+const SUPABASE_URL="https://pyzifnxflqvclctwogdz.supabase.co";
+const SUPABASE_KEY="sb_publishable_9ewFHMOrQsopkeQziD5z1w_ZB4Zmc58";
+const TABLE="kh_bible_verses";
+const SOURCE="https://raw.githubusercontent.com/midvash/bible-data/main/versions/en/kjv/books/";
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const BOOKS=[
+["Gen","Genesis"],["Exod","Exodus"],["Lev","Leviticus"],["Num","Numbers"],
+["Deut","Deuteronomy"],["Josh","Joshua"],["Judg","Judges"],["Ruth","Ruth"],
+["1Sam","1 Samuel"],["2Sam","2 Samuel"],["1Kgs","1 Kings"],["2Kgs","2 Kings"],
+["1Chr","1 Chronicles"],["2Chr","2 Chronicles"],["Ezra","Ezra"],["Neh","Nehemiah"],
+["Esth","Esther"],["Job","Job"],["Ps","Psalms"],["Prov","Proverbs"],
+["Eccl","Ecclesiastes"],["Song","Song of Solomon"],["Isa","Isaiah"],["Jer","Jeremiah"],
+["Lam","Lamentations"],["Ezek","Ezekiel"],["Dan","Daniel"],["Hos","Hosea"],
+["Joel","Joel"],["Amos","Amos"],["Obad","Obadiah"],["Jonah","Jonah"],
+["Mic","Micah"],["Nah","Nahum"],["Hab","Habakkuk"],["Zeph","Zephaniah"],
+["Hag","Haggai"],["Zech","Zechariah"],["Mal","Malachi"],["Matt","Matthew"],
+["Mark","Mark"],["Luke","Luke"],["John","John"],["Acts","Acts"],["Rom","Romans"],
+["1Cor","1 Corinthians"],["2Cor","2 Corinthians"],["Gal","Galatians"],["Eph","Ephesians"],
+["Phil","Philippians"],["Col","Colossians"],["1Thess","1 Thessalonians"],
+["2Thess","2 Thessalonians"],["1Tim","1 Timothy"],["2Tim","2 Timothy"],
+["Titus","Titus"],["Phlm","Philemon"],["Heb","Hebrews"],["Jas","James"],
+["1Pet","1 Peter"],["2Pet","2 Peter"],["1John","1 John"],["2John","2 John"],
+["3John","3 John"],["Jude","Jude"],["Rev","Revelation"]
+];
+
+const $=id=>document.getElementById(id);
+let signedIn=false;
+let importing=false;
+
+function log(message){
+const box=$("log");
+box.textContent+=(box.textContent?"\n":"")+message;
+box.scrollTop=box.scrollHeight;
+}
+function setProgress(done){
+$("progressBar").style.width=(done/BOOKS.length*100)+"%";
+$("progressText").textContent=done+" of "+BOOKS.length+" books completed.";
+}
+
+async function login(){
+$("loginBtn").disabled=true;
+$("loginStatus").textContent="Signing in...";
+try{
+const {data,error}=await sb.auth.signInWithPassword({
+email:$("email").value.trim(),
+password:$("password").value
+});
+if(error)throw error;
+if(!data.session)throw new Error("No login session was returned.");
+signedIn=true;
+$("authStatus").textContent="Signed in. Ready to import KJV.";
+$("loginStatus").textContent="Administrator login successful.";
+$("importBtn").disabled=false;
+$("logoutBtn").disabled=false;
+$("log").textContent="Signed in successfully. Ready.";
+}catch(e){
+$("loginStatus").textContent="Login failed: "+e.message;
+log("LOGIN ERROR: "+e.message);
+}finally{
+$("loginBtn").disabled=false;
+}
+}
+
+async function logout(){
+if(importing)return alert("Wait for the import to finish.");
+await sb.auth.signOut();
+signedIn=false;
+$("authStatus").textContent="Not signed in.";
+$("importBtn").disabled=true;
+$("logoutBtn").disabled=true;
+$("loginStatus").textContent="Signed out.";
+}
+
+async function fetchBook(fileCode,displayName){
+const response=await fetch(SOURCE+encodeURIComponent(fileCode)+".json");
+if(!response.ok)throw new Error(displayName+": source download failed (HTTP "+response.status+").");
+const book=await response.json();
+if(!Array.isArray(book.chapters)||!book.chapters.length){
+throw new Error(displayName+": downloaded file has an unexpected format.");
+}
+return book;
+}
+
+async function uploadRows(rows,bookName){
+const BATCH_SIZE=300;
+for(let i=0;i<rows.length;i+=BATCH_SIZE){
+const batch=rows.slice(i,i+BATCH_SIZE);
+const {error}=await sb.from(TABLE).upsert(batch,{
+onConflict:"version,book,chapter,verse",
+ignoreDuplicates:true
+});
+if(error)throw new Error(bookName+" upload failed: "+error.message);
+}
+}
+
+async function startImport(){
+if(!signedIn)return alert("Please sign in first.");
+if(importing)return;
+if(!confirm("Import the complete 66-book KJV Bible into Supabase? This may take several minutes. Existing verses will be skipped."))return;
+
+importing=true;
+$("importBtn").disabled=true;
+$("loginBtn").disabled=true;
+$("finalStatus").textContent="";
+$("log").textContent="Starting KJV import...";
+setProgress(0);
+
+let totalProcessed=0;
+let completed=0;
+
+try{
+for(let i=0;i<BOOKS.length;i++){
+const [fileCode,displayName]=BOOKS[i];
+$("authStatus").textContent="Downloading and importing: "+displayName;
+log("Loading "+displayName+"...");
+
+const book=await fetchBook(fileCode,displayName);
+const rows=[];
+
+for(const chapter of book.chapters){
+for(const verse of chapter.verses||[]){
+if(!verse.text||!String(verse.text).trim())continue;
+rows.push({
+version:"KJV",
+book:displayName,
+chapter:Number(chapter.chapter),
+verse:Number(verse.number),
+text:String(verse.text).trim()
+});
+}
+}
+
+if(!rows.length)throw new Error(displayName+": no verses found; import stopped.");
+
+await uploadRows(rows,displayName);
+totalProcessed+=rows.length;
+completed++;
+setProgress(completed);
+log("✓ "+displayName+": "+rows.length+" verses processed.");
+}
+
+const {count,error}=await sb.from(TABLE)
+.select("id",{count:"exact",head:true})
+.eq("version","KJV");
+if(error)throw new Error("Import finished, but final count could not be checked: "+error.message);
+
+$("authStatus").textContent="KJV import completed.";
+$("finalStatus").textContent=
+"Import completed. "+completed+" books processed; "+
+totalProcessed.toLocaleString()+" verse rows processed. "+
+"Supabase currently reports "+Number(count||0).toLocaleString()+
+" KJV rows in the table.";
+log("DONE. KJV rows currently in Supabase: "+Number(count||0).toLocaleString()+".");
+alert("KJV import completed. Books processed: "+completed+". KJV rows in Supabase: "+Number(count||0).toLocaleString()+".");
+}catch(e){
+$("authStatus").textContent="Import stopped. You can run it again to continue safely.";
+$("finalStatus").textContent=e.message;
+log("ERROR: "+e.message);
+alert("Import stopped: "+e.message+"\n\nYou can run the importer again. Previously uploaded verses will be skipped.");
+}finally{
+importing=false;
+$("importBtn").disabled=!signedIn;
+$("loginBtn").disabled=false;
+}
+}
+</script>
+</body>
+</html>
