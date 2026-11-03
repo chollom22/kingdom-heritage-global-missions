@@ -1,1 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Watch live broadcasts and recorded messages from Kingdom Heritage Network Global Missions.">
+  <meta name="theme-color" content="#102a72">
+  <title>Channel | Kingdom Heritage Network Global Missions</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{--blue:#102a72;--purple:#54268a;--light:#f4f5fb;--white:#fff;--ink:#20243a;--muted:#687087}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--light);color:var(--ink);line-height:1.55}
+    header{background:linear-gradient(115deg,var(--blue),var(--purple));color:white;padding:15px 4%;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:52px;height:52px;object-fit:contain;border-radius:50%;background:#fff}
+    .brand h1{font-size:17px;margin:0}
+    .brand p{font-size:12px;margin:2px 0 0;opacity:.9}
+    nav{display:flex;gap:8px;flex-wrap:wrap}
+    nav a{color:white;text-decoration:none;padding:8px 10px;border-radius:6px;font-size:13px}
+    nav a:hover{background:#ffffff25}
+    main{width:min(1100px,94%);margin:25px auto}
+    .intro{text-align:center;margin:20px 0 25px}
+    .intro h2{color:var(--blue);margin-bottom:5px}
+    .intro p{color:var(--muted);margin-top:0}
+    .section{background:white;border-radius:13px;padding:18px;margin:18px 0;box-shadow:0 3px 15px #17224b0d}
+    .section h2{color:var(--blue);font-size:21px;margin:0 0 13px}
+    .player-wrap{background:#080b15;border-radius:10px;overflow:hidden;position:relative}
+    video{display:block;width:100%;max-height:600px;background:#080b15}
+    .offline{color:#fff;text-align:center;padding:55px 15px}
+    .offline strong{display:block;font-size:20px;margin-bottom:8px}
+    .status{display:inline-block;padding:4px 10px;border-radius:30px;background:#eee;color:#555;font-size:12px;font-weight:bold;margin-bottom:10px}
+    .status.live{background:#ffe5e5;color:#b00020}
+    .scripture{margin-top:12px;border-left:5px solid var(--purple);background:#f2edfb;padding:15px;border-radius:8px}
+    .scripture h3{margin:0 0 5px;color:var(--purple);font-size:17px}
+    #scriptureReference{font-weight:bold;color:var(--blue)}
+    #scriptureText{margin:7px 0 0;white-space:pre-wrap}
+    .hint{font-size:12px;color:var(--muted)}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+    input,select{padding:11px;border:1px solid #d8dbea;border-radius:7px;font-size:14px;max-width:100%}
+    input{flex:1;min-width:180px}
+    .video-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px}
+    .video-card{border:1px solid #e8e9f1;border-radius:10px;overflow:hidden;background:white}
+    .video-card video{aspect-ratio:16/9;max-height:none}
+    .video-info{padding:13px}
+    .video-info h3{margin:0 0 5px;font-size:17px;color:var(--blue)}
+    .video-info p{margin:4px 0;color:var(--muted);font-size:13px}
+    .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+    .btn{display:inline-block;border:0;border-radius:7px;padding:9px 12px;background:var(--blue);color:white;text-decoration:none;font-size:13px;cursor:pointer}
+    .btn.purple{background:var(--purple)}
+    .btn.light{background:#eee8fa;color:var(--blue)}
+    .share-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+    .share-links a{display:inline-block;padding:8px 10px;border-radius:7px;background:#eee8fa;color:var(--blue);text-decoration:none;font-size:12px;font-weight:bold}
+    .empty{padding:22px;text-align:center;color:var(--muted);background:#fafaff;border-radius:8px}
+    footer{text-align:center;padding:25px 12px;background:#101d4b;color:white;margin-top:35px;font-size:13px}
+    footer a{color:#fff}
+    @media(max-width:600px){header{justify-content:center;text-align:center}.brand{justify-content:center}nav{justify-content:center}.section{padding:14px}.intro h2{font-size:22px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <img src="logo.png" alt="Kingdom Heritage Network logo" onerror="this.style.display='none'">
+    <div>
+      <h1>Kingdom Heritage Network Global Missions</h1>
+      <p>Channel • Live Broadcast • Messages</p>
+    </div>
+  </div>
+  <nav aria-label="Main navigation">
+    <a href="index.html">Home</a>
+    <a href="channel.html">Channel</a>
+    <a href="publishing.html">Publishing</a>
+    <a href="prayer.html">Prayer</a>
+  </nav>
+</header>
 
+<main>
+  <section class="intro">
+    <h2>Kingdom Heritage Channel</h2>
+    <p>Watch live broadcasts, revisit messages and share the message with others.</p>
+  </section>
+
+  <section class="section" id="live">
+    <h2>Live Broadcast</h2>
+    <span id="liveStatus" class="status">CHECKING LIVE STATUS</span>
+    <div class="player-wrap" id="livePlayerWrap">
+      <div class="offline" id="liveOffline">
+        <strong>Welcome to Kingdom Heritage Channel</strong>
+        The live broadcast will appear here when a stream is made available.
+      </div>
+      <video id="livePlayer" controls playsinline autoplay muted hidden></video>
+    </div>
+    <div class="scripture" id="scripturePanel" hidden aria-live="polite">
+      <h3>Scripture Reading</h3>
+      <div id="scriptureReference"></div>
+      <p id="scriptureText"></p>
+      <div class="hint" id="scriptureVersion"></div>
+    </div>
+    <p class="hint">If the broadcast does not start, refresh this page or return later.</p>
+  </section>
+
+  <section class="section" id="videos">
+    <h2>Recorded Messages</h2>
+    <div class="toolbar">
+      <input id="searchInput" type="search" placeholder="Search messages..." aria-label="Search messages">
+      <select id="categoryFilter" aria-label="Filter by category">
+        <option value="">All categories</option>
+        <option value="Sermon">Sermon</option>
+        <option value="Teaching">Teaching</option>
+        <option value="Prayer">Prayer</option>
+        <option value="Event">Event</option>
+      </select>
+    </div>
+    <div id="videoGrid" class="video-grid">
+      <div class="empty">Recorded messages will appear here when they are added by the ministry.</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; <span id="year"></span> Kingdom Heritage Network Global Missions. All rights reserved.</p>
+  <p><a href="index.html">Home</a> | <a href="prayer.html">Prayer Request</a> | <a href="publishing.html">Publishing</a></p>
+</footer>
+
+<script>
+  // Supabase public project settings. Never put a service-role key in a public webpage.
+  const SUPABASE_URL = "https://pyzifnxflqvclctwogdz.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_9ewFHMOrQsopkeQziD5z1w_ZB4Zmc58";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Add public recordings to this list, or replace this list with your archive table later.
+  // Each video needs a unique id, title, speaker, category, date, description and public video URL.
+  const recordings = [];
+
+  const videoGrid = document.getElementById("videoGrid");
+  const searchInput = document.getElementById("searchInput");
+  const categoryFilter = document.getElementById("categoryFilter");
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function safeText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[char]));
+  }
+
+  function makeShareUrl(video) {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    url.searchParams.set("video", video.id);
+    return url.toString();
+  }
+
+  async function shareVideo(video) {
+    const shareUrl = makeShareUrl(video);
+    const shareData = {
+      title: video.title,
+      text: video.title + " — Kingdom Heritage Network Global Missions",
+      url: shareUrl
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (error) {
+        if (error.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      alert("Video link copied. You can paste it into WhatsApp, Facebook, Telegram or another app.");
+    } catch (error) {
+      window.prompt("Copy this video link:", shareUrl);
+    }
+  }
+
+  function renderVideos() {
+    const term = searchInput.value.trim().toLowerCase();
+    const category = categoryFilter.value;
+    const filtered = recordings.filter(video => {
+      const searchable = [video.title, video.speaker, video.category, video.description].join(" ").toLowerCase();
+      return searchable.includes(term) && (!category || video.category === category);
+    });
+
+    if (!filtered.length) {
+      videoGrid.innerHTML = '<div class="empty">No recorded messages are available for this search yet.</div>';
+      return;
+    }
+
+    videoGrid.innerHTML = "";
+    filtered.forEach(video => {
+      const card = document.createElement("article");
+      card.className = "video-card";
+      const source = safeText(video.url);
+      card.innerHTML = `
+        <video controls preload="metadata" playsinline>
+          <source src="${source}" type="video/mp4">
+          Your browser does not support video playback.
+        </video>
+        <div class="video-info">
+          <h3>${safeText(video.title)}</h3>
+          <p>${safeText(video.speaker || "Kingdom Heritage Network")}</p>
+          <p>${safeText(video.category || "Message")} ${video.date ? "• " + safeText(video.date) : ""}</p>
+          <p>${safeText(video.description || "")}</p>
+          <div class="actions">
+            <a class="btn" href="${source}" download>Download video</a>
+            <button class="btn purple share-main" type="button">Share video</button>
+          </div>
+          <div class="share-links" aria-label="Share this video">
+            <a class="share-whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a class="share-facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a class="share-telegram" target="_blank" rel="noopener noreferrer">Telegram</a>
+            <a class="share-x" target="_blank" rel="noopener noreferrer">X</a>
+          </div>
+        </div>`;
+
+      const link = makeShareUrl(video);
+      const text = video.title + " — Kingdom Heritage Network Global Missions";
+      card.querySelector(".share-main").addEventListener("click", () => shareVideo(video));
+      card.querySelector(".share-whatsapp").href = "https://wa.me/?text=" + encodeURIComponent(text + " " + link);
+      card.querySelector(".share-facebook").href = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(link);
+      card.querySelector(".share-telegram").href = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(text);
+      card.querySelector(".share-x").href = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(text);
+      videoGrid.appendChild(card);
+    });
+  }
+
+  searchInput.addEventListener("input", renderVideos);
+  categoryFilter.addEventListener("change", renderVideos);
+  renderVideos();
+
+  async function loadLiveBroadcast() {
+    const status = document.getElementById("liveStatus");
+    const player = document.getElementById("livePlayer");
+    const offline = document.getElementById("liveOffline");
+
+    // This page expects an active stream row with a public stream_url.
+    // If your admin table uses different column names, adjust this query to match it.
+    const { data, error } = await supabaseClient
+      .from("kh_live_streams")
+      .select("*")
+      .eq("is_live", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error || !data || !data.stream_url) {
+      status.textContent = "OFFLINE";
+      status.className = "status";
+      player.hidden = true;
+      offline.hidden = false;
+      return;
+    }
+
+    status.textContent = "LIVE";
+    status.className = "status live";
+    offline.hidden = true;
+    player.hidden = false;
+    if (player.src !== data.stream_url) {
+      player.src = data.stream_url;
+      player.load();
+    }
+  }
+
+  async function loadScripture() {
+    const panel = document.getElementById("scripturePanel");
+    const { data, error } = await supabaseClient
+      .from("kh_scripture_display")
+      .select("reference,verse_text,bible_version,display_enabled,created_at")
+      .eq("display_enabled", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error || !data || !data.verse_text) {
+      panel.hidden = true;
+      return;
+    }
+
+    document.getElementById("scriptureReference").textContent = data.reference || "Bible Scripture";
+    document.getElementById("scriptureText").textContent = data.verse_text;
+    document.getElementById("scriptureVersion").textContent = data.bible_version || "Bible";
+    panel.hidden = false;
+  }
+
+  loadLiveBroadcast();
+  loadScripture();
+  setInterval(loadLiveBroadcast, 10000);
+  setInterval(loadScripture, 5000);
+
+  // Realtime updates, with polling above as a fallback.
+  supabaseClient.channel("public-channel-live")
+    .on("postgres_changes", { event: "*", schema: "public", table: "kh_live_streams" }, loadLiveBroadcast)
+    .on("postgres_changes", { event: "*", schema: "public", table: "kh_scripture_display" }, loadScripture)
+    .subscribe();
+</script>
+</body>
+</html>
