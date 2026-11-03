@@ -321,6 +321,7 @@ async function startLive(){
 try{
 if(!mediaStream)throw new Error("Start your camera first.");
 $("status").textContent="Connecting...";
+  await connectLiveKitHost();
 const {data:s,error:se}=await sb.auth.getSession();
 if(se)throw se;
 if(!s.session)throw new Error("Please log in again.");
