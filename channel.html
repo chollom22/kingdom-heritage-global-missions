@@ -128,6 +128,75 @@
   const SUPABASE_URL = "https://pyzifnxflqvclctwogdz.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_9ewFHMOrQsopkeQziD5z1w_ZB4Zmc58";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let viewerRoom = null;
+
+async function connectPublicViewer() {
+  const video = document.getElementById("livePlayer");
+  const offline = document.getElementById("liveOffline");
+  const status = document.getElementById("liveStatus");
+
+  try {
+    status.textContent = "CONNECTING TO LIVE BROADCAST...";
+
+    const { data, error } = await supabaseClient.functions.invoke(
+      "livekit-token",
+      {
+        body: { role: "viewer" }
+      }
+    );
+
+    if (error) throw error;
+
+    if (!data?.token || !data?.serverUrl) {
+      throw new Error("Viewer access token was not received.");
+    }
+
+    viewerRoom = new LivekitClient.Room();
+
+    viewerRoom.on(
+      LivekitClient.RoomEvent.TrackSubscribed,
+      (track) => {
+        if (track.kind === "video") {
+          track.attach(video);
+          video.hidden = false;
+          offline.hidden = true;
+          video.muted = false;
+          video.play().catch(() => {
+            status.textContent = "LIVE — TAP PLAY TO WATCH";
+          });
+        }
+
+        if (track.kind === "audio") {
+          const audioElement = track.attach();
+          audioElement.autoplay = true;
+          audioElement.controls = true;
+          document.body.appendChild(audioElement);
+
+          audioElement.play().catch(() => {
+            status.textContent = "LIVE — TAP AUDIO TO LISTEN";
+          });
+        }
+
+        status.textContent = "🔴 LIVE NOW";
+      }
+    );
+
+    viewerRoom.on(
+      LivekitClient.RoomEvent.Disconnected,
+      () => {
+        status.textContent = "BROADCAST DISCONNECTED";
+      }
+    );
+
+    await viewerRoom.connect(data.serverUrl, data.token);
+
+    status.textContent = "CONNECTED — WAITING FOR BROADCAST";
+
+  } catch (error) {
+    status.textContent = "BROADCAST UNAVAILABLE";
+    console.error("Viewer connection error:", error);
+  }
+}
 
   // Add public recordings to this list, or replace this list with your archive table later.
   // Each video needs a unique id, title, speaker, category, date, description and public video URL.
