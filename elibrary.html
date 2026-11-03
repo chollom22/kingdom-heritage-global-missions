@@ -4,119 +4,268 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Church E-Library | Kingdom Heritage Network</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta name="description" content="Explore Christian books, ministry resources, Bible study materials and other Christian libraries.">
+<title>Church E-Library | Kingdom Heritage Network Global Missions</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
+
 <style>
-body{margin:0;font-family:Arial;background:#f4f6fa;color:#222}
-header{background:#172554;color:white;padding:25px;text-align:center}
-main{max-width:900px;margin:25px auto;padding:15px}
-input,select{padding:13px;margin:5px 0;width:100%;box-sizing:border-box;border:1px solid #ccc;border-radius:7px}
-.card{background:white;padding:18px;margin:15px 0;border-radius:10px;box-shadow:0 2px 8px #ddd}
-button,.btn{background:#07562f;color:white;padding:10px 16px;border:0;border-radius:6px;text-decoration:none;display:inline-block;margin:5px;cursor:pointer}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f5fa;color:#252525}
+header{background:linear-gradient(120deg,#172554,#54258a);color:white;text-align:center;padding:35px 15px}
+header h1{font-size:26px}
+header p{line-height:1.6}
+main{max-width:1050px;margin:auto;padding:20px}
+h2{color:#172554}
+.search-area{background:white;padding:18px;border-radius:12px;margin-bottom:25px}
+input,select{width:100%;padding:14px;border:1px solid #ccc;border-radius:7px;margin:7px 0;font-size:15px}
+.section{margin:35px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px}
+.card{background:white;padding:18px;border-radius:10px;box-shadow:0 2px 9px #00000012}
+.card h3{color:#172554;margin-top:0}
+.card p{line-height:1.6}
+.btn{display:inline-block;background:#07562f;color:white;text-decoration:none;padding:10px 14px;border-radius:6px;margin:5px 4px 0 0}
+.library-link{background:#172554}
+.muted{color:#666;font-size:14px}
+footer{background:#172554;color:white;text-align:center;padding:22px;margin-top:40px}
+a{overflow-wrap:anywhere}
 </style>
 </head>
+
 <body>
 
 <header>
-<h2>Kingdom Heritage Network Global Missions</h2>
-<h3>Church E-Library</h3>
+<h1>Kingdom Heritage Network Global Missions</h1>
+<h2 style="color:white">Church E-Library</h2>
 <p>Accurate dispensation of the word, true worship and intercession.</p>
 </header>
 
 <main>
-<input id="search" placeholder="Search books and materials...">
+
+<section class="section">
+<h2>Church & Ministry Materials</h2>
+<p>Explore and access Christian books, teaching materials, ministry documents and other resources.</p>
+
+<div class="search-area">
+<input id="search" type="search" placeholder="Search books and materials...">
 <select id="filter">
 <option value="">All Categories</option>
 </select>
+<p class="muted" id="count">Loading materials...</p>
+</div>
 
 <div id="resources">Loading materials...</div>
+</section>
+
+<section class="section">
+<h2>Other Christian Online Libraries</h2>
+<p>Explore these additional Christian study and research resources.</p>
+
+<div class="cards">
+
+<div class="card">
+<h3>Bible Gateway</h3>
+<p>Read and search different Bible translations online.</p>
+<a class="btn library-link" href="https://www.biblegateway.com/" target="_blank" rel="noopener">Visit Library</a>
+</div>
+
+<div class="card">
+<h3>Blue Letter Bible</h3>
+<p>Explore Bible study tools, commentaries, dictionaries and original-language resources.</p>
+<a class="btn library-link" href="https://www.blueletterbible.org/" target="_blank" rel="noopener">Visit Library</a>
+</div>
+
+<div class="card">
+<h3>BibleProject</h3>
+<p>Access Bible study videos, reading plans and biblical resources.</p>
+<a class="btn library-link" href="https://bibleproject.com/" target="_blank" rel="noopener">Visit Library</a>
+</div>
+
+<div class="card">
+<h3>STEP Bible</h3>
+<p>Study Scripture with Bible translations and language research tools.</p>
+<a class="btn library-link" href="https://www.stepbible.org/" target="_blank" rel="noopener">Visit Library</a>
+</div>
+
+<div class="card">
+<h3>Christian Classics Ethereal Library</h3>
+<p>Explore Christian classics, theological writings and historical Christian literature.</p>
+<a class="btn library-link" href="https://www.ccel.org/" target="_blank" rel="noopener">Visit Library</a>
+</div>
+
+<div class="card">
+<h3>World History of Christian Literature</h3>
+<p>Explore historical Christian literature and digital collections.</p>
+<a class="btn library-link" href="https://www.whdl.org/" target="_blank" rel="noopener">Visit Library</a>
+</div>
+
+</div>
+</section>
+
 </main>
 
+<footer>
+<p>Kingdom Heritage Network Global Missions</p>
+<p>Interdenominational | Not-for-profit | Non-political</p>
+<p>&copy; <span id="year"></span> All Rights Reserved.</p>
+</footer>
+
 <script>
+"use strict";
+
 const URL="https://pyzifnxflqvclctwogdz.supabase.co";
+
 const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5emlmbnhmbHF2Y2xjdHdvZ2R6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5Mjk2MTgsImV4cCI6MjEwNjUwNTYxOH0.o_b4ZsTB4GSE-7v5p1Pynchdf8Sdol_q0Xkzpmcx-tc";
+
 const TABLE="kh_elibrary_materials";
 const BUCKET="kh-elibrary";
 
-const db=supabase.createClient(URL,KEY);
+const resources=document.getElementById("resources");
+const search=document.getElementById("search");
+const filter=document.getElementById("filter");
+const count=document.getElementById("count");
+
+let db;
 let materials=[];
 
-async function load(){
- const box=document.getElementById("resources");
- box.textContent="Loading materials...";
+document.getElementById("year").textContent=new Date().getFullYear();
 
- const {data,error}=await db.from(TABLE)
- .select("*")
- .eq("is_published",true)
- .order("created_at",{ascending:false});
+function showMessage(message){
+ resources.textContent=message;
+}
 
- if(error){
-  box.textContent="Unable to load materials: "+error.message;
-  return;
- }
-
- materials=data||[];
-
- const categories=[...new Set(materials.map(x=>x.category).filter(Boolean))];
- const filter=document.getElementById("filter");
- categories.forEach(c=>filter.add(new Option(c,c)));
-
- render();
+function makeLink(url,label){
+ const a=document.createElement("a");
+ a.href=url;
+ a.textContent=label;
+ a.className="btn";
+ a.target="_blank";
+ a.rel="noopener";
+ return a;
 }
 
 function render(){
- const search=document.getElementById("search").value.toLowerCase();
- const category=document.getElementById("filter").value;
- const box=document.getElementById("resources");
 
- box.replaceChildren();
+ const term=search.value.trim().toLowerCase();
+ const category=filter.value;
 
- const results=materials.filter(x=>
-  (x.title||"").toLowerCase().includes(search) &&
-  (!category||x.category===category)
- );
+ const results=materials.filter(item=>{
+  const title=(item.title||"").toLowerCase();
+  const description=(item.description||"").toLowerCase();
+
+  return (title.includes(term)||description.includes(term)) &&
+  (!category||item.category===category);
+ });
+
+ resources.replaceChildren();
+
+ count.textContent=results.length+" material(s) found";
 
  if(!results.length){
-  box.textContent="No published materials found.";
+  showMessage("No published materials found.");
   return;
  }
 
- results.forEach(x=>{
-  const url=db.storage.from(BUCKET).getPublicUrl(x.file_path).data.publicUrl;
-  const card=document.createElement("div");
+ const container=document.createElement("div");
+ container.className="cards";
+
+ results.forEach(item=>{
+
+  const card=document.createElement("article");
   card.className="card";
 
   const title=document.createElement("h3");
-  title.textContent=x.title||"Untitled";
+  title.textContent=item.title||"Untitled material";
 
   const description=document.createElement("p");
-  description.textContent=x.description||"";
+  description.textContent=item.description||"No description available.";
 
   const categoryText=document.createElement("p");
-  categoryText.textContent="Category: "+(x.category||"General");
+  categoryText.className="muted";
+  categoryText.textContent="Category: "+(item.category||"General");
 
-  const view=document.createElement("a");
-  view.href=url;
-  view.target="_blank";
-  view.rel="noopener";
-  view.className="btn";
-  view.textContent="View Material";
+  card.append(title,description,categoryText);
 
-  const download=document.createElement("a");
-  download.href=url;
-  download.download=x.file_name||"material";
-  download.className="btn";
-  download.textContent="Download";
+  if(item.file_path){
 
-  card.append(title,description,categoryText,view,download);
-  box.appendChild(card);
+   const fileURL=db.storage.from(BUCKET).getPublicUrl(item.file_path).data.publicUrl;
+
+   card.append(
+    makeLink(fileURL,"View Material"),
+    makeLink(fileURL,"Download")
+   );
+
+  }else{
+   const note=document.createElement("p");
+   note.className="muted";
+   note.textContent="File not available.";
+   card.append(note);
+  }
+
+  container.append(card);
  });
+
+ resources.append(container);
 }
 
-document.getElementById("search").addEventListener("input",render);
-document.getElementById("filter").addEventListener("change",render);
+async function load(){
 
-load();
+ showMessage("Loading materials...");
+ count.textContent="Connecting to library...";
+
+ try{
+
+  const {data,error}=await db
+   .from(TABLE)
+   .select("*")
+   .eq("is_published",true)
+   .order("created_at",{ascending:false});
+
+  if(error){
+   console.error("Supabase error:",error);
+   count.textContent="Library connection failed.";
+   showMessage("Unable to load materials: "+error.message);
+   return;
+  }
+
+  materials=data||[];
+
+  filter.replaceChildren(new Option("All Categories",""));
+
+  const categories=[...new Set(
+   materials.map(x=>x.category).filter(Boolean)
+  )].sort();
+
+  categories.forEach(category=>{
+   filter.add(new Option(category,category));
+  });
+
+  render();
+
+ }catch(error){
+
+  console.error("Loading error:",error);
+  count.textContent="Loading failed.";
+  showMessage("Connection error: "+error.message);
+
+ }
+}
+
+if(!window.supabase){
+
+ showMessage("Supabase library failed to load. Check your internet connection and refresh.");
+
+}else{
+
+ db=window.supabase.createClient(URL,KEY);
+
+ search.addEventListener("input",render);
+ filter.addEventListener("change",render);
+
+ load();
+
+}
 </script>
+
 </body>
 </html>
