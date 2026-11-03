@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>E-Library Admin | Kingdom Heritage</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body{font-family:Arial;background:#f1f3fa;margin:0;padding:20px;color:#222}
+main{max-width:650px;margin:auto;background:white;padding:20px;border-radius:12px}
+h2{color:#38216c}input,textarea,button{width:100%;padding:12px;margin:7px 0;box-sizing:border-box}
+button{background:#38216c;color:white;border:0;border-radius:6px}
+.item{padding:12px;border:1px solid #ddd;margin:10px 0;border-radius:8px}
+.item button{width:auto;margin-right:5px}
+#panel{display:none}
+</style>
+</head>
+<body>
+<main>
+<h2>Kingdom Heritage E-Library Admin</h2>
+
+<div id="login">
+<input id="email" type="email" placeholder="Admin email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+</div>
+
+<div id="panel">
+<button onclick="logout()">Logout</button>
+<h3>Upload Material</h3>
+<input id="title" placeholder="Material title">
+<textarea id="description" placeholder="Description"></textarea>
+<input id="category" placeholder="Category">
+<input id="file" type="file" accept=".pdf,.ppt,.pptx,.doc,.docx">
+<button onclick="upload()">Upload Material</button>
+<h3>Manage Materials</h3>
+<div id="items"></div>
+</div>
+<p id="msg"></p>
+</main>
+
+<script>
+const db=supabase.createClient(
+"https://bmiechymiyedubezhcqk.supabase.co",
+"sb_publishable_9ewFHMOrQsopkeQziD5z1w_ZB4Zmc58"
+);
+
+const $=id=>document.getElementById(id);
+const say=t=>$("msg").textContent=t;
+
+async function login(){
+say("Checking login...");
+const {error}=await db.auth.signInWithPassword({
+email:$("email").value.trim(),
+password:$("password").value
+});
+if(error){say(error.message);return;}
+
+const {data, error:checkError}=await db.rpc("is_active_kh_admin");
+if(checkError||data!==true){
+await db.auth.signOut();
+say("This account is not an authorized administrator.");
+return;
+}
+$("login").style.display="none";
+$("panel").style.display="block";
+say("Welcome, administrator.");
+load();
+}
+
+async function logout(){
+await db.auth.signOut();
+location.reload();
+}
+
+async function upload(){
+const f=$("file").files[0];
+if(!f||!$("title").value.trim()){
+say("Enter a title and select a file.");return;
+}
+if(f.size>50*1024*1024){say("Maximum file size is 50MB.");return;}
+
+say("Uploading...");
+const {data:{user}}=await db.auth.getUser();
+const path=user.id+"/"+Date.now()+"_"+f.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+
+let {error}=await db.storage.from("kh-elibrary").upload(path,f);
+if(error){say(error.message);return;}
+
+const result=await db.from("kh_elibrary_materials").insert({
+title:$("title").value.trim(),
+description:$("description").value.trim(),
+category:$("category").value.trim()||"General",
+file_name:f.name,
+file_path:path,
+file_type:f.type,
+file_size:f.size,
+is_published:false,
+created_by:user.id
+});
+if(result.error){say(result.error.message);return;}
+
+say("Material uploaded successfully.");
+$("title").value="";
+$("description").value="";
+$("category").value="";
+$("file").value="";
+load();
+}
+
+async function load(){
+const {data,error}=await db.from("kh_elibrary_materials")
+.select("*").order("created_at",{ascending:false});
+if(error){say(error.message);return;}
+
+$("items").innerHTML="";
+data.forEach(x=>{
+const div=document.createElement("div");
+div.className="item";
+const name=document.createElement("b");
+name.textContent=x.title;
+const status=document.createElement("p");
+status.textContent=x.is_published?"Published":"Unpublished";
+div.append(name,status);
+
+const btn=(label,fn)=>{
+const b=document.createElement("button");
+b.textContent=label;b.onclick=fn;div.append(b);
+};
+btn("Edit",()=>edit(x));
+btn(x.is_published?"Unpublish":"Publish",()=>publish(x));
+btn("Delete",()=>removeItem(x));
+$("items").append(div);
+});
+}
+
+async function edit(x){
+const title=prompt("Edit title:",x.title);
+if(title===null)return;
+if(!title.trim()){alert("Title is required.");return;}
+const description=prompt("Edit description:",x.description||"");
+if(description===null)return;
+const category=prompt("Edit category:",x.category||"General");
+if(category===null)return;
+
+const {error}=await db.from("kh_elibrary_materials")
+.update({title:title.trim(),description:description.trim(),category:category.trim()})
+.eq("id",x.id);
+say(error?error.message:"Material updated.");
+load();
+}
+
+async function publish(x){
+const {error}=await db.from("kh_elibrary_materials")
+.update({is_published:!x.is_published}).eq("id",x.id);
+say(error?error.message:"Publication status updated.");
+load();
+}
+
+async function removeItem(x){
+if(!confirm("Delete this material permanently?"))return;
+const {error}=await db.storage.from("kh-elibrary").remove([x.file_path]);
+if(error){say(error.message);return;}
+const result=await db.from("kh_elibrary_materials").delete().eq("id",x.id);
+say(result.error?result.error.message:"Material deleted.");
+load();
+}
+
+db.auth.getSession().then(async({data})=>{
+if(data.session){
+const {data:ok}=await db.rpc("is_active_kh_admin");
+if(ok===true){
+$("login").style.display="none";
+$("panel").style.display="block";
+load();
+}else await db.auth.signOut();
+}
+});
+</script>
+</body>
+</html>
