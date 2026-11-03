@@ -242,17 +242,12 @@ let streamId=null,mediaStream=null,recorder=null,recording=false;
 
   await liveKitRoom.connect(data.serverUrl, data.token);
 
-  const tracks = await LivekitClient.createLocalTracks({
-    audio: true,
-    video: {
-      facingMode: $("camera").srcObject
-        ?.getVideoTracks()[0]
-        ?.getSettings().facingMode || "user"
-    }
-  });
+  if (!mediaStream) {
+  throw new Error("Start your camera first.");
+}
 
-  for (const track of tracks) {
-    await liveKitRoom.localParticipant.publishTrack(track);
+for (const track of mediaStream.getTracks()) {
+  await liveKitRoom.localParticipant.publishTrack(track);
   }
 
   return true;
