@@ -11,7 +11,7 @@
 body{margin:0;font-family:Arial;background:#f4f6fb;color:#222}
 header{background:linear-gradient(135deg,#123c8c,#673ab7);color:white;padding:12px;text-align:center}
 main{max-width:850px;margin:auto;padding:10px}
-.card{background:white;padding:15px;margin:10px 0;border-radius:12px;box-shadow:0 2px 8px #0001}
+.card{position:relative;z-index:20;background:white;padding:15px;margin:10px 0;border-radius:12px;box-shadow:0 2px 8px #0002}
 input,textarea,select,button{width:100%;padding:11px;margin:5px 0;border:1px solid #ddd;border-radius:7px}
 button{background:#123c8c;color:white;border:0;font-weight:bold}
 .red{background:#c62828}.green{background:#16833b}.purple{background:#673ab7}
@@ -22,9 +22,27 @@ video{width:100%;height:30vh;max-height:250px;object-fit:contain;background:#000
 .small{font-size:12px;color:#666}
 .audio-item{padding:10px;background:#f1f3f8;border-radius:8px;margin:8px 0;overflow-wrap:anywhere}
 
-/* Fixed live screen */
-.live-screen{position:sticky;top:0;z-index:100;background:#f4f6fb;padding:4px 0}
-.live-screen .card{margin-top:4px}
+/* FIXED LIVE BROADCAST */
+body.admin-mode header{display:none}
+.live-screen{
+position:fixed;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:min(830px,calc(100% - 20px));
+z-index:5;
+background:#f4f6fb;
+padding:4px 0;
+}
+.live-screen .card{margin:0}
+.live-spacer{height:var(--live-height,650px);pointer-events:none}
+.admin-functions{position:relative;z-index:20}
+.admin-functions .card{background:#fff}
+@media(max-width:500px){
+.live-screen{width:calc(100% - 12px)}
+.live-screen .card{padding:10px}
+.live-screen video{height:25vh;max-height:190px}
+}
 </style>
 </head>
 <body>
@@ -46,8 +64,7 @@ video{width:100%;height:30vh;max-height:250px;object-fit:contain;background:#000
 
 <section id="admin" class="hidden">
 
-<!-- FIXED LIVE SCREEN -->
-<div class="live-screen">
+<div class="live-screen" id="liveScreen">
 <div class="card">
 <h3>Live Broadcast</h3>
 <div id="status" class="status">OFFLINE</div>
@@ -67,7 +84,9 @@ video{width:100%;height:30vh;max-height:250px;object-fit:contain;background:#000
 </div>
 </div>
 
-<!-- REMAINING SCROLLABLE FUNCTIONS -->
+<div class="live-spacer" id="liveSpacer"></div>
+
+<div class="admin-functions">
 
 <div class="card">
 <h3>Recording</h3>
@@ -133,6 +152,7 @@ video{width:100%;height:30vh;max-height:250px;object-fit:contain;background:#000
 </div>
 
 <button class="red" onclick="logout()">Logout</button>
+</div>
 </section>
 </main>
 
@@ -146,305 +166,314 @@ const $=id=>document.getElementById(id);
 
 let streamId=null,mediaStream=null,recorder=null,recording=false;
 
-// LOGIN
+/* SIZE THE SPACE UNDER THE FIXED LIVE SCREEN */
+function updateLiveHeight(){
+const live=$("liveScreen");
+if(live){
+$("liveSpacer").style.height=live.offsetHeight+"px";
+}
+}
+window.addEventListener("resize",updateLiveHeight);
+if(window.ResizeObserver){
+const liveObserver=new ResizeObserver(updateLiveHeight);
+liveObserver.observe($("liveScreen"));
+}
+
+/* LOGIN */
 async function adminLogin(){
- $("loginMsg").textContent="Signing in...";
- try{
-  const {error}=await sb.auth.signInWithPassword({
-   email:$("email").value.trim(),
-   password:$("password").value
-  });
-  if(error)throw error;
-  $("login").classList.add("hidden");
-  $("admin").classList.remove("hidden");
-  await loadAudio();
-  await loadRecordings();
- }catch(e){$("loginMsg").textContent=e.message}
+$("loginMsg").textContent="Signing in...";
+try{
+const {error}=await sb.auth.signInWithPassword({
+email:$("email").value.trim(),
+password:$("password").value
+});
+if(error)throw error;
+$("login").classList.add("hidden");
+$("admin").classList.remove("hidden");
+document.body.classList.add("admin-mode");
+updateLiveHeight();
+await loadAudio();
+await loadRecordings();
+}catch(e){$("loginMsg").textContent=e.message}
 }
 
 async function logout(){
- if(mediaStream)stopCamera();
- await sb.auth.signOut();
- location.reload();
+if(mediaStream)stopCamera();
+await sb.auth.signOut();
+location.reload();
 }
 
-// CAMERA
+/* CAMERA */
 async function startCamera(mode="environment"){
- try{
-  stopCamera();
-  mediaStream=await navigator.mediaDevices.getUserMedia({
-   video:{facingMode:{ideal:mode}},audio:true
-  });
-  $("camera").srcObject=mediaStream;
-  await $("camera").play();
- }catch(e){alert("Camera error: "+e.message)}
+try{
+stopCamera();
+mediaStream=await navigator.mediaDevices.getUserMedia({
+video:{facingMode:{ideal:mode}},audio:true
+});
+$("camera").srcObject=mediaStream;
+await $("camera").play();
+}catch(e){alert("Camera error: "+e.message)}
 }
 
 function stopCamera(){
- if(mediaStream){
-  mediaStream.getTracks().forEach(t=>t.stop());
-  mediaStream=null;
- }
- $("camera").srcObject=null;
+if(mediaStream){
+mediaStream.getTracks().forEach(t=>t.stop());
+mediaStream=null;
+}
+$("camera").srcObject=null;
 }
 
-// START LIVE STATUS
+/* START LIVE STATUS */
 async function startLive(){
- try{
-  if(!mediaStream)throw new Error("Start your camera first.");
-  $("status").textContent="Connecting...";
-  const {data:s,error:se}=await sb.auth.getSession();
-  if(se)throw se;
-  if(!s.session)throw new Error("Please log in again.");
+try{
+if(!mediaStream)throw new Error("Start your camera first.");
+$("status").textContent="Connecting...";
+const {data:s,error:se}=await sb.auth.getSession();
+if(se)throw se;
+if(!s.session)throw new Error("Please log in again.");
 
-  const {data,error}=await sb.from("kh_live_streams").insert({
-   title:$("title").value||"Kingdom Heritage Live",
-   description:$("description").value,
-   status:"live",
-   started_at:new Date().toISOString()
-  }).select().single();
+const {data,error}=await sb.from("kh_live_streams").insert({
+title:$("title").value||"Kingdom Heritage Live",
+description:$("description").value,
+status:"live",
+started_at:new Date().toISOString()
+}).select().single();
 
-  if(error)throw error;
-  streamId=data.id;
+if(error)throw error;
+streamId=data.id;
 
-  const {error:settingsError}=await sb.from("kh_channel_settings").upsert({
-   live_enabled:true,
-   current_stream_id:streamId,
-   current_title:$("title").value||"Kingdom Heritage Live",
-   current_description:$("description").value
-  });
+const {error:settingsError}=await sb.from("kh_channel_settings").upsert({
+live_enabled:true,
+current_stream_id:streamId,
+current_title:$("title").value||"Kingdom Heritage Live",
+current_description:$("description").value
+});
+if(settingsError)throw settingsError;
 
-  if(settingsError)throw settingsError;
-
-  $("status").textContent="🔴 LIVE";
-  $("status").style.background="#c8f7d2";
-  alert("Broadcast status successfully activated!");
- }catch(e){
-  $("status").textContent="Broadcast failed: "+e.message;
-  alert("START LIVE ERROR: "+e.message);
- }
+$("status").textContent="🔴 LIVE";
+$("status").style.background="#c8f7d2";
+alert("Broadcast status successfully activated!");
+}catch(e){
+$("status").textContent="Broadcast failed: "+e.message;
+alert("START LIVE ERROR: "+e.message);
+}
 }
 
-// STOP LIVE STATUS
+/* STOP LIVE STATUS */
 async function stopLive(){
- try{
-  if(!streamId)throw new Error("No active broadcast found.");
-  $("status").textContent="Stopping broadcast...";
+try{
+if(!streamId)throw new Error("No active broadcast found.");
+$("status").textContent="Stopping broadcast...";
 
-  const {error}=await sb.from("kh_live_streams").update({
-   status:"ended",
-   ended_at:new Date().toISOString()
-  }).eq("id",streamId);
-  if(error)throw error;
+const {error}=await sb.from("kh_live_streams").update({
+status:"ended",
+ended_at:new Date().toISOString()
+}).eq("id",streamId);
+if(error)throw error;
 
-  const {error:se}=await sb.from("kh_channel_settings").update({
-   live_enabled:false,
-   current_stream_id:null
-  }).eq("current_stream_id",streamId);
-  if(se)throw se;
+const {error:se}=await sb.from("kh_channel_settings").update({
+live_enabled:false,
+current_stream_id:null
+}).eq("current_stream_id",streamId);
+if(se)throw se;
 
-  streamId=null;
-  $("status").textContent="OFFLINE";
-  $("status").style.background="#eee";
-  alert("Broadcast successfully stopped!");
- }catch(e){alert("STOP LIVE ERROR: "+e.message)}
+streamId=null;
+$("status").textContent="OFFLINE";
+$("status").style.background="#eee";
+alert("Broadcast successfully stopped!");
+}catch(e){alert("STOP LIVE ERROR: "+e.message)}
 }
 
-// RECORDING
+/* RECORDING */
 async function toggleRecording(){
- if(!mediaStream)return alert("Start the camera first.");
- if(!recording){
-  try{
-   recorder=new MediaRecorder(mediaStream);
-   recorder.start();
-   recording=true;
-   $("recordStatus").textContent="Recording: ON";
-  }catch(e){alert("Recording error: "+e.message)}
- }else{
-  recorder.stop();
-  recording=false;
-  $("recordStatus").textContent="Recording: OFF";
-  alert("Recording stopped. File upload is not yet connected.");
- }
+if(!mediaStream)return alert("Start the camera first.");
+if(!recording){
+try{
+recorder=new MediaRecorder(mediaStream);
+recorder.start();
+recording=true;
+$("recordStatus").textContent="Recording: ON";
+}catch(e){alert("Recording error: "+e.message)}
+}else{
+recorder.stop();
+recording=false;
+$("recordStatus").textContent="Recording: OFF";
+alert("Recording stopped. File upload is not yet connected.");
+}
 }
 
-// UPLOAD BACKGROUND MUSIC
+/* UPLOAD BACKGROUND MUSIC */
 async function uploadBackgroundMusic(){
- const file=$("musicFile").files[0];
- const status=$("uploadStatus");
+const file=$("musicFile").files[0];
+const status=$("uploadStatus");
+if(!file)return alert("Select an audio file first.");
+if(!file.type.startsWith("audio/")&&!/\.(mp3|m4a|wav|aac|ogg|flac)$/i.test(file.name))
+return alert("Select a supported audio file.");
+if(file.size>50*1024*1024)return alert("Maximum file size is 50 MB.");
 
- if(!file)return alert("Select an audio file first.");
- if(!file.type.startsWith("audio/")&&!/\.(mp3|m4a|wav|aac|ogg|flac)$/i.test(file.name))
-  return alert("Select a supported audio file.");
- if(file.size>50*1024*1024)return alert("Maximum file size is 50 MB.");
+const {data:s,error:se}=await sb.auth.getSession();
+if(se||!s.session)return alert("Please log in again.");
 
- const {data:s,error:se}=await sb.auth.getSession();
- if(se||!s.session)return alert("Please log in again.");
+const title=$("musicTitle").value.trim()||file.name.replace(/\.[^/.]+$/,"");
+const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+const path=Date.now()+"_"+Math.random().toString(36).slice(2)+"_"+safeName;
+status.textContent="Uploading music...";
 
- const title=$("musicTitle").value.trim()||file.name.replace(/\.[^/.]+$/,"");
- const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
- const path=Date.now()+"_"+Math.random().toString(36).slice(2)+"_"+safeName;
+try{
+const {error:ue}=await sb.storage.from(MUSIC_BUCKET).upload(path,file,{
+contentType:file.type||"application/octet-stream",
+upsert:false
+});
+if(ue)throw ue;
 
- status.textContent="Uploading music...";
+const {data:urlData}=sb.storage.from(MUSIC_BUCKET).getPublicUrl(path);
+const audioUrl=urlData.publicUrl;
 
- try{
-  const {error:ue}=await sb.storage.from(MUSIC_BUCKET).upload(path,file,{
-   contentType:file.type||"application/octet-stream",
-   upsert:false
-  });
-  if(ue)throw ue;
-
-  const {data:urlData}=sb.storage.from(MUSIC_BUCKET).getPublicUrl(path);
-  const audioUrl=urlData.publicUrl;
-
-  const {error:de}=await sb.from(MUSIC_TABLE).insert({
-   title:title,audio_url:audioUrl,enabled:true
-  });
-
-  if(de){
-   await sb.storage.from(MUSIC_BUCKET).remove([path]);
-   throw de;
-  }
-
-  status.textContent="Music uploaded successfully!";
-  $("musicTitle").value="";
-  $("musicFile").value="";
-  await loadAudio();
-  alert("Background music uploaded successfully!");
- }catch(e){
-  console.error(e);
-  status.textContent="Upload failed: "+e.message;
-  alert("MUSIC UPLOAD ERROR: "+e.message);
- }
+const {error:de}=await sb.from(MUSIC_TABLE).insert({
+title:title,audio_url:audioUrl,enabled:true
+});
+if(de){
+await sb.storage.from(MUSIC_BUCKET).remove([path]);
+throw de;
 }
 
-// LOAD MUSIC
+status.textContent="Music uploaded successfully!";
+$("musicTitle").value="";
+$("musicFile").value="";
+await loadAudio();
+alert("Background music uploaded successfully!");
+}catch(e){
+console.error(e);
+status.textContent="Upload failed: "+e.message;
+alert("MUSIC UPLOAD ERROR: "+e.message);
+}
+}
+
+/* LOAD MUSIC */
 async function loadAudio(){
- const select=$("audioSelect");
- select.innerHTML='<option value="">Loading music...</option>';
- try{
-  const {data,error}=await sb.from(MUSIC_TABLE)
-   .select("id,title,audio_url,enabled,created_at")
-   .eq("enabled",true).order("created_at",{ascending:false});
-  if(error)throw error;
+const select=$("audioSelect");
+select.innerHTML='<option value="">Loading music...</option>';
+try{
+const {data,error}=await sb.from(MUSIC_TABLE)
+.select("id,title,audio_url,enabled,created_at")
+.eq("enabled",true).order("created_at",{ascending:false});
+if(error)throw error;
 
-  select.innerHTML='<option value="">Select background music</option>';
-  if(!data||!data.length){
-   select.innerHTML+='<option value="">No enabled music found</option>';
-   return;
-  }
-
-  data.forEach(item=>{
-   const option=document.createElement("option");
-   option.value=item.audio_url;
-   option.textContent=item.title;
-   select.appendChild(option);
-  });
- }catch(e){
-  select.innerHTML='<option value="">Music loading failed</option>';
-  alert("MUSIC ERROR: "+e.message);
- }
+select.innerHTML='<option value="">Select background music</option>';
+if(!data||!data.length){
+select.innerHTML+='<option value="">No enabled music found</option>';
+return;
+}
+data.forEach(item=>{
+const option=document.createElement("option");
+option.value=item.audio_url;
+option.textContent=item.title;
+select.appendChild(option);
+});
+}catch(e){
+select.innerHTML='<option value="">Music loading failed</option>';
+alert("MUSIC ERROR: "+e.message);
+}
 }
 
-// AUDIO CONTROLS
+/* AUDIO CONTROLS */
 async function playAudio(){
- const player=$("bgAudio");
- const url=$("audioSelect").value;
- if(!url)return alert("Select background music first.");
- try{
-  if(player.src!==url){
-   player.pause();
-   player.src=url;
-   player.load();
-  }
-  await player.play();
- }catch(e){alert("Playback error: "+e.message)}
+const player=$("bgAudio");
+const url=$("audioSelect").value;
+if(!url)return alert("Select background music first.");
+try{
+if(player.src!==url){
+player.pause();
+player.src=url;
+player.load();
 }
-
+await player.play();
+}catch(e){alert("Playback error: "+e.message)}
+}
 function pauseAudio(){$("bgAudio").pause()}
 function stopAudio(){
- const p=$("bgAudio");
- p.pause();p.currentTime=0;
+const p=$("bgAudio");
+p.pause();p.currentTime=0;
 }
 function setVolume(v){$("bgAudio").volume=v/100}
 
-// SCRIPTURE
+/* SCRIPTURE */
 async function showScripture(){
- if(!streamId)return alert("Start a broadcast first.");
- const book=$("book").value.trim();
- const chapter=Number($("chapter").value);
- const start=Number($("verseStart").value);
- const end=$("verseEnd").value?Number($("verseEnd").value):null;
- if(!book||!chapter||!start)return alert("Enter the scripture details.");
+if(!streamId)return alert("Start a broadcast first.");
+const book=$("book").value.trim();
+const chapter=Number($("chapter").value);
+const start=Number($("verseStart").value);
+const end=$("verseEnd").value?Number($("verseEnd").value):null;
+if(!book||!chapter||!start)return alert("Enter the scripture details.");
 
- const reference=book+" "+chapter+":"+start+(end?"-"+end:"");
- try{
-  const {error}=await sb.from("kh_scripture_display").insert({
-   stream_id:streamId,
-   bible_version:$("version").value,
-   book:book,
-   chapter:chapter,
-   verse_start:start,
-   verse_end:end,
-   reference:reference,
-   display_enabled:true
-  });
-  if(error)throw error;
-  $("scripturePreview").textContent=reference;
- }catch(e){alert("SCRIPTURE ERROR: "+e.message)}
+const reference=book+" "+chapter+":"+start+(end?"-"+end:"");
+try{
+const {error}=await sb.from("kh_scripture_display").insert({
+stream_id:streamId,
+bible_version:$("version").value,
+book:book,
+chapter:chapter,
+verse_start:start,
+verse_end:end,
+reference:reference,
+display_enabled:true
+});
+if(error)throw error;
+$("scripturePreview").textContent=reference;
+}catch(e){alert("SCRIPTURE ERROR: "+e.message)}
 }
 
 async function hideScripture(){
- if(!streamId)return alert("No active broadcast.");
- try{
-  const {error}=await sb.from("kh_scripture_display")
-   .update({display_enabled:false}).eq("stream_id",streamId);
-  if(error)throw error;
-  $("scripturePreview").textContent="";
- }catch(e){alert("SCRIPTURE ERROR: "+e.message)}
+if(!streamId)return alert("No active broadcast.");
+try{
+const {error}=await sb.from("kh_scripture_display")
+.update({display_enabled:false}).eq("stream_id",streamId);
+if(error)throw error;
+$("scripturePreview").textContent="";
+}catch(e){alert("SCRIPTURE ERROR: "+e.message)}
 }
 
-// DESTINATIONS
+/* DESTINATIONS */
 async function saveDestinations(){
- alert("Destination controls are placeholders. A streaming backend is required.");
+alert("Destination controls are placeholders. A streaming backend is required.");
 }
 
-// RECORDINGS
+/* RECORDINGS */
 async function loadRecordings(){
- const container=$("recordings");
- try{
-  const {data,error}=await sb.from("kh_live_recordings")
-   .select("*").order("created_at",{ascending:false});
-  if(error)throw error;
-  container.innerHTML="";
-  if(!data||!data.length){
-   container.textContent="No recordings yet.";
-   return;
-  }
-  data.forEach(r=>{
-   const item=document.createElement("div");
-   item.className="audio-item";
-   const heading=document.createElement("strong");
-   heading.textContent=r.title||"Untitled recording";
-   item.appendChild(heading);
-   if(r.video_url){
-    const link=document.createElement("a");
-    link.href=r.video_url;
-    link.target="_blank";
-    link.rel="noopener";
-    link.textContent="View recording";
-    item.appendChild(document.createElement("br"));
-    item.appendChild(link);
-   }
-   container.appendChild(item);
-  });
- }catch(e){
-  container.textContent="Recording loading failed: "+e.message;
- }
+const container=$("recordings");
+try{
+const {data,error}=await sb.from("kh_live_recordings")
+.select("*").order("created_at",{ascending:false});
+if(error)throw error;
+container.innerHTML="";
+if(!data||!data.length){
+container.textContent="No recordings yet.";
+return;
+}
+data.forEach(r=>{
+const item=document.createElement("div");
+item.className="audio-item";
+const heading=document.createElement("strong");
+heading.textContent=r.title||"Untitled recording";
+item.appendChild(heading);
+if(r.video_url){
+const link=document.createElement("a");
+link.href=r.video_url;
+link.target="_blank";
+link.rel="noopener";
+link.textContent="View recording";
+item.appendChild(document.createElement("br"));
+item.appendChild(link);
+}
+container.appendChild(item);
+});
+}catch(e){
+container.textContent="Recording loading failed: "+e.message;
+}
 }
 
 $("bgAudio").volume=0.3;
 </script>
 </body>
-    </html>
-    
+ </html>
+ 
