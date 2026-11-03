@@ -98,15 +98,21 @@ padding:4px 0;
 <h3>Background Music</h3>
 <label>Music title</label>
 <input id="musicTitle" placeholder="Enter music title">
-<label>Select audio file from phone</label>
-<input id="musicFile" type="file" accept="audio/*,.mp3,.m4a,.wav,.aac,.ogg">
-<button class="green" onclick="uploadBackgroundMusic()">⬆ Upload Background Music</button>
+
+<label>Select audio from your phone</label>
+<input id="musicFile" type="file" accept="audio/*" onchange="checkSelectedMusic(this)">
+
+<p id="selectedMusic" class="small">No audio selected.</p>
+
+<button class="green" onclick="uploadBackgroundMusic()">⬆ Upload Selected Music</button>
 <p id="uploadStatus"></p>
+
 <hr>
 <h4>Available Music</h4>
 <select id="audioSelect">
 <option value="">Select background music</option>
 </select>
+
 <div class="row">
 <button onclick="playAudio()">▶ Play</button>
 <button onclick="pauseAudio()">⏸ Pause</button>
@@ -115,10 +121,10 @@ padding:4px 0;
 <button class="red" onclick="stopAudio()">⏹ Stop</button>
 <button onclick="loadAudio()">🔄 Refresh</button>
 </div>
+
 <label>Volume</label>
 <input id="volume" type="range" min="0" max="100" value="30" oninput="setVolume(this.value)">
-<audio id="bgAudio" loop></audio>
-<p class="small">Playback is currently on the admin device. Music mixing into the public live stream still needs a streaming connection.</p>
+<audio id="bgAudio" controls loop style="width:100%"></audio>
 </div>
 
 <div class="card">
@@ -302,50 +308,60 @@ alert("Recording stopped. File upload is not yet connected.");
 }
 }
 
-/* UPLOAD BACKGROUND MUSIC */
-async function uploadBackgroundMusic(){
-const file=$("musicFile").files[0];
-const status=$("uploadStatus");
-if(!file)return alert("Select an audio file first.");
-if(!file.type.startsWith("audio/")&&!/\.(mp3|m4a|wav|aac|ogg|flac)$/i.test(file.name))
-return alert("Select a supported audio file.");
-if(file.size>50*1024*1024)return alert("Maximum file size is 50 MB.");
+function checkSelectedMusic(input){
+const file=input.files && input.files[0];
+$("selectedMusic").textContent=file
+? "Selected: "+file.name+" ("+(file.size/1024/1024).toFixed(2)+" MB)"
+: "No audio selected.";
+}
 
+async function uploadBackgroundMusic(){
+const file=$("musicFile").files?.[0];
+if(!file)return alert("Please select an audio file.");
+
+if(file.size>50*1024*1024)
+return alert("Maximum file size is 50 MB.");
+
+const status=$("uploadStatus");
 const {data:s,error:se}=await sb.auth.getSession();
 if(se||!s.session)return alert("Please log in again.");
 
-const title=$("musicTitle").value.trim()||file.name.replace(/\.[^/.]+$/,"");
-const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-const path=Date.now()+"_"+Math.random().toString(36).slice(2)+"_"+safeName;
-status.textContent="Uploading music...";
+const title=$("musicTitle").value.trim()||
+file.name.replace(/\.[^/.]+$/,"");
+
+const path=Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
 
 try{
-const {error:ue}=await sb.storage.from(MUSIC_BUCKET).upload(path,file,{
+status.textContent="Uploading...";
+const {error}=await sb.storage.from(MUSIC_BUCKET).upload(path,file,{
 contentType:file.type||"application/octet-stream",
 upsert:false
 });
-if(ue)throw ue;
+if(error)throw error;
 
-const {data:urlData}=sb.storage.from(MUSIC_BUCKET).getPublicUrl(path);
-const audioUrl=urlData.publicUrl;
+const {data}=sb.storage.from(MUSIC_BUCKET).getPublicUrl(path);
 
-const {error:de}=await sb.from(MUSIC_TABLE).insert({
-title:title,audio_url:audioUrl,enabled:true
+const {error:dbError}=await sb.from(MUSIC_TABLE).insert({
+title:title,
+audio_url:data.publicUrl,
+enabled:true
 });
-if(de){
+
+if(dbError){
 await sb.storage.from(MUSIC_BUCKET).remove([path]);
-throw de;
+throw dbError;
 }
 
-status.textContent="Music uploaded successfully!";
-$("musicTitle").value="";
+status.textContent="Upload successful!";
 $("musicFile").value="";
+$("selectedMusic").textContent="No audio selected.";
+$("musicTitle").value="";
 await loadAudio();
-alert("Background music uploaded successfully!");
+alert("Music uploaded successfully!");
+
 }catch(e){
-console.error(e);
 status.textContent="Upload failed: "+e.message;
-alert("MUSIC UPLOAD ERROR: "+e.message);
+alert("Upload error: "+e.message);
 }
 }
 
