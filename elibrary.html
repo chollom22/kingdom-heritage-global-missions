@@ -2,182 +2,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#172b62">
-<meta name="description" content="Kingdom Heritage Network Global Missions E-Library: Christian books, Bible study, ministry resources and teaching materials.">
-<title>E-Library | Kingdom Heritage Network Global Missions</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Church E-Library | Kingdom Heritage Network</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#f6f7fc;color:#202b42;line-height:1.6}button,input,select,textarea{font:inherit}header{background:linear-gradient(120deg,#172b62,#633b91);color:white;position:sticky;top:0;z-index:10;box-shadow:0 3px 15px #0002}.head{max-width:1200px;margin:auto;padding:13px 18px;display:flex;justify-content:space-between;align-items:center;gap:15px}.brand{display:flex;align-items:center;gap:10px}.brand img{width:48px;height:48px;object-fit:contain;background:white;border-radius:50%;padding:3px}.brand h1{font-size:15px;line-height:1.3}.brand p{font-size:10px}nav{display:flex;gap:5px;flex-wrap:wrap}nav a{color:white;text-decoration:none;font-size:12px;padding:8px;border-radius:7px}nav a:hover,nav .active{background:white;color:#172b62}.hero{background:linear-gradient(120deg,#172b62,#3d397e,#694391);color:white;text-align:center;padding:65px 18px}.hero-icon{font-size:45px}.hero h2{font-size:clamp(28px,5vw,43px);margin:8px}.hero p{max-width:700px;margin:auto;font-size:14px;color:#eee}.tag{display:inline-block;margin-top:17px;border:1px solid #ffffff55;padding:6px 15px;border-radius:30px;font-size:11px}main{max-width:1200px;margin:auto;padding:42px 18px 65px}.heading{text-align:center;margin-bottom:24px}.heading h2{color:#172b62;font-size:25px}.heading p{font-size:13px;color:#6b7280}.toolbar{display:flex;gap:10px;margin:25px 0;flex-wrap:wrap}.toolbar input,.toolbar select,.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #e1e5ee;border-radius:9px;background:white;outline:none}.toolbar input{flex:1;min-width:200px}.toolbar select{width:auto;min-width:170px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{background:white;border:1px solid #e5e8f0;border-radius:13px;padding:20px;box-shadow:0 7px 25px #172b6210;display:flex;flex-direction:column;min-width:0}.card h3{font-size:15px;color:#172b62;overflow-wrap:anywhere}.card p{font-size:12px;color:#6b7280;margin:8px 0}.fileicon,.exticon{width:48px;height:48px;border-radius:11px;background:#eeeafa;display:grid;place-items:center;font-size:24px;margin-bottom:12px}.category{font-size:10px;color:#633b91;background:#eeeafa;padding:4px 9px;border-radius:20px;align-self:flex-start;margin-bottom:10px}.meta{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:#777;margin:10px 0}.actions{display:flex;gap:8px;margin-top:auto}.btn{border:0;border-radius:8px;padding:9px 12px;font-size:11px;font-weight:bold;cursor:pointer;text-decoration:none;text-align:center}.primary{background:#172b62;color:white}.secondary{background:#eeeafa;color:#633b91}.danger{background:#feecec;color:#b42318}.actions>*{flex:1}.empty{grid-column:1/-1;text-align:center;background:white;border:1px dashed #ccd2e1;padding:35px;border-radius:12px;color:#777;font-size:13px}.section{margin-top:65px}.extcard{background:white;border:1px solid #e5e8f0;border-radius:12px;padding:20px;display:flex;flex-direction:column}.extcard h3{font-size:14px;color:#172b62}.extcard p{font-size:12px;color:#6b7280;margin:8px 0 13px}.extcard a{font-size:12px;color:#244d9a;text-decoration:none;font-weight:bold;margin-top:auto}.notice{margin-top:55px;text-align:center;padding:28px;background:linear-gradient(120deg,#eef2ff,#f5edfc);border-radius:14px}.notice h3{color:#172b62}.notice p{font-size:12px;color:#59627a;max-width:750px;margin:auto}.admin-entry{text-align:center;margin:30px}.admin-entry button{background:white;border:1px solid #ddd;padding:10px 16px;border-radius:8px;color:#172b62;cursor:pointer;font-size:12px}.login,.admin{display:none;background:white;border:1px solid #e5e8f0;border-radius:13px;padding:22px;margin:20px 0;box-shadow:0 7px 25px #172b6210}.login{max-width:430px;margin:20px auto}.admin h2,.login h3{color:#172b62;margin-bottom:12px}.admin-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.admin p,.hint{font-size:11px;color:#777}.form{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:20px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:12px;font-weight:bold;color:#172b62}.full{grid-column:1/-1}.field textarea{min-height:75px}.status{font-size:12px;margin:12px 0;min-height:18px}.admin-list{border-top:1px solid #eee;margin-top:25px;padding-top:20px}.admin-list h3{font-size:16px;color:#172b62;margin-bottom:12px}.admin-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #eee}.admin-row strong{font-size:12px;display:block}.admin-row small{font-size:10px;color:#777}.row-actions{display:flex;gap:5px;flex-wrap:wrap}.row-actions button{border:0;padding:7px 9px;border-radius:6px;font-size:10px;cursor:pointer}.modal{display:none;position:fixed;inset:0;background:#000c;z-index:50;align-items:center;justify-content:center;padding:15px}.modalbox{background:white;width:min(950px,100%);height:85vh;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}.modalhead{display:flex;justify-content:space-between;padding:12px;border-bottom:1px solid #eee}.modalhead strong{font-size:12px;color:#172b62}.modalhead button{border:0;padding:7px;border-radius:6px}iframe{width:100%;height:100%;border:0}footer{background:#111c3d;color:white;text-align:center;padding:30px 15px}footer h3{font-size:16px}footer p{font-size:11px;color:#ddd;margin:5px}.footerlinks{display:flex;justify-content:center;gap:13px;flex-wrap:wrap;margin-top:14px}.footerlinks a{font-size:11px;color:white;text-decoration:none}@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.head{flex-direction:column}.brand{justify-content:center}nav{justify-content:center}nav a{font-size:10px;padding:7px}.grid{grid-template-columns:1fr}.toolbar select{width:100%}.form{grid-template-columns:1fr}.full{grid-column:auto}.admin-row{align-items:flex-start;flex-direction:column}.hero{padding:48px 15px}main{padding:32px 13px}.admin{padding:16px}}
+body{margin:0;font-family:Arial;background:#f4f6fa;color:#222}
+header{background:#172554;color:white;padding:25px;text-align:center}
+main{max-width:900px;margin:25px auto;padding:15px}
+input,select{padding:13px;margin:5px 0;width:100%;box-sizing:border-box;border:1px solid #ccc;border-radius:7px}
+.card{background:white;padding:18px;margin:15px 0;border-radius:10px;box-shadow:0 2px 8px #ddd}
+button,.btn{background:#07562f;color:white;padding:10px 16px;border:0;border-radius:6px;text-decoration:none;display:inline-block;margin:5px;cursor:pointer}
 </style>
 </head>
 <body>
-<header><div class="head"><div class="brand"><img src="logo.png" alt="Ministry Logo"><div><h1>Kingdom Heritage Network Global Missions</h1><p>Accurate dispensation of the word, true worship and intercession</p></div></div><nav><a href="index.html">Home</a><a href="channel.html">Channel</a><a href="mp3.html">Audio</a><a href="publishing.html">Publications</a><a href="elibrary.html" class="active">E-Library</a></nav></div></header>
-<section class="hero"><div class="hero-icon">📚</div><h2>Kingdom Heritage E-Library</h2><p>A digital home for Christian knowledge, Bible study, ministry resources, spiritual development and theological learning.</p><span class="tag">LEARN · STUDY · GROW · SHARE</span></section>
+
+<header>
+<h2>Kingdom Heritage Network Global Missions</h2>
+<h3>Church E-Library</h3>
+<p>Accurate dispensation of the word, true worship and intercession.</p>
+</header>
+
 <main>
-<section><div class="heading"><h2>Church & Ministry Materials</h2><p>Explore downloadable teaching materials and ministry publications.</p></div><div class="toolbar"><input id="search" type="search" placeholder="Search books, sermons, notes and resources..."><select id="filter"><option value="">All categories</option></select></div><div class="grid" id="resources"><div class="empty">Loading materials...</div></div></section>
-<section class="section"><div class="heading"><h2>Other Christian Online Libraries</h2><p>Explore additional Christian study and research platforms.</p></div><div class="grid">
-<article class="extcard"><div class="exticon">📖</div><h3>Bible Gateway</h3><p>Read Bible translations and explore Scripture.</p><a href="https://www.biblegateway.com/" target="_blank" rel="noopener">Visit Bible Gateway ↗</a></article>
-<article class="extcard"><div class="exticon">🔍</div><h3>Blue Letter Bible</h3><p>Commentaries, concordances and Hebrew and Greek word studies.</p><a href="https://www.blueletterbible.org/" target="_blank" rel="noopener">Visit Blue Letter Bible ↗</a></article>
-<article class="extcard"><div class="exticon">🎓</div><h3>BibleProject</h3><p>Bible teaching videos, podcasts and educational resources.</p><a href="https://bibleproject.com/" target="_blank" rel="noopener">Visit BibleProject ↗</a></article>
-<article class="extcard"><div class="exticon">📚</div><h3>STEP Bible</h3><p>Bible research, translations and original-language tools.</p><a href="https://www.stepbible.org/" target="_blank" rel="noopener">Visit STEP Bible ↗</a></article>
-<article class="extcard"><div class="exticon">🏛️</div><h3>Christian Classics Ethereal Library</h3><p>Historic Christian books and theological writings.</p><a href="https://www.ccel.org/" target="_blank" rel="noopener">Visit CCEL ↗</a></article>
-<article class="extcard"><div class="exticon">🌍</div><h3>Wesleyan-Holiness Digital Library</h3><p>Christian theological and ministry education resources.</p><a href="https://www.whdl.org/" target="_blank" rel="noopener">Visit WHDL ↗</a></article>
-</div></section>
-<section class="notice"><h3>📖 Growing in the Knowledge of God</h3><p>Kingdom Heritage Network Global Missions is committed to making Christian learning resources accessible. New ministry publications and teaching resources will be added as they become available. External websites remain independently operated.</p></section>
-<div class="admin-entry"><button id="adminToggle">🔐 Administrator Access</button></div>
-<div class="login" id="login"><h3>Administrator Login</h3><form id="loginForm"><div class="field"><label>Email</label><input id="email" type="email" autocomplete="username" required></div><div class="field" style="margin-top:12px"><label>Password</label><input id="password" type="password" autocomplete="current-password" required></div><button class="btn primary" style="margin-top:12px" id="loginBtn">Login to Dashboard</button></form><div class="status" id="loginStatus"></div></div>
-<section class="admin" id="admin"><div class="admin-top"><div><h2>📚 E-Library Administration</h2><p>Upload and manage ministry documents.</p></div><button class="btn danger" id="logout">Sign Out</button></div>
-<form id="uploadForm" class="form">
-<div class="field"><label>Material Title *</label><input id="title" maxlength="200" required></div>
-<div class="field"><label>Category *</label><select id="category" required><option value="">Select category</option><option>Bible Study</option><option>Sermons</option><option>Teaching Materials</option><option>Prayer & Intercession</option><option>Theology</option><option>Christian Books</option><option>PowerPoint Presentations</option><option>Ministry Publications</option><option>General</option></select></div>
-<div class="field full"><label>Description</label><textarea id="description" maxlength="2000"></textarea></div>
-<div class="field full"><label>Select Document *</label><input id="file" type="file" accept=".pdf,.ppt,.pptx,.doc,.docx" required><span class="hint">PDF, PowerPoint or Word. Maximum 50 MB.</span></div>
-<div class="field full"><label><input type="checkbox" id="publish"> Publish immediately</label></div>
-<div class="field full"><button class="btn primary" id="uploadBtn">Upload Material</button></div>
-</form><div class="status" id="uploadStatus"></div>
-<div class="admin-list"><h3>Manage Existing Materials</h3><div id="adminMaterials">Loading...</div></div></section>
+<input id="search" placeholder="Search books and materials...">
+<select id="filter">
+<option value="">All Categories</option>
+</select>
+
+<div id="resources">Loading materials...</div>
 </main>
-<div class="modal" id="modal"><div class="modalbox"><div class="modalhead"><strong id="previewTitle">Document Preview</strong><button id="close">Close ✕</button></div><iframe id="frame" title="PDF preview"></iframe></div></div>
-<footer><h3>Kingdom Heritage Network Global Missions</h3><p>Accurate dispensation of the word, true worship and intercession.</p><p>© <span id="year"></span> Kingdom Heritage Network Global Missions. All rights reserved.</p><div class="footerlinks"><a href="index.html">Home</a><a href="channel.html">Channel</a><a href="mp3.html">Audio</a><a href="publishing.html">Publications</a><a href="elibrary.html">E-Library</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a></div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
+
 <script>
-"use strict";
-const URL="https://pyzifnxflqvclctwogdz.supabase.co",KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5emlmbnhmbHF2Y2xjdHdvZ2R6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5Mjk2MTgsImV4cCI6MjEwNjUwNTYxOH0.o_b4ZsTB4GSE-7v5p1Pynchdf8Sdol_q0Xkzpmcx-tc",TABLE="kh_elibrary_materials",BUCKET="kh-elibrary";
-const db=window.supabase.createClient(URL,KEY);
-let materials=[],isAdmin=false,user=null;
-const $=id=>document.getElementById(id);
-function status(id,msg,error=false){$(id).textContent=msg;$(id).style.color=error?"#b42318":"#16835b"}
-function empty(msg){let e=document.createElement("div");e.className="empty";e.textContent=msg;return e}
-function size(n){return n<1048576?Math.round(n/1024)+" KB":(n/1048576).toFixed(2)+" MB"}
-function fileIcon(t){return t.includes("pdf")?"📕":t.includes("presentation")?"📊":t.includes("word")?"📝":"📄"}
-function publicURL(path){return db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl}
+const URL="https://pyzifnxflqvclctwogdz.supabase.co";
+const KEY="PASTE_YOUR_EXISTING_ANON_KEY_HERE";
+const TABLE="kh_elibrary_materials";
+const BUCKET="kh-elibrary";
+
+const db=supabase.createClient(URL,KEY);
+let materials=[];
+
 async function load(){
- const box=$("resources");box.replaceChildren(empty("Loading materials..."));
- const {data,error}=await db.from(TABLE).select("*").order("created_at",{ascending:false});
- if(error){box.replaceChildren(empty("Unable to load materials: "+error.message));return}
- materials=data||[];
- let filter=$("filter"),old=filter.value;filter.replaceChildren(new Option("All categories",""));
- [...new Set(materials.map(x=>x.category).filter(Boolean))].sort().forEach(c=>filter.add(new Option(c,c)));
- if(materials.some(x=>x.category===old))filter.value=old;
- render();
- if(isAdmin)renderAdmin();
-}
-function render(){
- let q=$("search").value.toLowerCase().trim(),cat=$("filter").value,box=$("resources");box.replaceChildren();
- let list=materials.filter(x=>(!q||[x.title,x.description,x.category].join(" ").toLowerCase().includes(q))&&(!cat||x.category===cat));
- if(!list.length){box.append(empty("No published materials found."));return}
- list.forEach(x=>{
- let card=document.createElement("article");card.className="card";
- let icon=document.createElement("div");icon.className="fileicon";icon.textContent=fileIcon(x.file_type);
- let tag=document.createElement("span");tag.className="category";tag.textContent=x.category||"General";
- let title=document.createElement("h3");title.textContent=x.title;
- let desc=document.createElement("p");desc.textContent=x.description||"Ministry learning resource.";
- let meta=document.createElement("div");meta.className="meta";
- let a=document.createElement("span");a.textContent=size(x.file_size);
- let b=document.createElement("span");b.textContent=new Date(x.created_at).toLocaleDateString();meta.append(a,b);
- let actions=document.createElement("div");actions.className="actions";
- let url=publicURL(x.file_path);
- let preview=document.createElement("button");preview.className="btn secondary";preview.textContent="Preview";preview.onclick=()=>openPreview(x,url);
- let download=document.createElement("a");download.className="btn primary";download.href=url;download.target="_blank";download.rel="noopener noreferrer";download.textContent="Open / Download";
- actions.append(preview,download);card.append(icon,tag,title,desc,meta,actions);box.append(card);
- });
-}
-function openPreview(x,url){
- if(!x.file_type.includes("pdf")){window.open(url,"_blank","noopener,noreferrer");return}
- $("previewTitle").textContent=x.title;$("frame").src=url;$("modal").style.display="flex";
-}
-function closePreview(){$("frame").src="about:blank";$("modal").style.display="none"}
-$("close").onclick=closePreview;
-$("modal").onclick=e=>{if(e.target===$("modal"))closePreview()};
-async function verify(){
- const {data,error}=await db.auth.getSession();
- if(error||!data.session){isAdmin=false;user=null;showAdmin();return false}
- user=data.session.user;
- const {data:allowed,error:rpcError}=await db.rpc("is_active_kh_admin");
- if(rpcError||allowed!==true){
- isAdmin=false;user=null;await db.auth.signOut();
- status("loginStatus","This account is not an authorized active administrator.",true);showAdmin();return false;
- }
- isAdmin=true;showAdmin();return true;
-}
-function showAdmin(){
- $("admin").style.display=isAdmin?"block":"none";
- $("login").style.display=isAdmin?"none":$("login").dataset.open==="true"?"block":"none";
- $("adminToggle").textContent=isAdmin?"✓ Administrator Dashboard Active":"🔐 Administrator Access";
-}
-$("adminToggle").onclick=()=>{if(isAdmin){$("admin").scrollIntoView({behavior:"smooth"});return}$("login").dataset.open=$("login").dataset.open==="true"?"false":"true";showAdmin()};
-$("loginForm").onsubmit=async e=>{
- e.preventDefault();$("loginBtn").disabled=true;status("loginStatus","Verifying...");
- const {error}=await db.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
- if(error)status("loginStatus",error.message,true);
- else if(await verify()){status("loginStatus","Login successful.");await load();$("admin").scrollIntoView({behavior:"smooth"})}
- $("loginBtn").disabled=false;
-};
-$("uploadForm").onsubmit=async e=>{
- e.preventDefault();if(!isAdmin||!user){status("uploadStatus","Administrator login required.",true);return}
- let f=$("file").files[0];if(!f){status("uploadStatus","Select a file.",true);return}
- if(f.size>50*1024*1024){status("uploadStatus","File exceeds 50 MB.",true);return}
- let ext=f.name.split(".").pop().toLowerCase();if(!["pdf","ppt","pptx","doc","docx"].includes(ext)){status("uploadStatus","Unsupported file format.",true);return}
- $("uploadBtn").disabled=true;$("uploadBtn").textContent="Uploading...";
- status("uploadStatus","Uploading document...");
- let safe=f.name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]/g,"_").slice(-150),path=user.id+"/"+Date.now()+"_"+safe;
- try{
- let {error}=await db.storage.from(BUCKET).upload(path,f,{cacheControl:"3600",upsert:false,contentType:f.type||undefined});
- if(error)throw error;
- let result=await db.from(TABLE).insert({title:$("title").value.trim(),description:$("description").value.trim(),category:$("category").value,file_name:f.name,file_path:path,file_type:f.type||ext,file_size:f.size,is_published:$("publish").checked,created_by:user.id});
- if(result.error){await db.storage.from(BUCKET).remove([path]);throw result.error}
- $("uploadForm").reset();status("uploadStatus","Material uploaded successfully.");await load();
- }catch(err){status("uploadStatus","Upload failed: "+err.message,true)}
- finally{$("uploadBtn").disabled=false;$("uploadBtn").textContent="Upload Material"}
-};
-function renderAdmin(){
- let box=$("adminMaterials");box.replaceChildren();
- if(!materials.length){box.textContent="No materials uploaded yet.";return}
- materials.forEach(x=>{
- let row=document.createElement("div");row.className="admin-row";
- let info=document.createElement("div"),title=document.createElement("strong"),detail=document.createElement("small");
- title.textContent=x.title;detail.textContent=x.category+" · "+(x.is_published?"Published":"Unpublished");info.append(title,detail);
- let actions=document.createElement("div");actions.className="row-actions";
- function action(label,color,fn){let b=document.createElement("button");b.textContent=label;b.style.background=color;b.onclick=fn;actions.append(b)}
- action(x.is_published?"Unpublish":"Publish","#e5f6ed",()=>publication(x));
- action("Edit","#eeeafa",()=>edit(x));
- action("Delete","#feecec",()=>remove(x));
- row.append(info,actions);box.append(row);
- });
-}
-async function publication(x){
- let {error}=await db.from(TABLE).update({is_published:!x.is_published,updated_at:new Date().toISOString()}).eq("id",x.id);
- if(error)alert(error.message);else await load();
-}
-async function edit(x){
- let title=prompt("Edit title:",x.title);
- if(title===null)return;
- if(!title.trim()){
-  alert("Title cannot be empty.");
-  return;
- }
+ const box=document.getElementById("resources");
+ box.textContent="Loading materials...";
 
- let description=prompt("Edit description:",x.description||"");
- if(description===null)return;
-
- let category=prompt("Edit category:",x.category||"General");
- if(category===null)return;
-
- const {error}=await db.from("kh_elibrary_materials")
- .update({
-  title:title.trim(),
-  description:description.trim(),
-  category:category.trim()
- })
- .eq("id",x.id);
+ const {data,error}=await db.from(TABLE)
+ .select("*")
+ .eq("is_published",true)
+ .order("created_at",{ascending:false});
 
  if(error){
-  alert("Update failed: "+error.message);
+  box.textContent="Unable to load materials: "+error.message;
   return;
  }
 
- alert("Material updated successfully.");
- load();
+ materials=data||[];
+
+ const categories=[...new Set(materials.map(x=>x.category).filter(Boolean))];
+ const filter=document.getElementById("filter");
+ categories.forEach(c=>filter.add(new Option(c,c)));
+
+ render();
 }
+
+function render(){
+ const search=document.getElementById("search").value.toLowerCase();
+ const category=document.getElementById("filter").value;
+ const box=document.getElementById("resources");
+
+ box.replaceChildren();
+
+ const results=materials.filter(x=>
+  (x.title||"").toLowerCase().includes(search) &&
+  (!category||x.category===category)
+ );
+
+ if(!results.length){
+  box.textContent="No published materials found.";
+  return;
+ }
+
+ results.forEach(x=>{
+  const url=db.storage.from(BUCKET).getPublicUrl(x.file_path).data.publicUrl;
+  const card=document.createElement("div");
+  card.className="card";
+
+  const title=document.createElement("h3");
+  title.textContent=x.title||"Untitled";
+
+  const description=document.createElement("p");
+  description.textContent=x.description||"";
+
+  const categoryText=document.createElement("p");
+  categoryText.textContent="Category: "+(x.category||"General");
+
+  const view=document.createElement("a");
+  view.href=url;
+  view.target="_blank";
+  view.rel="noopener";
+  view.className="btn";
+  view.textContent="View Material";
+
+  const download=document.createElement("a");
+  download.href=url;
+  download.download=x.file_name||"material";
+  download.className="btn";
+  download.textContent="Download";
+
+  card.append(title,description,categoryText,view,download);
+  box.appendChild(card);
+ });
+}
+
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("filter").addEventListener("change",render);
+
+load();
 </script>
 </body>
 </html>
