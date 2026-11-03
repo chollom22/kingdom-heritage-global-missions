@@ -4,10 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Explore Christian books, ministry resources, Bible study materials and other Christian libraries.">
+<meta name="description" content="Christian books, ministry resources and Bible study materials.">
 <title>Church E-Library | Kingdom Heritage Network Global Missions</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{box-sizing:border-box}
@@ -44,14 +44,14 @@ a{overflow-wrap:anywhere}
 
 <section class="section">
 <h2>Church & Ministry Materials</h2>
-<p>Explore and access Christian books, teaching materials, ministry documents and other resources.</p>
+<p>Explore Christian books, teaching materials, ministry documents and other resources.</p>
 
 <div class="search-area">
 <input id="search" type="search" placeholder="Search books and materials...">
 <select id="filter">
 <option value="">All Categories</option>
 </select>
-<p class="muted" id="count">Loading materials...</p>
+<p class="muted" id="count">Connecting to library...</p>
 </div>
 
 <div id="resources">Loading materials...</div>
@@ -59,7 +59,7 @@ a{overflow-wrap:anywhere}
 
 <section class="section">
 <h2>Other Christian Online Libraries</h2>
-<p>Explore these additional Christian study and research resources.</p>
+<p>Explore additional Christian study and research resources.</p>
 
 <div class="cards">
 
@@ -89,7 +89,7 @@ a{overflow-wrap:anywhere}
 
 <div class="card">
 <h3>Christian Classics Ethereal Library</h3>
-<p>Explore Christian classics, theological writings and historical Christian literature.</p>
+<p>Explore Christian classics and historical Christian literature.</p>
 <a class="btn library-link" href="https://www.ccel.org/" target="_blank" rel="noopener">Visit Library</a>
 </div>
 
@@ -113,9 +113,9 @@ a{overflow-wrap:anywhere}
 <script>
 "use strict";
 
-const URL="https://pyzifnxflqvclctwogdz.supabase.co";
+const SUPABASE_URL="https://pyzifnxflqvclctwogdz.supabase.co";
 
-const KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5emlmbnhmbHF2Y2xjdHdvZ2R6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5Mjk2MTgsImV4cCI6MjEwNjUwNTYxOH0.o_b4ZsTB4GSE-7v5p1Pynchdf8Sdol_q0Xkzpmcx-tc";
+const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5emlmbnhmbHF2Y2xjdHdvZ2R6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5Mjk2MTgsImV4cCI6MjEwNjUwNTYxOH0.o_b4ZsTB4GSE-7v5p1Pynchdf8Sdol_q0Xkzpmcx-tc";
 
 const TABLE="kh_elibrary_materials";
 const BUCKET="kh-elibrary";
@@ -125,19 +125,19 @@ const search=document.getElementById("search");
 const filter=document.getElementById("filter");
 const count=document.getElementById("count");
 
-let db;
+let db=null;
 let materials=[];
 
 document.getElementById("year").textContent=new Date().getFullYear();
 
-function showMessage(message){
- resources.textContent=message;
+function message(text){
+ resources.textContent=text;
 }
 
-function makeLink(url,label){
+function link(url,text){
  const a=document.createElement("a");
  a.href=url;
- a.textContent=label;
+ a.textContent=text;
  a.className="btn";
  a.target="_blank";
  a.rel="noopener";
@@ -158,11 +158,12 @@ function render(){
  });
 
  resources.replaceChildren();
-
- count.textContent=results.length+" material(s) found";
+ count.textContent=results.length+" published material(s) found.";
 
  if(!results.length){
-  showMessage("No published materials found.");
+  message(materials.length===0?
+   "No published materials are currently available.":
+   "No materials match your search.");
   return;
  }
 
@@ -188,21 +189,28 @@ function render(){
 
   if(item.file_path){
 
-   const fileURL=db.storage.from(BUCKET).getPublicUrl(item.file_path).data.publicUrl;
+   const viewURL=db.storage.from(BUCKET)
+    .getPublicUrl(item.file_path).data.publicUrl;
+
+   const downloadURL=db.storage.from(BUCKET)
+    .getPublicUrl(item.file_path,{download:true}).data.publicUrl;
 
    card.append(
-    makeLink(fileURL,"View Material"),
-    makeLink(fileURL,"Download")
+    link(viewURL,"View Material"),
+    link(downloadURL,"Download Material")
    );
 
   }else{
+
    const note=document.createElement("p");
+   note.textContent="No file path is attached to this material.";
    note.className="muted";
-   note.textContent="File not available.";
    card.append(note);
+
   }
 
   container.append(card);
+
  });
 
  resources.append(container);
@@ -210,8 +218,8 @@ function render(){
 
 async function load(){
 
- showMessage("Loading materials...");
- count.textContent="Connecting to library...";
+ message("Loading materials...");
+ count.textContent="Connecting to Supabase...";
 
  try{
 
@@ -222,46 +230,52 @@ async function load(){
    .order("created_at",{ascending:false});
 
   if(error){
-   console.error("Supabase error:",error);
-   count.textContent="Library connection failed.";
-   showMessage("Unable to load materials: "+error.message);
+   console.error("Supabase database error:",error);
+   count.textContent="Unable to connect.";
+   message("Database error: "+error.message);
    return;
   }
 
   materials=data||[];
 
-  filter.replaceChildren(new Option("All Categories",""));
-
   const categories=[...new Set(
-   materials.map(x=>x.category).filter(Boolean)
+   materials.map(item=>item.category).filter(Boolean)
   )].sort();
+
+  const previous=filter.value;
+
+  filter.replaceChildren(new Option("All Categories",""));
 
   categories.forEach(category=>{
    filter.add(new Option(category,category));
   });
 
+  if(categories.includes(previous)){
+   filter.value=previous;
+  }
+
   render();
 
  }catch(error){
 
-  console.error("Loading error:",error);
+  console.error("E-Library error:",error);
   count.textContent="Loading failed.";
-  showMessage("Connection error: "+error.message);
+  message("Connection error: "+error.message);
 
  }
 }
 
-if(!window.supabase){
+search.addEventListener("input",render);
+filter.addEventListener("change",render);
 
- showMessage("Supabase library failed to load. Check your internet connection and refresh.");
+if(!window.supabase||!window.supabase.createClient){
+
+ count.textContent="Library unavailable.";
+ message("Supabase library did not load. Check your internet connection and refresh.");
 
 }else{
 
- db=window.supabase.createClient(URL,KEY);
-
- search.addEventListener("input",render);
- filter.addEventListener("change",render);
-
+ db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
  load();
 
 }
