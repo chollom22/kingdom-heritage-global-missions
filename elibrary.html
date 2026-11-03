@@ -41,7 +41,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
 <script>
 "use strict";
-const URL="https://bmiechymiyedubezhcqk.supabase.co",KEY="sb_publishable_9ewFHMOrQsopkeQziD5z1w_ZB4Zmc58",TABLE="kh_elibrary_materials",BUCKET="kh-elibrary";
+const URL="https://bmiechymiyedubezhcqk.supabase.co",KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5emlmbnhmbHF2Y2xjdHdvZ2R6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5Mjk2MTgsImV4cCI6MjEwNjUwNTYxOH0.o_b4ZsTB4GSE-7v5p1Pynchdf8Sdol_q0Xkzpmcx-tc",TABLE="kh_elibrary_materials",BUCKET="kh-elibrary";
 const db=window.supabase.createClient(URL,KEY);
 let materials=[],isAdmin=false,user=null;
 const $=id=>document.getElementById(id);
