@@ -211,6 +211,52 @@ const $=id=>document.getElementById(id);
 
 let streamId=null,mediaStream=null,recorder=null,recording=false;
   let liveKitRoom = null;
+  async function connectLiveKitHost() {
+  const { data: sessionData, error: sessionError } =
+    await sb.auth.getSession();
+
+  if (sessionError) throw sessionError;
+
+  const accessToken = sessionData.session?.access_token;
+
+  if (!accessToken) {
+    throw new Error("Please log in again.");
+  }
+
+  const { data, error } = await sb.functions.invoke(
+    "livekit-token",
+    {
+      body: { role: "host" },
+      headers: {
+        Authorization: "Bearer " + accessToken
+      }
+    }
+  );
+
+  if (error) throw error;
+  if (!data?.token || !data?.serverUrl) {
+    throw new Error(data?.error || "LiveKit token was not received.");
+  }
+
+  liveKitRoom = new LivekitClient.Room();
+
+  await liveKitRoom.connect(data.serverUrl, data.token);
+
+  const tracks = await LivekitClient.createLocalTracks({
+    audio: true,
+    video: {
+      facingMode: $("camera").srcObject
+        ?.getVideoTracks()[0]
+        ?.getSettings().facingMode || "user"
+    }
+  });
+
+  for (const track of tracks) {
+    await liveKitRoom.localParticipant.publishTrack(track);
+  }
+
+  return true;
+  }
 
 /* SIZE THE SPACE UNDER THE FIXED LIVE SCREEN */
 function updateLiveHeight(){
