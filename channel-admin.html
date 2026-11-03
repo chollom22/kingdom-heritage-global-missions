@@ -353,6 +353,10 @@ async function stopLive(){
 try{
 if(!streamId)throw new Error("No active broadcast found.");
 $("status").textContent="Stopping broadcast...";
+  if (liveKitRoom) {
+  await liveKitRoom.disconnect();
+  liveKitRoom = null;
+  }
 
 const {error}=await sb.from("kh_live_streams").update({
 status:"ended",
