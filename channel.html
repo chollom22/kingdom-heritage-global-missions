@@ -402,24 +402,46 @@ async function connectPublicViewer() {
   }
 
   async function loadScripture() {
-    const panel = document.getElementById("scripturePanel");
-    const { data, error } = await supabaseClient
-      .from("kh_scripture_display")
-      .select("reference,verse_text,bible_version,display_enabled,created_at")
-      .eq("display_enabled", true)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
+  const panel = document.getElementById("scripturePanel");
+  const overlay = document.getElementById("scriptureVideoOverlay");
 
-    if (error || !data || !data.verse_text) {
-      panel.hidden = true;
-      return;
-    }
+  const { data, error } = await supabaseClient
+    .from("kh_scripture_display")
+    .select("reference,verse_text,bible_version,display_enabled,created_at")
+    .eq("display_enabled", true)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
 
-    document.getElementById("scriptureReference").textContent = data.reference || "Bible Scripture";
-    document.getElementById("scriptureText").textContent = data.verse_text;
-    document.getElementById("scriptureVersion").textContent = data.bible_version || "Bible";
-    panel.hidden = false;
+  if (error || !data || !data.verse_text) {
+    panel.hidden = true;
+    overlay.hidden = true;
+    return;
+  }
+
+  // Existing Scripture panel underneath the video
+  document.getElementById("scriptureReference").textContent =
+    data.reference || "Bible Scripture";
+
+  document.getElementById("scriptureText").textContent =
+    data.verse_text;
+
+  document.getElementById("scriptureVersion").textContent =
+    data.bible_version || "Bible";
+
+  panel.hidden = false;
+
+  // New Scripture overlay inside the video
+  document.getElementById("overlayReference").textContent =
+    data.reference || "Bible Scripture";
+
+  document.getElementById("overlayVerseText").textContent =
+    data.verse_text;
+
+  document.getElementById("overlayVersion").textContent =
+    data.bible_version || "Bible";
+
+  overlay.hidden = false;
   }
 
   loadLiveBroadcast();
