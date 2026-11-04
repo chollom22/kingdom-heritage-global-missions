@@ -752,12 +752,18 @@ async function hideScripture() {
     const { error } = await sb
       .from("kh_scripture_display")
       .update({ display_enabled: false })
-      .eq("stream_id", streamId);
+      .eq("stream_id", streamId)
+      .eq("display_enabled", true);
 
     if (error) throw error;
 
-    $("scripturePreview").textContent = "";
-    $("scriptureMsg").textContent = "Scripture hidden.";
+    $("scripturePreview").textContent =
+      "Scripture display is now hidden.";
+
+    $("scriptureMsg").textContent =
+      "Scripture hidden successfully.";
+
+    alert("Scripture has been hidden from the public channel.");
 
   } catch (e) {
     alert("SCRIPTURE ERROR: " + e.message);
