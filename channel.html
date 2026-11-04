@@ -447,7 +447,7 @@ async function connectPublicViewer() {
   loadLiveBroadcast();
   loadScripture();
   setInterval(loadLiveBroadcast, 10000);
-  setInterval(loadScripture, 5000);
+  setInterval(loadScripture, 1000);
 
   // Realtime updates, with polling above as a fallback.
   supabaseClient.channel("public-channel-live")
