@@ -330,6 +330,7 @@ started_at:new Date().toISOString()
 
 if(error)throw error;
 streamId=data.id;
+  console.log("BROADCAST ID:", streamId);
 
 const {error:settingsError}=await sb.from("kh_channel_settings").upsert({
 live_enabled:true,
@@ -340,6 +341,7 @@ current_description:$("description").value
 if(settingsError)throw settingsError;
 
 $("status").textContent="🔴 LIVE";
+  console.log("LIVE BROADCAST STARTED:", streamId);
 $("status").style.background="#c8f7d2";
 alert("Broadcast status successfully activated!");
 }catch(e){
