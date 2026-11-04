@@ -375,36 +375,43 @@ async function connectPublicViewer() {
 
   const { data, error } = await supabaseClient
     .from("kh_live_streams")
-    .select("id,title,status")
+    .select("id,title,status,started_at")
     .eq("status", "live")
     .order("started_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
-  if (error || !data) {
+  if (error) {
+    console.error("BROADCAST QUERY ERROR:", error);
+    status.textContent = "BROADCAST ERROR: " + error.message;
     window.currentLiveStreamId = null;
-
-    status.textContent = error ? "BROADCAST ERROR" : "OFFLINE";
-    status.className = "status";
-
-    player.hidden = true;
-    offline.hidden = false;
-
-    await loadScripture();
+    panelHide();
     return;
   }
 
+  if (!data) {
+    status.textContent = "NO ACTIVE BROADCAST FOUND";
+    window.currentLiveStreamId = null;
+    panelHide();
+    return;
+  }
+
+  console.log("ACTIVE BROADCAST:", data);
+
   window.currentLiveStreamId = data.id;
 
-  status.textContent = "🔴 LIVE";
+  status.textContent = "LIVE — ID FOUND";
   status.className = "status live";
   offline.hidden = true;
 
-  // LiveKit supplies the actual video.
-  // Do not assign a stream_url here.
-
   await loadScripture();
-  }
+}
+
+function panelHide() {
+  document.getElementById("scripturePanel").hidden = true;
+  document.getElementById("scriptureVideoOverlay").hidden = true;
+}
+  
   async function loadScripture() {
   const panel = document.getElementById("scripturePanel");
   const overlay = document.getElementById("scriptureVideoOverlay");
@@ -464,7 +471,6 @@ async function connectPublicViewer() {
   }
 
   loadLiveBroadcast();
-  loadScripture();
   setInterval(loadLiveBroadcast, 10000);
   setInterval(loadScripture, 1000);
 
