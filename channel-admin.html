@@ -700,6 +700,7 @@ async function showScripture() {
   if (end < start) {
     return alert("Ending verse cannot be earlier than starting verse.");
   }
+  console.log("SCRIPTURE BROADCAST ID:", streamId);
 
   const rows = getSelectedVerses();
 
