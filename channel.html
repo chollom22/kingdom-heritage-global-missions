@@ -369,71 +369,77 @@ async function connectPublicViewer() {
   renderVideos();
 
   async function loadLiveBroadcast() {
-    const status = document.getElementById("liveStatus");
-    const player = document.getElementById("livePlayer");
-    const offline = document.getElementById("liveOffline");
+  const status = document.getElementById("liveStatus");
+  const player = document.getElementById("livePlayer");
+  const offline = document.getElementById("liveOffline");
 
-    // This page expects an active stream row with a public stream_url.
-    // If your admin table uses different column names, adjust this query to match it.
-    const { data, error } = await supabaseClient
-      .from("kh_live_streams")
-      .select("*")
-      .eq("is_live", true)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
+  const { data, error } = await supabaseClient
+    .from("kh_live_streams")
+    .select("id,title,status")
+    .eq("status", "live")
+    .order("started_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
 
-    if (error || !data || !data.stream_url) {
-      status.textContent = "OFFLINE";
-      status.className = "status";
-      player.hidden = true;
-      offline.hidden = false;
-      return;
-    }
+  if (error || !data) {
+    window.currentLiveStreamId = null;
 
-    status.textContent = "LIVE";
-    status.className = "status live";
-    offline.hidden = true;
-    player.hidden = false;
-    if (player.src !== data.stream_url) {
-      player.src = data.stream_url;
-      player.load();
-    }
+    status.textContent = error ? "BROADCAST ERROR" : "OFFLINE";
+    status.className = "status";
+
+    player.hidden = true;
+    offline.hidden = false;
+
+    await loadScripture();
+    return;
   }
 
+  window.currentLiveStreamId = data.id;
+
+  status.textContent = "🔴 LIVE";
+  status.className = "status live";
+  offline.hidden = true;
+
+  // LiveKit supplies the actual video.
+  // Do not assign a stream_url here.
+
+  await loadScripture();
+  }
   async function loadScripture() {
   const panel = document.getElementById("scripturePanel");
   const overlay = document.getElementById("scriptureVideoOverlay");
 
+  const streamId = window.currentLiveStreamId;
+
+  // No active broadcast means no Scripture.
+  if (!streamId) {
+    panel.hidden = true;
+    overlay.hidden = true;
+    return;
+  }
+
   const { data, error } = await supabaseClient
     .from("kh_scripture_display")
     .select("reference,verse_text,bible_version,display_enabled,created_at")
+    .eq("stream_id", streamId)
     .eq("display_enabled", true)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
   if (error) {
-  console.error("SCRIPTURE LOAD ERROR:", error);
-  document.getElementById("liveStatus").textContent =
-    "SCRIPTURE ERROR: " + error.message;
-  panel.hidden = true;
-  overlay.hidden = true;
-  return;
-}
+    console.error("SCRIPTURE LOAD ERROR:", error);
+    panel.hidden = true;
+    overlay.hidden = true;
+    return;
+  }
 
-if (!data || !data.verse_text) {
-  document.getElementById("liveStatus").textContent =
-    "NO SCRIPTURE FOUND";
-  panel.hidden = true;
-  overlay.hidden = true;
-  return;
-}
+  if (!data || !data.verse_text) {
+    panel.hidden = true;
+    overlay.hidden = true;
+    return;
+  }
 
-document.getElementById("liveStatus").textContent =
-  "SCRIPTURE RECEIVED";
-
-  // Existing Scripture panel underneath the video
   document.getElementById("scriptureReference").textContent =
     data.reference || "Bible Scripture";
 
@@ -445,7 +451,6 @@ document.getElementById("liveStatus").textContent =
 
   panel.hidden = false;
 
-  // New Scripture overlay inside the video
   document.getElementById("overlayReference").textContent =
     data.reference || "Bible Scripture";
 
