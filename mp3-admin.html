@@ -1,0 +1,1739 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Audio Admin | Kingdom Heritage Network Global Missions</title>
+
+<meta name="theme-color" content="#102a72">
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f5fa;
+  color: #18233a;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+header {
+  background: linear-gradient(135deg,#102a72,#54268a);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 21px;
+}
+
+header p {
+  font-size: 13px;
+  margin-top: 7px;
+}
+
+.container {
+  width: 95%;
+  max-width: 1100px;
+  margin: 25px auto;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* LOGIN */
+
+.login-box {
+  max-width: 420px;
+  margin: 55px auto;
+  padding: 25px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 18px #00000012;
+}
+
+.login-box h2 {
+  color: #102a72;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.login-box p {
+  color: #666;
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* FORMS */
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: 2px solid #54268a;
+  border-color: transparent;
+}
+
+.hint {
+  font-size: 11px;
+  color: #777;
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+/* BUTTONS */
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.primary {
+  background: #102a72;
+  color: white;
+}
+
+.purple {
+  background: #54268a;
+  color: white;
+}
+
+.green {
+  background: #087b48;
+  color: white;
+}
+
+.red {
+  background: #c62828;
+  color: white;
+}
+
+.gray {
+  background: #e9edf4;
+  color: #26344d;
+}
+
+.full {
+  width: 100%;
+}
+
+/* DASHBOARD */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.topbar h2 {
+  color: #102a72;
+  font-size: 22px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 3px 10px #00000008;
+}
+
+.stat-card span {
+  display: block;
+  color: #666;
+  font-size: 12px;
+}
+
+.stat-card strong {
+  display: block;
+  color: #102a72;
+  font-size: 25px;
+  margin-top: 8px;
+}
+
+/* SECTIONS */
+
+.panel {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 22px;
+  box-shadow: 0 3px 12px #00000008;
+}
+
+.panel h3 {
+  color: #102a72;
+  margin-bottom: 17px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f2f5fc;
+  padding: 13px;
+  border-radius: 9px;
+  margin-bottom: 15px;
+}
+
+.checkbox-row input {
+  width: 18px;
+  height: 18px;
+}
+
+.checkbox-row label {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.preview {
+  width: 100%;
+  max-width: 180px;
+  max-height: 130px;
+  object-fit: cover;
+  border-radius: 9px;
+  margin-top: 10px;
+}
+
+/* MESSAGE LIST */
+
+.message-card {
+  border: 1px solid #e8ebf1;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
+}
+
+.message-card h4 {
+  color: #102a72;
+  font-size: 16px;
+  margin-bottom: 7px;
+}
+
+.message-card p {
+  font-size: 12px;
+  color: #666;
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  margin: 7px 0;
+}
+
+.status.published {
+  color: #087b48;
+  background: #e4f6ed;
+}
+
+.status.scheduled {
+  color: #8b5b00;
+  background: #fff1d4;
+}
+
+.status.draft {
+  color: #555;
+  background: #eceff4;
+}
+
+.message-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.message-actions button {
+  padding: 9px 12px;
+  font-size: 11px;
+}
+
+.list-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.list-filter input,
+.list-filter select {
+  flex: 1;
+  min-width: 160px;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+#notice {
+  display: none;
+  padding: 13px;
+  border-radius: 9px;
+  margin-bottom: 17px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+#notice.success {
+  display: block;
+  background: #e5f6ed;
+  color: #087b48;
+}
+
+#notice.error {
+  display: block;
+  background: #ffebee;
+  color: #b71c1c;
+}
+
+#notice.info {
+  display: block;
+  background: #eaf0ff;
+  color: #102a72;
+}
+
+.empty {
+  text-align: center;
+  color: #777;
+  padding: 30px 10px;
+  font-size: 13px;
+}
+
+footer {
+  text-align: center;
+  background: #10182d;
+  color: white;
+  padding: 20px;
+  font-size: 12px;
+}
+
+@media(max-width:650px) {
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .panel {
+    padding: 15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Kingdom Heritage Network Global Missions</h1>
+  <p>Audio Messages Administration Dashboard</p>
+</header>
+
+<main class="container">
+
+  <!-- LOGIN -->
+
+  <section id="loginSection" class="login-box">
+
+    <h2>🔐 Admin Login</h2>
+
+    <p>
+      Sign in using your existing ministry administrator account.
+    </p>
+
+    <form id="loginForm">
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input
+          type="email"
+          id="loginEmail"
+          required
+          autocomplete="username"
+          placeholder="Admin email">
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input
+          type="password"
+          id="loginPassword"
+          required
+          autocomplete="current-password"
+          placeholder="Password">
+      </div>
+
+      <button class="btn primary full" id="loginButton">
+        Sign In
+      </button>
+
+    </form>
+
+  </section>
+
+
+  <!-- DASHBOARD -->
+
+  <section id="dashboard" class="hidden">
+
+    <div class="topbar">
+
+      <div>
+        <h2>Audio Dashboard</h2>
+        <p id="adminEmail"
+           style="font-size:12px;color:#777;margin-top:6px;">
+        </p>
+      </div>
+
+      <button class="btn red" id="logoutButton">
+        Sign Out
+      </button>
+
+    </div>
+
+    <div id="notice" role="status" aria-live="polite"></div>
+
+    <!-- STATISTICS -->
+
+    <section class="stats">
+
+      <div class="stat-card">
+        <span>Total Messages</span>
+        <strong id="totalCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Published</span>
+        <strong id="publishedCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Scheduled</span>
+        <strong id="scheduledCount">0</strong>
+      </div>
+
+    </section>
+
+
+    <!-- UPLOAD FORM -->
+
+    <section class="panel" id="formPanel">
+
+      <h3 id="formHeading">➕ Add New Audio Message</h3>
+
+      <form id="audioForm">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Message Title *</label>
+            <input
+              type="text"
+              id="title"
+              required
+              maxlength="200"
+              placeholder="Enter message title">
+          </div>
+
+          <div class="form-group">
+            <label>Speaker / Preacher *</label>
+            <input
+              type="text"
+              id="speaker"
+              required
+              maxlength="150"
+              placeholder="Enter speaker's name">
+          </div>
+
+          <div class="form-group">
+            <label>Category *</label>
+            <select id="category" required>
+              <option value="">Select Category</option>
+              <option value="Sermon">Sermon</option>
+              <option value="Teaching">Teaching</option>
+              <option value="Worship">Worship</option>
+              <option value="Prayer">Prayer</option>
+              <option value="Bible Study">Bible Study</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Audio File *</label>
+            <input
+              type="file"
+              id="audioFile"
+              accept=".mp3,.mpeg,.mp4,.aac,.ogg,.wav,audio/*">
+
+            <p class="hint">
+              MP3 and other supported audio formats.
+              Maximum file size: 150 MB.
+              When editing, leave empty to keep the existing file.
+            </p>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Cover Image (Optional)</label>
+            <input
+              type="file"
+              id="coverFile"
+              accept="image/jpeg,image/png,image/webp">
+
+            <p class="hint">
+              JPG, PNG or WEBP. Leave empty when editing
+              to keep the existing cover.
+            </p>
+
+            <img id="coverPreview"
+                 class="preview hidden"
+                 alt="Cover preview">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Message Description</label>
+            <textarea
+              id="description"
+              maxlength="3000"
+              placeholder="Write a brief description of the message..."></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Publication Date and Time *</label>
+
+            <input
+              type="datetime-local"
+              id="publishedAt"
+              required>
+
+            <p class="hint">
+              Choose now for immediate publication or a future
+              date and time to schedule the message.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="checkbox-row">
+
+          <input
+            type="checkbox"
+            id="isPublished"
+            checked>
+
+          <label for="isPublished">
+            Make this message public (or schedule it)
+          </label>
+
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+          <button
+            type="submit"
+            class="btn primary"
+            id="saveButton">
+            Upload and Save Message
+          </button>
+
+          <button
+            type="button"
+            class="btn gray hidden"
+            id="cancelEdit">
+            Cancel Editing
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+
+    <!-- MESSAGE MANAGEMENT -->
+
+    <section class="panel">
+
+      <h3>📚 Manage Audio Messages</h3>
+
+      <div class="list-filter">
+
+        <input
+          type="search"
+          id="adminSearch"
+          placeholder="Search messages...">
+
+        <select id="adminFilter">
+          <option value="">All Messages</option>
+          <option value="published">Published</option>
+          <option value="scheduled">Scheduled</option>
+          <option value="draft">Drafts</option>
+        </select>
+
+      </div>
+
+      <div id="adminMessageList">
+        <div class="empty">Loading messages...</div>
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
+
+<footer>
+  © <span id="year"></span>
+  Kingdom Heritage Network Global Missions
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+// ========================================
+// SUPABASE CONFIGURATION
+// ========================================
+
+const SUPABASE_URL =
+  "https://bmiechymiyedubezhcqk.supabase.co";
+
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5emlmbnhmbHF2Y2xjdHdvZ2R6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5Mjk2MTgsImV4cCI6MjEwNjUwNTYxOH0.o_b4ZsTB4GSE-7v5p1Pynchdf8Sdol_q0Xkzpmcx-tc";
+
+const TABLE = "kh_audio_messages";
+const BUCKET = "kh-audio-messages";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+// ========================================
+// GLOBAL VARIABLES
+// ========================================
+
+let currentUser = null;
+let messages = [];
+let editingID = null;
+let oldAudioPath = null;
+let oldCoverPath = null;
+let busy = false;
+
+
+// ========================================
+// ELEMENTS
+// ========================================
+
+const loginSection =
+  document.getElementById("loginSection");
+
+const dashboard =
+  document.getElementById("dashboard");
+
+const audioForm =
+  document.getElementById("audioForm");
+
+const notice =
+  document.getElementById("notice");
+
+
+// ========================================
+// NOTIFICATIONS
+// ========================================
+
+function showNotice(message, type = "info") {
+
+  notice.textContent = message;
+  notice.className = type;
+
+  notice.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+
+}
+
+function hideNotice() {
+
+  notice.style.display = "none";
+
+}
+
+
+// ========================================
+// SAFE HTML
+// ========================================
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+// ========================================
+// DATE HELPERS
+// ========================================
+
+function localDateTime(dateValue) {
+
+  const date = new Date(dateValue);
+
+  const offset = date.getTimezoneOffset();
+
+  return new Date(
+    date.getTime() - offset * 60000
+  ).toISOString().slice(0,16);
+
+}
+
+function dateText(value) {
+
+  return new Date(value).toLocaleString("en-NG", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+
+}
+
+function setDefaultDate() {
+
+  document.getElementById("publishedAt").value =
+    localDateTime(new Date());
+
+}
+
+
+// ========================================
+// FILE HELPERS
+// ========================================
+
+function safeFileName(file) {
+
+  const extension =
+    file.name.split(".").pop().toLowerCase();
+
+  return Date.now() + "_" +
+    crypto.randomUUID() + "." + extension;
+
+}
+
+async function uploadFile(file, folder) {
+
+  const path = folder + "/" + safeFileName(file);
+
+  const { data, error } = await supabaseClient
+    .storage
+    .from(BUCKET)
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type || undefined
+    });
+
+  if (error) throw error;
+
+  return data.path;
+
+}
+
+async function removeFiles(paths) {
+
+  const validPaths = paths.filter(Boolean);
+
+  if (!validPaths.length) return;
+
+  const { error } = await supabaseClient
+    .storage
+    .from(BUCKET)
+    .remove(validPaths);
+
+  if (error) {
+
+    console.error("Storage cleanup error:", error);
+
+    showNotice(
+      "The database operation succeeded, but an old file could not be removed. Check Storage manually.",
+      "error"
+    );
+
+  }
+
+}
+
+
+// ========================================
+// ADMIN VERIFICATION
+// ========================================
+
+async function verifyAdmin(user) {
+
+  const { data, error } = await supabaseClient
+    .from("kh_admin_users")
+    .select("id, active")
+    .eq("id", user.id)
+    .eq("active", true)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return !!data;
+
+}
+
+
+// ========================================
+// LOGIN
+// ========================================
+
+document.getElementById("loginForm")
+.addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  const button =
+    document.getElementById("loginButton");
+
+  button.disabled = true;
+  button.textContent = "Signing in...";
+
+  try {
+
+    const email =
+      document.getElementById("loginEmail").value.trim();
+
+    const password =
+      document.getElementById("loginPassword").value;
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+    if (error) throw error;
+
+    const authorized =
+      await verifyAdmin(data.user);
+
+    if (!authorized) {
+
+      await supabaseClient.auth.signOut();
+
+      throw new Error(
+        "Access denied. Your account is not an active ministry administrator."
+      );
+
+    }
+
+    currentUser = data.user;
+
+    await openDashboard();
+
+  } catch (error) {
+
+    alert(error.message);
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Sign In";
+
+  }
+
+});
+
+
+// ========================================
+// RESTORE EXISTING SESSION
+// ========================================
+
+async function checkExistingSession() {
+
+  const { data, error } =
+    await supabaseClient.auth.getSession();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  if (data.session) {
+
+    try {
+
+      const { data: userData, error: userError } =
+        await supabaseClient.auth.getUser();
+
+      if (userError) throw userError;
+
+      const authorized =
+        await verifyAdmin(userData.user);
+
+      if (authorized) {
+
+        currentUser = userData.user;
+
+        await openDashboard();
+
+      } else {
+
+        await supabaseClient.auth.signOut();
+
+      }
+
+    } catch (error) {
+
+      console.error("Session verification failed:", error);
+
+      await supabaseClient.auth.signOut();
+
+    }
+
+  }
+
+}
+
+
+// ========================================
+// OPEN DASHBOARD
+// ========================================
+
+async function openDashboard() {
+
+  loginSection.classList.add("hidden");
+
+  dashboard.classList.remove("hidden");
+
+  document.getElementById("adminEmail").textContent =
+    "Signed in as: " + currentUser.email;
+
+  await loadMessages();
+
+}
+
+
+// ========================================
+// LOGOUT
+// ========================================
+
+document.getElementById("logoutButton")
+.addEventListener("click", async () => {
+
+  if (!confirm("Are you sure you want to sign out?")) {
+    return;
+  }
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+
+  dashboard.classList.add("hidden");
+  loginSection.classList.remove("hidden");
+
+  resetForm();
+
+});
+
+
+// ========================================
+// LOAD MESSAGES
+// ========================================
+
+async function loadMessages() {
+
+  const list =
+    document.getElementById("adminMessageList");
+
+  list.innerHTML =
+    '<div class="empty">Loading messages...</div>';
+
+  try {
+
+    const { data, error } = await supabaseClient
+      .from(TABLE)
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    messages = data || [];
+
+    updateStatistics();
+
+    renderMessages();
+
+  } catch (error) {
+
+    console.error(error);
+
+    list.innerHTML =
+      '<div class="empty">Unable to load messages: ' +
+      escapeHTML(error.message) + '</div>';
+
+  }
+
+}
+
+
+// ========================================
+// STATISTICS
+// ========================================
+
+function updateStatistics() {
+
+  const now = Date.now();
+
+  const published = messages.filter(item =>
+    item.is_published &&
+    new Date(item.published_at).getTime() <= now
+  ).length;
+
+  const scheduled = messages.filter(item =>
+    item.is_published &&
+    new Date(item.published_at).getTime() > now
+  ).length;
+
+  document.getElementById("totalCount").textContent =
+    messages.length;
+
+  document.getElementById("publishedCount").textContent =
+    published;
+
+  document.getElementById("scheduledCount").textContent =
+    scheduled;
+
+}
+
+
+// ========================================
+// MESSAGE STATUS
+// ========================================
+
+function messageStatus(item) {
+
+  if (!item.is_published) {
+
+    return {
+      text: "Draft / Unpublished",
+      className: "draft"
+    };
+
+  }
+
+  if (new Date(item.published_at).getTime() > Date.now()) {
+
+    return {
+      text: "Scheduled",
+      className: "scheduled"
+    };
+
+  }
+
+  return {
+    text: "Published",
+    className: "published"
+  };
+
+}
+
+
+
+// ========================================
+// DISPLAY MESSAGES
+// ========================================
+
+function renderMessages() {
+
+  const list =
+    document.getElementById("adminMessageList");
+
+  const search =
+    document.getElementById("adminSearch")
+      .value.toLowerCase().trim();
+
+  const filter =
+    document.getElementById("adminFilter").value;
+
+  const filtered = messages.filter(item => {
+
+    const status = messageStatus(item);
+
+    const searchable = [
+      item.title,
+      item.speaker,
+      item.category,
+      item.description
+    ].join(" ").toLowerCase();
+
+    const matchesSearch =
+      searchable.includes(search);
+
+    const matchesFilter =
+      !filter ||
+      (filter === "published" && status.className === "published") ||
+      (filter === "scheduled" && status.className === "scheduled") ||
+      (filter === "draft" && status.className === "draft");
+
+    return matchesSearch && matchesFilter;
+
+  });
+
+  if (!filtered.length) {
+
+    list.innerHTML =
+      '<div class="empty">No matching audio messages found.</div>';
+
+    return;
+
+  }
+
+  list.innerHTML = "";
+
+  filtered.forEach(item => {
+
+    const status = messageStatus(item);
+
+    const card = document.createElement("article");
+
+    card.className = "message-card";
+
+    card.innerHTML = `
+
+      <h4>${escapeHTML(item.title)}</h4>
+
+      <p>🎙️ ${escapeHTML(item.speaker)}</p>
+
+      <p>Category: ${escapeHTML(item.category)}</p>
+
+      <p>Publication: ${escapeHTML(dateText(item.published_at))}</p>
+
+      <span class="status ${status.className}">
+        ${status.text}
+      </span>
+
+      <div class="message-actions">
+
+        <button class="btn primary"
+          data-edit="${escapeHTML(item.id)}">
+          Edit
+        </button>
+
+        <button class="btn purple"
+          data-toggle="${escapeHTML(item.id)}">
+          ${item.is_published ? "Unpublish" : "Publish"}
+        </button>
+
+        <button class="btn red"
+          data-delete="${escapeHTML(item.id)}">
+          Delete
+        </button>
+
+      </div>
+
+    `;
+
+    list.appendChild(card);
+
+  });
+
+}
+
+
+// ========================================
+// SEARCH AND FILTER
+// ========================================
+
+document.getElementById("adminSearch")
+.addEventListener("input", renderMessages);
+
+document.getElementById("adminFilter")
+.addEventListener("change", renderMessages);
+
+
+// ========================================
+// COVER PREVIEW
+// ========================================
+
+document.getElementById("coverFile")
+.addEventListener("change", event => {
+
+  const file = event.target.files[0];
+
+  const preview =
+    document.getElementById("coverPreview");
+
+  if (!file) {
+
+    preview.classList.add("hidden");
+    return;
+
+  }
+
+  if (!file.type.startsWith("image/")) {
+
+    alert("Please select a valid image.");
+
+    event.target.value = "";
+
+    return;
+
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+
+    alert("Cover image must not exceed 5 MB.");
+
+    event.target.value = "";
+
+    return;
+
+  }
+
+  preview.src = URL.createObjectURL(file);
+
+  preview.classList.remove("hidden");
+
+});
+
+
+// ========================================
+// SAVE / UPLOAD MESSAGE
+// ========================================
+
+audioForm.addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  if (busy || !currentUser) return;
+
+  const title =
+    document.getElementById("title").value.trim();
+
+  const speaker =
+    document.getElementById("speaker").value.trim();
+
+  const category =
+    document.getElementById("category").value;
+
+  const description =
+    document.getElementById("description").value.trim();
+
+  const audioFile =
+    document.getElementById("audioFile").files[0];
+
+  const coverFile =
+    document.getElementById("coverFile").files[0];
+
+  const publishedInput =
+    document.getElementById("publishedAt").value;
+
+  const isPublished =
+    document.getElementById("isPublished").checked;
+
+  if (!publishedInput) {
+    showNotice("Select a publication date and time.", "error");
+    return;
+  }
+
+  if (!editingID && !audioFile) {
+    showNotice("Please select an audio file.", "error");
+    return;
+  }
+
+  if (audioFile) {
+
+    if (!audioFile.type.startsWith("audio/")) {
+      showNotice("Please select a valid audio file.", "error");
+      return;
+    }
+
+    if (audioFile.size > 150 * 1024 * 1024) {
+      showNotice("Audio file exceeds the 150 MB limit.", "error");
+      return;
+    }
+
+  }
+
+  if (coverFile) {
+
+    if (!coverFile.type.startsWith("image/")) {
+      showNotice("Please select a valid cover image.", "error");
+      return;
+    }
+
+    if (coverFile.size > 5 * 1024 * 1024) {
+      showNotice("Cover image exceeds the 5 MB limit.", "error");
+      return;
+    }
+
+  }
+
+  busy = true;
+
+  const saveButton =
+    document.getElementById("saveButton");
+
+  saveButton.disabled = true;
+  saveButton.textContent = "Saving...";
+
+  let newAudioPath = null;
+  let newCoverPath = null;
+
+  try {
+
+    const { data: userData, error: userError } =
+      await supabaseClient.auth.getUser();
+
+    if (userError || !userData.user) {
+      throw new Error("Your session has expired. Please sign in again.");
+    }
+
+    const authorized =
+      await verifyAdmin(userData.user);
+
+    if (!authorized) {
+      throw new Error("Administrator access is no longer active.");
+    }
+
+    if (audioFile) {
+      showNotice("Uploading audio file...", "info");
+      newAudioPath = await uploadFile(audioFile, "audio");
+    }
+
+    if (coverFile) {
+      showNotice("Uploading cover image...", "info");
+      newCoverPath = await uploadFile(coverFile, "covers");
+    }
+
+    const publishedAt =
+      new Date(publishedInput).toISOString();
+
+    const record = {
+
+      title,
+      speaker,
+      category,
+      description,
+
+      published_at: publishedAt,
+      is_published: isPublished,
+      updated_at: new Date().toISOString()
+
+    };
+
+    if (newAudioPath) record.audio_path = newAudioPath;
+    if (newCoverPath) record.cover_path = newCoverPath;
+
+    if (editingID) {
+
+      const oldAudio = oldAudioPath;
+      const oldCover = oldCoverPath;
+
+      const { error } = await supabaseClient
+        .from(TABLE)
+        .update(record)
+        .eq("id", editingID);
+
+      if (error) throw error;
+
+      showNotice("Audio message updated successfully.", "success");
+
+      const pathsToRemove = [];
+
+      if (newAudioPath && oldAudio) pathsToRemove.push(oldAudio);
+      if (newCoverPath && oldCover) pathsToRemove.push(oldCover);
+
+      await removeFiles(pathsToRemove);
+
+    } else {
+
+      record.audio_path = newAudioPath;
+      record.cover_path = newCoverPath;
+      record.created_by = currentUser.id;
+
+      const { error } = await supabaseClient
+        .from(TABLE)
+        .insert(record);
+
+      if (error) throw error;
+
+      showNotice("Audio message uploaded successfully.", "success");
+
+    }
+
+    resetForm();
+    await loadMessages();
+
+  } catch (error) {
+
+    console.error(error);
+
+    await removeFiles([
+      newAudioPath,
+      newCoverPath
+    ]);
+
+    showNotice(error.message, "error");
+
+  } finally {
+
+    busy = false;
+    saveButton.disabled = false;
+
+    saveButton.textContent = editingID
+      ? "Update Message"
+      : "Upload and Save Message";
+
+  }
+
+});
+
+
+// ========================================
+// EDIT MESSAGE
+// ========================================
+
+function editMessage(id) {
+
+  const item = messages.find(
+    message => String(message.id) === String(id)
+  );
+
+  if (!item) return;
+
+  editingID = item.id;
+
+  oldAudioPath = item.audio_path;
+  oldCoverPath = item.cover_path;
+
+  document.getElementById("title").value =
+    item.title || "";
+
+  document.getElementById("speaker").value =
+    item.speaker || "";
+
+  document.getElementById("category").value =
+    item.category || "";
+
+  document.getElementById("description").value =
+    item.description || "";
+
+  document.getElementById("publishedAt").value =
+    localDateTime(item.published_at);
+
+  document.getElementById("isPublished").checked =
+    item.is_published;
+
+  const preview =
+    document.getElementById("coverPreview");
+
+  if (item.cover_path) {
+
+    preview.src = supabaseClient.storage
+      .from(BUCKET)
+      .getPublicUrl(item.cover_path).data.publicUrl;
+
+    preview.classList.remove("hidden");
+
+  } else {
+
+    preview.classList.add("hidden");
+
+  }
+
+  document.getElementById("formHeading").textContent =
+    "✏️ Edit Audio Message";
+
+  document.getElementById("saveButton").textContent =
+    "Update Message";
+
+  document.getElementById("cancelEdit")
+    .classList.remove("hidden");
+
+  document.getElementById("audioFile").required = false;
+
+  document.getElementById("formPanel")
+    .scrollIntoView({ behavior: "smooth" });
+
+}
+
+
+// ========================================
+// RESET FORM
+// ========================================
+
+function resetForm() {
+
+  audioForm.reset();
+
+  editingID = null;
+  oldAudioPath = null;
+  oldCoverPath = null;
+
+  document.getElementById("formHeading").textContent =
+    "➕ Add New Audio Message";
+
+  document.getElementById("saveButton").textContent =
+    "Upload and Save Message";
+
+  document.getElementById("cancelEdit")
+    .classList.add("hidden");
+
+  document.getElementById("audioFile").required = true;
+
+  document.getElementById("coverPreview")
+    .classList.add("hidden");
+
+  setDefaultDate();
+
+}
+
+document.getElementById("cancelEdit")
+.addEventListener("click", resetForm);
+
+
+// ========================================
+// PUBLISH / UNPUBLISH
+// ========================================
+
+async function togglePublish(id) {
+
+  const item = messages.find(
+    message => String(message.id) === String(id)
+  );
+
+  if (!item) return;
+
+  const newStatus = !item.is_published;
+
+  if (!confirm(
+    newStatus
+      ? "Activate publication for this message?"
+      : "Unpublish this message?"
+  )) return;
+
+  try {
+
+    const { error } = await supabaseClient
+      .from(TABLE)
+      .update({
+        is_published: newStatus,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", item.id);
+
+    if (error) throw error;
+
+    showNotice(
+      newStatus ? "Publication activated." : "Message unpublished.",
+      "success"
+    );
+
+    await loadMessages();
+
+  } catch (error) {
+
+    showNotice(error.message, "error");
+
+  }
+
+}
+
+
+// ========================================
+// DELETE MESSAGE
+// ========================================
+
+async function deleteMessage(id) {
+
+  const item = messages.find(
+    message => String(message.id) === String(id)
+  );
+
+  if (!item) return;
+
+  if (!confirm(
+    "Permanently delete this message and its uploaded files?\n\n" +
+    item.title
+  )) return;
+
+  try {
+
+    const { error } = await supabaseClient
+      .from(TABLE)
+      .delete()
+      .eq("id", item.id);
+
+    if (error) throw error;
+
+    await removeFiles([
+      item.audio_path,
+      item.cover_path
+    ]);
+
+    if (String(editingID) === String(id)) {
+      resetForm();
+    }
+
+    showNotice("Audio message deleted.", "success");
+
+    await loadMessages();
+
+  } catch (error) {
+
+    showNotice(error.message, "error");
+
+  }
+
+}
+
+
+// ========================================
+// MESSAGE BUTTON EVENTS
+// ========================================
+
+document.getElementById("adminMessageList")
+.addEventListener("click", event => {
+
+  const editButton =
+    event.target.closest("[data-edit]");
+
+  const toggleButton =
+    event.target.closest("[data-toggle]");
+
+  const deleteButton =
+    event.target.closest("[data-delete]");
+
+  if (editButton) {
+    editMessage(editButton.dataset.edit);
+  }
+
+  if (toggleButton) {
+    togglePublish(toggleButton.dataset.toggle);
+  }
+
+  if (deleteButton) {
+    deleteMessage(deleteButton.dataset.delete);
+  }
+
+});
+
+
+// ========================================
+// AUTOMATIC SCHEDULE REFRESH
+// ========================================
+
+setInterval(() => {
+
+  if (currentUser && !busy) {
+    updateStatistics();
+    renderMessages();
+  }
+
+}, 60000);
+
+
+// ========================================
+// FOOTER YEAR
+// ========================================
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+
+// ========================================
+// INITIALIZE
+// ========================================
+
+setDefaultDate();
+
+checkExistingSession();
+  </script>
+</body>
+</html>
