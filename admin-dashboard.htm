@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard | Kingdom Heritage Network Global Missions</title>
+
+<meta name="description" content="Central administration portal for Kingdom Heritage Network Global Missions.">
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f2f5fb;
+  color:#172554;
+  min-height:100vh;
+}
+
+header{
+  background:linear-gradient(135deg,#102d60,#59349a);
+  color:white;
+  padding:28px 18px;
+  text-align:center;
+}
+
+.logo{
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  background:white;
+  color:#263b75;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:27px;
+  font-weight:bold;
+  margin:0 auto 12px;
+}
+
+header h1{
+  font-size:21px;
+  line-height:1.4;
+}
+
+header p{
+  font-size:13px;
+  margin-top:8px;
+  color:#e2e8ff;
+}
+
+main{
+  max-width:950px;
+  margin:25px auto;
+  padding:0 16px 35px;
+}
+
+.welcome{
+  background:white;
+  padding:20px;
+  border-radius:14px;
+  margin-bottom:22px;
+  box-shadow:0 3px 12px rgba(0,0,0,.05);
+}
+
+.welcome h2{
+  font-size:20px;
+  margin-bottom:8px;
+}
+
+.welcome p{
+  color:#64748b;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.section-title{
+  font-size:17px;
+  margin-bottom:15px;
+}
+
+.dashboard{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.admin-card{
+  background:white;
+  border-radius:15px;
+  padding:23px 15px;
+  text-decoration:none;
+  color:#172554;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+  border:1px solid #e5eaf3;
+  transition:.2s;
+  min-height:155px;
+}
+
+.admin-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 7px 18px rgba(0,0,0,.1);
+}
+
+.card-icon{
+  width:48px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  font-size:25px;
+  margin-bottom:14px;
+}
+
+.channel .card-icon{
+  background:#e0eaff;
+}
+
+.library .card-icon{
+  background:#e5e1ff;
+}
+
+.audio .card-icon{
+  background:#dff8ef;
+}
+
+.prayer .card-icon{
+  background:#fff0df;
+}
+
+.admin-card h3{
+  font-size:15px;
+  margin-bottom:7px;
+}
+
+.admin-card p{
+  font-size:12px;
+  line-height:1.5;
+  color:#64748b;
+}
+
+.open-link{
+  display:inline-block;
+  margin-top:12px;
+  font-size:12px;
+  font-weight:bold;
+  color:#2456a5;
+}
+
+footer{
+  text-align:center;
+  padding:22px 15px;
+  color:#64748b;
+  font-size:12px;
+}
+
+@media(max-width:420px){
+  .dashboard{
+    grid-template-columns:1fr;
+  }
+
+  .admin-card{
+    min-height:135px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">KH</div>
+
+  <h1>Kingdom Heritage Network<br>Global Missions</h1>
+
+  <p>Central Administration Portal</p>
+</header>
+
+<main>
+
+  <section class="welcome">
+    <h2>Welcome, Administrator</h2>
+    <p>
+      Manage your ministry website from one central location.
+      Select any administration section below to open its
+      management platform.
+    </p>
+  </section>
+
+  <h2 class="section-title">Administration Sections</h2>
+
+  <section class="dashboard">
+
+    <a href="channel-admin.html"
+       class="admin-card channel">
+
+      <div class="card-icon">📡</div>
+
+      <h3>Channel Administration</h3>
+
+      <p>
+        Manage live broadcasts, channel content,
+        scripture displays and broadcast settings.
+      </p>
+
+      <span class="open-link">Open Channel Admin →</span>
+
+    </a>
+
+    <a href="elibrary-admin.html"
+       class="admin-card library">
+
+      <div class="card-icon">📚</div>
+
+      <h3>E-Library Administration</h3>
+
+      <p>
+        Manage Christian books, PDF documents,
+        presentations and library resources.
+      </p>
+
+      <span class="open-link">Open E-Library Admin →</span>
+
+    </a>
+
+    <a href="mp3-admin.html"
+       class="admin-card audio">
+
+      <div class="card-icon">🎧</div>
+
+      <h3>MP3 / Audio Administration</h3>
+
+      <p>
+        Upload, organize and manage ministry
+        audio messages and MP3 resources.
+      </p>
+
+      <span class="open-link">Open Audio Admin →</span>
+
+    </a>
+
+    <a href="prayer-admin.html"
+       class="admin-card prayer">
+
+      <div class="card-icon">🙏</div>
+
+      <h3>Prayer Requests Administration</h3>
+
+      <p>
+        View and manage prayer requests
+        submitted through the ministry website.
+      </p>
+
+      <span class="open-link">Open Prayer Admin →</span>
+
+    </a>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    © <span id="year"></span>
+    Kingdom Heritage Network Global Missions.
+  </p>
+  <p style="margin-top:6px;">
+    Official Ministry Administration Portal
+  </p>
+</footer>
+
+<script>
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+</script>
+
+</body>
+</html>
