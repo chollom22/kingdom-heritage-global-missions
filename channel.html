@@ -3,11 +3,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3660632082094744"
-     crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3660632082094744"
+crossorigin="anonymous"></script>
+
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#102a72">
-<meta name="description" content="Kingdom Heritage Network Global Missions Channel.">
+<meta name="description" content="Watch live broadcasts, sermons, teachings and recorded messages from Kingdom Heritage Network Global Missions.">
+
 <title>Kingdom Heritage Channel</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -15,44 +18,223 @@
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f4f5fb;color:#222}
-header{background:linear-gradient(120deg,#102a72,#54268a);color:white;padding:18px;text-align:center}
+
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f4f5fb;
+ color:#222;
+}
+
+header{
+ background:linear-gradient(120deg,#102a72,#54268a);
+ color:white;
+ padding:18px;
+ text-align:center;
+}
+
+header h2{color:white}
+
 nav{margin-top:12px}
-nav a{color:white;text-decoration:none;margin:8px;font-size:14px}
-main{max-width:950px;margin:25px auto;padding:12px}
-section{background:white;padding:18px;border-radius:13px;margin-bottom:20px;box-shadow:0 3px 12px #0001}
+
+nav a{
+ color:white;
+ text-decoration:none;
+ margin:8px;
+ font-size:14px;
+ display:inline-block;
+}
+
+main{
+ max-width:950px;
+ margin:25px auto;
+ padding:12px;
+}
+
+section{
+ background:white;
+ padding:18px;
+ border-radius:13px;
+ margin-bottom:20px;
+ box-shadow:0 3px 12px #0001;
+}
+
 h2{color:#102a72}
-.status{display:inline-block;padding:9px 14px;background:#eee;border-radius:30px;font-weight:bold;margin-bottom:12px}
-.live{background:#ffe0e0;color:#b00020}
-.player{background:#080b15;border-radius:10px;overflow:hidden;position:relative}
-video{width:100%;display:block;background:#080b15;max-height:550px}
-.offline{color:white;text-align:center;padding:45px 10px}
-.overlay{position:absolute;bottom:10%;left:3%;right:3%;background:#101d4be8;color:white;text-align:center;padding:12px;border-radius:8px}
+
+.status{
+ display:inline-block;
+ padding:9px 14px;
+ background:#eee;
+ border-radius:30px;
+ font-weight:bold;
+ margin-bottom:12px;
+ font-size:13px;
+}
+
+.status.live{
+ background:#ffe0e0;
+ color:#b00020;
+}
+
+.status.error{
+ background:#fff0d9;
+ color:#925400;
+}
+
+.player{
+ background:#080b15;
+ border-radius:10px;
+ overflow:hidden;
+ position:relative;
+ min-height:220px;
+}
+
+#livePlayer{
+ width:100%;
+ display:block;
+ background:#080b15;
+ max-height:550px;
+ object-fit:contain;
+}
+
+.offline{
+ color:white;
+ text-align:center;
+ padding:45px 10px;
+}
+
+.overlay{
+ position:absolute;
+ bottom:10%;
+ left:3%;
+ right:3%;
+ background:#101d4be8;
+ color:white;
+ text-align:center;
+ padding:12px;
+ border-radius:8px;
+ pointer-events:none;
+}
+
 .overlay[hidden]{display:none}
+
 .overlay h3{margin:5px}
-.overlay p{white-space:pre-wrap}
-.scripture{background:#f2edfb;padding:12px;border-left:5px solid #54268a;margin-top:12px;border-radius:7px}
-input,select{padding:12px;border:1px solid #ddd;border-radius:7px;margin:5px 0;max-width:100%}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap}
-.toolbar input{flex:1;min-width:160px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.card{border:1px solid #eee;border-radius:9px;overflow:hidden}
-.card video{aspect-ratio:16/9}
+
+.overlay p{
+ white-space:pre-wrap;
+ margin:6px 0;
+}
+
+.scripture{
+ background:#f2edfb;
+ padding:12px;
+ border-left:5px solid #54268a;
+ margin-top:12px;
+ border-radius:7px;
+}
+
+input,select{
+ padding:12px;
+ border:1px solid #ddd;
+ border-radius:7px;
+ margin:5px 0;
+ max-width:100%;
+}
+
+.toolbar{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+}
+
+.toolbar input{
+ flex:1;
+ min-width:160px;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+ gap:14px;
+}
+
+.card{
+ border:1px solid #eee;
+ border-radius:9px;
+ overflow:hidden;
+ background:white;
+}
+
+.card video{
+ width:100%;
+ aspect-ratio:16/9;
+ object-fit:contain;
+ background:#080b15;
+}
+
 .info{padding:12px}
-.info h3{color:#102a72;margin:5px 0}
-.info p{font-size:13px;color:#666}
-.btn{display:inline-block;padding:9px 12px;background:#102a72;color:white;text-decoration:none;border:0;border-radius:6px;margin:4px 3px;cursor:pointer;font-size:13px}
-.empty{text-align:center;background:#fafaff;padding:25px;color:#687087;border-radius:8px}
-footer{background:#101d4b;color:white;text-align:center;padding:25px 10px}
+
+.info h3{
+ color:#102a72;
+ margin:5px 0;
+}
+
+.info p{
+ font-size:13px;
+ color:#666;
+ line-height:1.5;
+}
+
+.btn{
+ display:inline-block;
+ padding:9px 12px;
+ background:#102a72;
+ color:white;
+ text-decoration:none;
+ border:0;
+ border-radius:6px;
+ margin:4px 3px;
+ cursor:pointer;
+ font-size:13px;
+}
+
+.btn:hover{background:#54268a}
+
+.empty{
+ text-align:center;
+ background:#fafaff;
+ padding:25px;
+ color:#687087;
+ border-radius:8px;
+ grid-column:1/-1;
+}
+
+footer{
+ background:#101d4b;
+ color:white;
+ text-align:center;
+ padding:25px 10px;
+}
+
 footer a{color:white}
+
+@media(max-width:600px){
+ header h2{font-size:19px}
+ nav a{font-size:12px;margin:5px}
+ section{padding:13px}
+ .overlay{bottom:4%;padding:8px}
+ .overlay h3{font-size:16px}
+ .overlay p{font-size:13px}
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h2 style="color:white">KINGDOM HERITAGE NETWORK GLOBAL MISSIONS</h2>
+<h2>KINGDOM HERITAGE NETWORK GLOBAL MISSIONS</h2>
 <p>Kingdom Heritage Channel</p>
+
 <nav>
 <a href="index.html">Home</a>
 <a href="channel.html">Channel</a>
@@ -65,15 +247,25 @@ footer a{color:white}
 
 <section>
 <h2>Live Broadcast</h2>
-<div id="liveStatus" class="status">CHECKING STATUS...</div>
+
+<div id="liveStatus" class="status">
+CHECKING BROADCAST...
+</div>
 
 <div class="player">
+
 <div id="liveOffline" class="offline">
 <strong>Broadcast Currently Offline</strong>
 <p>Please return when the ministry goes live.</p>
 </div>
 
-<video id="livePlayer" controls playsinline autoplay hidden></video>
+<video
+ id="livePlayer"
+ controls
+ playsinline
+ autoplay
+ hidden>
+</video>
 
 <div id="scriptureOverlay" class="overlay" hidden>
 <small>SCRIPTURE READING</small>
@@ -81,6 +273,7 @@ footer a{color:white}
 <p id="overlayText"></p>
 <small id="overlayVersion"></small>
 </div>
+
 </div>
 
 <div id="scripturePanel" class="scripture" hidden>
@@ -88,13 +281,24 @@ footer a{color:white}
 <p id="scriptureText"></p>
 <small id="scriptureVersion"></small>
 </div>
+
+<p id="viewerHelp" style="font-size:13px;color:#687087">
+The live broadcast will appear here when the ministry is online.
+</p>
+
 </section>
 
 <section>
 <h2>Recorded Messages</h2>
 
 <div class="toolbar">
-<input id="search" type="search" placeholder="Search messages...">
+
+<input
+ id="search"
+ type="search"
+ placeholder="Search messages..."
+>
+
 <select id="category">
 <option value="">All categories</option>
 <option>Sermon</option>
@@ -103,11 +307,13 @@ footer a{color:white}
 <option>Event</option>
 <option>Live Broadcast</option>
 </select>
+
 </div>
 
 <div id="videos" class="grid">
 <div class="empty">Loading messages...</div>
 </div>
+
 </section>
 
 </main>
@@ -120,274 +326,726 @@ footer a{color:white}
 </footer>
 
 <script>
-const SUPABASE_URL="https://pyzifnxflqvclctwogdz.supabase.co";
-const SUPABASE_KEY="sb_publishable_9ewFHMOrQsopkeQziD5z1w_ZB4Zmc58";
+/* =====================================
+   SUPABASE CONFIGURATION
+===================================== */
 
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const SUPABASE_URL =
+"https://pyzifnxflqvclctwogdz.supabase.co";
 
-document.getElementById("year").textContent=new Date().getFullYear();
+const SUPABASE_KEY =
+"sb_publishable_9ewFHMOrQsopkeQziD5z1w_ZB4Zmc58";
 
-let room=null;
-let connectedStream=null;
-let allVideos=[];
+const db = window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
 
-const el=id=>document.getElementById(id);
+const ROOM_NAME = "kingdom-heritage-live";
 
-function message(text){
- el("liveStatus").textContent=text;
+const el = id => document.getElementById(id);
+
+el("year").textContent = new Date().getFullYear();
+
+
+/* =====================================
+   LIVE BROADCAST VARIABLES
+===================================== */
+
+let room = null;
+let connectedStream = null;
+let connectingStream = null;
+let allVideos = [];
+let liveCheckRunning = false;
+let scriptureChannel = null;
+let streamChannel = null;
+
+const audioElements = new Map();
+
+
+/* =====================================
+   STATUS DISPLAY
+===================================== */
+
+function message(text,type="normal"){
+ const status = el("liveStatus");
+
+ status.textContent = text;
+ status.className = "status";
+
+ if(type==="live"){
+  status.classList.add("live");
+ }
+
+ if(type==="error"){
+  status.classList.add("error");
+ }
 }
 
-function showOffline(){
- el("liveOffline").hidden=false;
- el("livePlayer").hidden=true;
- el("scripturePanel").hidden=true;
- el("scriptureOverlay").hidden=true;
+
+/* =====================================
+   DISCONNECT VIEWER
+===================================== */
+
+async function disconnectViewer(){
+
+ if(room){
+
+  try{
+   await room.disconnect();
+  }catch(error){
+   console.warn("Disconnect warning:",error);
+  }
+
+  room = null;
+ }
+
+ audioElements.forEach(audio=>{
+  try{
+   audio.pause();
+   audio.remove();
+  }catch(e){}
+ });
+
+ audioElements.clear();
+
+ connectedStream = null;
+ connectingStream = null;
+
+ el("livePlayer").pause();
+ el("livePlayer").srcObject = null;
+ el("livePlayer").hidden = true;
+
 }
+
+
+/* =====================================
+   SHOW OFFLINE SCREEN
+===================================== */
+
+async function showOffline(){
+
+ await disconnectViewer();
+
+ el("liveOffline").hidden = false;
+ el("scripturePanel").hidden = true;
+ el("scriptureOverlay").hidden = true;
+
+ message("NO ACTIVE BROADCAST FOUND");
+
+ el("viewerHelp").textContent =
+ "Please return when the ministry goes live.";
+}
+
+
+/* =====================================
+   CONNECT PUBLIC VIEWER TO LIVEKIT
+===================================== */
 
 async function connectViewer(streamId){
- if(connectedStream===streamId)return;
 
- connectedStream=streamId;
+ if(connectedStream===streamId && room){
+  return;
+ }
+
+ if(connectingStream===streamId){
+  return;
+ }
+
+ connectingStream = streamId;
 
  try{
-  if(room){
-   await room.disconnect();
-   room=null;
+
+  await disconnectViewer();
+
+  connectingStream = streamId;
+
+  message("CONNECTING TO LIVE BROADCAST...");
+
+  el("viewerHelp").textContent =
+   "Connecting to the ministry broadcast...";
+
+  const {data,error} = await db.functions.invoke(
+   "livekit-token",
+   {
+    body:{
+     role:"viewer"
+    }
+   }
+  );
+
+  if(error){
+   throw new Error(
+    error.message || "Could not obtain viewer token."
+   );
   }
 
-  message("CONNECTING TO BROADCAST...");
+  if(!data || !data.token){
+   throw new Error("Viewer token was not returned.");
+  }
 
-  const {data,error}=await db.functions.invoke("livekit-token",{
-   body:{role:"viewer"}
+  const serverUrl = data.serverUrl || data.url;
+
+  if(!serverUrl){
+   throw new Error("LiveKit server URL was not returned.");
+  }
+
+  if(data.room && data.room !== ROOM_NAME){
+   throw new Error("The viewer token belongs to a different room.");
+  }
+
+  const lk = window.LivekitClient || window.LiveKitClient;
+
+  if(!lk){
+   throw new Error("LiveKit browser library could not load.");
+  }
+
+  const newRoom = new lk.Room({
+   adaptiveStream:true,
+   dynacast:true
   });
 
-  if(error)throw error;
+  room = newRoom;
 
-  if(!data?.token || !data?.serverUrl)
-   throw new Error("LiveKit token or server URL missing.");
+  newRoom.on(
+   lk.RoomEvent.TrackSubscribed,
+   (track,publication,participant)=>{
 
-  room=new LivekitClient.Room();
+    if(track.kind==="video"){
 
-  room.on(LivekitClient.RoomEvent.TrackSubscribed,(track)=>{
-   if(track.kind==="video"){
-    track.attach(el("livePlayer"));
-    el("livePlayer").hidden=false;
-    el("liveOffline").hidden=true;
+     track.attach(el("livePlayer"));
+
+     el("livePlayer").hidden = false;
+     el("liveOffline").hidden = true;
+
+     el("viewerHelp").textContent =
+      "You are watching the live ministry broadcast.";
+
+     message("🔴 LIVE NOW","live");
+    }
+
+    if(track.kind==="audio"){
+
+     const audio = track.attach();
+
+     audio.autoplay = true;
+     audio.controls = false;
+
+     document.body.appendChild(audio);
+
+     audioElements.set(
+      publication.trackSid || track.sid,
+      audio
+     );
+
+     audio.play().catch(()=>{
+      el("viewerHelp").textContent =
+       "Broadcast connected. Tap the page or video to enable audio.";
+     });
+    }
    }
+  );
 
-   if(track.kind==="audio"){
-    const audio=track.attach();
-    audio.autoplay=true;
-    document.body.appendChild(audio);
-    audio.play().catch(()=>message("LIVE — TAP AUDIO TO LISTEN"));
+  newRoom.on(
+   lk.RoomEvent.TrackUnsubscribed,
+   (track,publication)=>{
+
+    track.detach();
+
+    const key = publication.trackSid || track.sid;
+
+    if(audioElements.has(key)){
+     const audio = audioElements.get(key);
+     audio.remove();
+     audioElements.delete(key);
+    }
    }
+  );
 
-   message("🔴 LIVE NOW");
-   el("liveStatus").className="status live";
-  });
+  newRoom.on(
+   lk.RoomEvent.Disconnected,
+   ()=>{
+    connectedStream = null;
+    connectingStream = null;
+    message("BROADCAST DISCONNECTED","error");
+   }
+  );
 
-  room.on(LivekitClient.RoomEvent.Disconnected,()=>{
-   message("BROADCAST DISCONNECTED");
-  });
+  await newRoom.connect(serverUrl,data.token);
 
-  await room.connect(data.serverUrl,data.token);
-  message("CONNECTED — WAITING FOR VIDEO");
+  if(room !== newRoom){
+   await newRoom.disconnect();
+   return;
+  }
+
+  connectedStream = streamId;
+  connectingStream = null;
+
+  message("CONNECTED — WAITING FOR LIVE VIDEO","live");
+
+  el("viewerHelp").textContent =
+   "Connected to the broadcast. Waiting for the camera and microphone.";
+
+  if(newRoom.remoteParticipants.size===0){
+   console.log("Waiting for host to publish tracks.");
+  }
 
  }catch(error){
-  console.error(error);
-  message("LIVE FOUND — CONNECTION FAILED");
-  connectedStream=null;
+
+  console.error("Viewer connection error:",error);
+
+  connectedStream = null;
+  connectingStream = null;
+
+  message(
+   "LIVE BROADCAST CONNECTION FAILED",
+   "error"
+  );
+
+  el("viewerHelp").textContent =
+   error.message || "Unable to connect to the broadcast.";
+
+  if(room){
+   try{
+    await room.disconnect();
+   }catch(e){}
+   room = null;
+  }
+
  }
 }
+
+
+/* =====================================
+   LOAD ACTIVE BROADCAST
+===================================== */
 
 async function loadLive(){
- const {data,error}=await db
-  .from("kh_live_streams")
-  .select("id,title,status,started_at")
-  .eq("status","live")
-  .order("started_at",{ascending:false})
-  .limit(1)
-  .maybeSingle();
 
- if(error){
-  console.error(error);
-  message("DATABASE ERROR");
-  return;
- }
+ if(liveCheckRunning) return;
 
- if(!data){
-  if(room){
-   await room.disconnect();
-   room=null;
+ liveCheckRunning = true;
+
+ try{
+
+  const {data,error} = await db
+   .from("kh_live_streams")
+   .select("id,title,status,started_at")
+   .eq("status","live")
+   .order("started_at",{ascending:false})
+   .limit(1)
+   .maybeSingle();
+
+  if(error){
+   console.error("Live database error:",error);
+
+   message("DATABASE ERROR","error");
+
+   el("viewerHelp").textContent =
+    error.message;
+
+   return;
   }
-  connectedStream=null;
-  message("NO ACTIVE BROADCAST FOUND");
-  el("liveStatus").className="status";
-  showOffline();
-  return;
+
+  if(!data){
+   await showOffline();
+   return;
+  }
+
+  message(
+   "🔴 LIVE: "+(data.title || "Kingdom Heritage Live"),
+   "live"
+  );
+
+  el("liveOffline").hidden = false;
+  el("liveOffline").innerHTML =
+   "<strong>Connecting to live broadcast...</strong>";
+
+  if(connectedStream!==data.id){
+   await connectViewer(data.id);
+  }
+
+  await loadScripture(data.id);
+
+ }catch(error){
+
+  console.error("loadLive error:",error);
+  message("UNABLE TO CHECK BROADCAST","error");
+
+ }finally{
+  liveCheckRunning = false;
  }
-
- el("liveStatus").className="status live";
- message("🔴 LIVE: "+data.title);
-
- await connectViewer(data.id);
- await loadScripture(data.id);
 }
+
+
+/* =====================================
+   LOAD SCRIPTURE DISPLAY
+===================================== */
 
 async function loadScripture(streamId){
- const {data,error}=await db
-  .from("kh_scripture_display")
-  .select("reference,scripture_text,bible_version,display_enabled,created_at")
-  .eq("stream_id",streamId)
-  .eq("display_enabled",true)
-  .order("created_at",{ascending:false})
-  .limit(1)
-  .maybeSingle();
 
- if(error){
-  console.error(error);
-  return;
+ try{
+
+  const {data,error} = await db
+   .from("kh_scripture_display")
+   .select(
+    "reference,scripture_text,bible_version,display_enabled,created_at"
+   )
+   .eq("stream_id",streamId)
+   .eq("display_enabled",true)
+   .order("created_at",{ascending:false})
+   .limit(1)
+   .maybeSingle();
+
+  if(error){
+   console.error("Scripture error:",error);
+   return;
+  }
+
+  if(!data){
+
+   el("scripturePanel").hidden = true;
+   el("scriptureOverlay").hidden = true;
+
+   return;
+  }
+
+  el("scriptureReference").textContent =
+   data.reference || "";
+
+  el("scriptureText").textContent =
+   data.scripture_text || "";
+
+  el("scriptureVersion").textContent =
+   data.bible_version || "";
+
+  el("overlayReference").textContent =
+   data.reference || "";
+
+  el("overlayText").textContent =
+   data.scripture_text || "";
+
+  el("overlayVersion").textContent =
+   data.bible_version || "";
+
+  el("scripturePanel").hidden = false;
+  el("scriptureOverlay").hidden = false;
+
+ }catch(error){
+  console.error("Scripture loading failed:",error);
  }
-
- if(!data){
-  el("scripturePanel").hidden=true;
-  el("scriptureOverlay").hidden=true;
-  return;
- }
-
- el("scriptureReference").textContent=data.reference;
- el("scriptureText").textContent=data.scripture_text||"";
- el("scriptureVersion").textContent=data.bible_version;
-
- el("overlayReference").textContent=data.reference;
- el("overlayText").textContent=data.scripture_text||"";
- el("overlayVersion").textContent=data.bible_version;
-
- el("scripturePanel").hidden=false;
- el("scriptureOverlay").hidden=false;
 }
+
+
+/* =====================================
+   REALTIME SCRIPTURE UPDATES
+===================================== */
+
+function subscribeScripture(){
+
+ if(scriptureChannel){
+  db.removeChannel(scriptureChannel);
+ }
+
+ scriptureChannel = db
+  .channel("public-scripture-updates")
+
+  .on(
+   "postgres_changes",
+   {
+    event:"*",
+    schema:"public",
+    table:"kh_scripture_display"
+   },
+   ()=>{
+    if(connectedStream){
+     loadScripture(connectedStream);
+    }
+   }
+  )
+
+  .subscribe();
+}
+
+
+/* =====================================
+   REALTIME BROADCAST UPDATES
+===================================== */
+
+function subscribeLive(){
+
+ if(streamChannel){
+  db.removeChannel(streamChannel);
+ }
+
+ streamChannel = db
+  .channel("public-live-broadcast-updates")
+
+  .on(
+   "postgres_changes",
+   {
+    event:"*",
+    schema:"public",
+    table:"kh_live_streams"
+   },
+   ()=>{
+    loadLive();
+   }
+  )
+
+  .subscribe();
+}
+
+
+/* =====================================
+   LOAD VIDEOS AND RECORDINGS
+===================================== */
 
 async function loadVideos(){
- const [videosResult,recordingsResult]=await Promise.all([
-  db.from("kh_channel_videos")
-   .select("id,title,speaker,description,category,video_url,thumbnail_url,published_at,downloadable")
-   .eq("published",true)
-   .order("published_at",{ascending:false}),
 
-  db.from("kh_live_recordings")
-   .select("id,title,description,category,video_url,thumbnail_url,recorded_at,downloadable")
-   .order("recorded_at",{ascending:false})
- ]);
+ el("videos").innerHTML =
+  '<div class="empty">Loading recorded messages...</div>';
 
- if(videosResult.error)console.error(videosResult.error);
- if(recordingsResult.error)console.error(recordingsResult.error);
+ try{
 
- allVideos=[
-  ...(videosResult.data||[]).map(v=>({...v,speaker:v.speaker||"Kingdom Heritage Network"})),
-  ...(recordingsResult.data||[]).map(v=>({...v,speaker:"Kingdom Heritage Network"}))
- ];
+  const [videosResult,recordingsResult] =
+   await Promise.all([
 
- allVideos.sort((a,b)=>
-  new Date(b.published_at||b.recorded_at||0)-
-  new Date(a.published_at||a.recorded_at||0)
- );
+    db.from("kh_channel_videos")
+     .select(
+      "id,title,speaker,description,category,video_url,thumbnail_url,published_at,downloadable"
+     )
+     .eq("published",true)
+     .order("published_at",{ascending:false}),
 
- renderVideos();
+    db.from("kh_live_recordings")
+     .select(
+      "id,title,description,category,video_url,thumbnail_url,recorded_at,downloadable"
+     )
+     .order("recorded_at",{ascending:false})
+
+   ]);
+
+  if(videosResult.error){
+   console.error("Channel videos error:",videosResult.error);
+  }
+
+  if(recordingsResult.error){
+   console.error("Recordings error:",recordingsResult.error);
+  }
+
+  allVideos = [
+
+   ...(videosResult.data||[]).map(v=>({
+    ...v,
+    speaker:v.speaker || "Kingdom Heritage Network",
+    date:v.published_at
+   })),
+
+   ...(recordingsResult.data||[]).map(v=>({
+    ...v,
+    speaker:"Kingdom Heritage Network",
+    date:v.recorded_at
+   }))
+
+  ];
+
+  allVideos.sort((a,b)=>
+   new Date(b.date||0)-new Date(a.date||0)
+  );
+
+  renderVideos();
+
+ }catch(error){
+
+  console.error("Video loading error:",error);
+
+  el("videos").innerHTML =
+   '<div class="empty">Unable to load recorded messages. Please try again later.</div>';
+ }
 }
 
+
+/* =====================================
+   RENDER RECORDED MESSAGES
+===================================== */
+
 function renderVideos(){
- const term=el("search").value.toLowerCase().trim();
- const category=el("category").value;
 
- const list=allVideos.filter(v=>
-  [v.title,v.speaker,v.description,v.category]
-   .join(" ").toLowerCase().includes(term) &&
-  (!category||v.category===category)
- );
+ const term =
+  el("search").value.toLowerCase().trim();
 
- el("videos").innerHTML="";
+ const category =
+  el("category").value;
+
+ const list = allVideos.filter(v=>{
+
+  const searchable = [
+   v.title,
+   v.speaker,
+   v.description,
+   v.category
+  ].join(" ").toLowerCase();
+
+  return searchable.includes(term) &&
+   (!category || v.category===category);
+ });
+
+ el("videos").innerHTML = "";
 
  if(!list.length){
-  el("videos").innerHTML='<div class="empty">No recorded messages available.</div>';
+
+  el("videos").innerHTML =
+   '<div class="empty">No recorded messages available.</div>';
+
   return;
  }
 
  list.forEach(v=>{
-  const card=document.createElement("article");
-  card.className="card";
 
-  const video=document.createElement("video");
-  video.controls=true;
-  video.preload="metadata";
-  video.playsInline=true;
-  video.src=v.video_url;
+  if(!v.video_url) return;
 
-  const info=document.createElement("div");
-  info.className="info";
+  const card = document.createElement("article");
+  card.className = "card";
 
-  const heading=document.createElement("h3");
-  heading.textContent=v.title;
+  const video = document.createElement("video");
 
-  const speaker=document.createElement("p");
-  speaker.textContent=v.speaker||"Kingdom Heritage Network";
+  video.controls = true;
+  video.preload = "metadata";
+  video.playsInline = true;
+  video.src = v.video_url;
 
-  const description=document.createElement("p");
-  description.textContent=v.description||"";
+  if(v.thumbnail_url){
+   video.poster = v.thumbnail_url;
+  }
 
-  const categoryText=document.createElement("p");
-  categoryText.textContent=v.category||"Message";
+  const info = document.createElement("div");
+  info.className = "info";
 
-  info.append(heading,speaker,categoryText,description);
+  const heading = document.createElement("h3");
+  heading.textContent = v.title || "Recorded Message";
+
+  const speaker = document.createElement("p");
+  speaker.textContent = v.speaker ||
+   "Kingdom Heritage Network";
+
+  const description = document.createElement("p");
+  description.textContent = v.description || "";
+
+  const categoryText = document.createElement("p");
+  categoryText.textContent = v.category || "Message";
+
+  info.append(
+   heading,
+   speaker,
+   categoryText,
+   description
+  );
 
   if(v.downloadable){
-   const download=document.createElement("a");
-   download.href=v.video_url;
-   download.download="";
-   download.className="btn";
-   download.textContent="Download";
+
+   const download = document.createElement("a");
+
+   download.href = v.video_url;
+   download.download = "";
+   download.target = "_blank";
+   download.rel = "noopener";
+   download.className = "btn";
+   download.textContent = "Download";
+
    info.appendChild(download);
   }
 
-  const share=document.createElement("button");
-  share.className="btn";
-  share.textContent="Share";
-  share.onclick=async()=>{
-   const url=location.origin+location.pathname;
+  const share = document.createElement("button");
+
+  share.className = "btn";
+  share.textContent = "Share";
+
+  share.onclick = async()=>{
+
+   const url = v.video_url;
+
    if(navigator.share){
+
     try{
-     await navigator.share({title:v.title,text:v.title,url});
-    }catch(e){}
+     await navigator.share({
+      title:v.title || "Kingdom Heritage Message",
+      text:v.description || "Watch this message",
+      url
+     });
+    }catch(error){}
+    
    }else{
-    await navigator.clipboard.writeText(url);
-    alert("Page link copied.");
+
+    try{
+     await navigator.clipboard.writeText(url);
+     alert("Video link copied.");
+    }catch(error){
+     prompt("Copy this video link:",url);
+    }
    }
   };
 
   info.appendChild(share);
+
   card.append(video,info);
+
   el("videos").appendChild(card);
+
  });
 }
 
-el("search").addEventListener("input",renderVideos);
-el("category").addEventListener("change",renderVideos);
+
+/* =====================================
+   SEARCH AND CATEGORY
+===================================== */
+
+el("search").addEventListener(
+ "input",
+ renderVideos
+);
+
+el("category").addEventListener(
+ "change",
+ renderVideos
+);
+
+
+/* =====================================
+   START PUBLIC CHANNEL
+===================================== */
 
 loadLive();
 loadVideos();
 
-setInterval(loadLive,15000);
+subscribeLive();
+subscribeScripture();
 
-db.channel("channel-live-updates")
- .on("postgres_changes",{
-  event:"*",schema:"public",table:"kh_live_streams"
- },loadLive)
- .on("postgres_changes",{
-  event:"*",schema:"public",table:"kh_scripture_display"
- },()=>{
-  if(connectedStream)loadScripture(connectedStream);
- })
- .subscribe();
+
+/* Check broadcast periodically */
+
+setInterval(()=>{
+ loadLive();
+},10000);
+
+
+/* Refresh recordings periodically */
+
+setInterval(()=>{
+ loadVideos();
+},60000);
+
+
+/* Clean up when page is closed */
+
+window.addEventListener("beforeunload",()=>{
+ if(room){
+  room.disconnect();
+ }
+});
 
 </script>
+
 </body>
-</html>
+   </html>
+   
