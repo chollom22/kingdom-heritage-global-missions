@@ -311,73 +311,194 @@ mediaStream=null;
 $("camera").srcObject=null;
 }
 
+
 /* START LIVE STATUS */
-async function startLive(){
-try{
-if(!mediaStream)throw new Error("Start your camera first.");
-$("status").textContent="Connecting...";
-  await connectLiveKitHost();
-const {data:s,error:se}=await sb.auth.getSession();
-if(se)throw se;
-if(!s.session)throw new Error("Please log in again.");
+async function startLive() {
+  try {
+    if (!mediaStream) {
+      throw new Error("Start your camera first.");
+    }
 
-const {data,error}=await sb.from("kh_live_streams").insert({
-title:$("title").value||"Kingdom Heritage Live",
-description:$("description").value,
-status:"live",
-started_at:new Date().toISOString()
-}).select().single();
+    $("status").textContent = "Connecting...";
 
-if(error)throw error;
-streamId=data.id;
-  console.log("BROADCAST ID:", streamId);
+    // Connect the camera and microphone to LiveKit.
+    await connectLiveKitHost();
 
-const {error:settingsError}=await sb.from("kh_channel_settings").upsert({
-live_enabled:true,
-current_stream_id:streamId,
-current_title:$("title").value||"Kingdom Heritage Live",
-current_description:$("description").value
-});
-if(settingsError)throw settingsError;
+    const { data: sessionData, error: sessionError } =
+      await sb.auth.getSession();
 
-$("status").textContent="🔴 LIVE";
-  console.log("LIVE BROADCAST STARTED:", streamId);
-$("status").style.background="#c8f7d2";
-alert("Broadcast status successfully activated!");
-}catch(e){
-$("status").textContent="Broadcast failed: "+e.message;
-alert("START LIVE ERROR: "+e.message);
+    if (sessionError) throw sessionError;
+    if (!sessionData.session) {
+      throw new Error("Please log in again.");
+    }
+
+    // Create the broadcast record.
+    const { data, error } = await sb
+      .from("kh_live_streams")
+      .insert({
+        title: $("title").value || "Kingdom Heritage Live",
+        description: $("description").value,
+        status: "live",
+        started_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    streamId = data.id;
+
+    console.log("BROADCAST ID:", streamId);
+
+    // Update channel settings.
+    const { error: settingsError } = await sb
+      .from("kh_channel_settings")
+      .upsert({
+        live_enabled: true,
+        current_stream_id: streamId,
+        current_title: $("title").value || "Kingdom Heritage Live",
+        current_description: $("description").value
+      });
+
+    if (settingsError) throw settingsError;
+
+    // Start LiveKit Egress and selected external platforms.
+    const { data: egressData, error: egressError } =
+      await sb.functions.invoke("livekit-egress", {
+        body: {
+          action: "start",
+          streamId: streamId
+        }
+      });
+
+    if (egressError) throw egressError;
+
+    if (!egressData || !egressData.success) {
+      throw new Error(
+        egressData?.error || "Could not start broadcast Egress."
+      );
+    }
+
+    console.log("EGRESS STARTED:", egressData);
+
+    $("status").textContent = "🔴 LIVE";
+    $("status").style.background = "#c8f7d2";
+
+    alert(
+      "Broadcast started successfully!\n\n" +
+      "External platforms: " +
+      (egressData.platforms?.join(", ") || "None selected") +
+      "\nRecording and HLS streaming have been requested."
+    );
+
+  } catch (e) {
+    console.error("START LIVE ERROR:", e);
+
+    // Clean up if broadcast startup fails.
+    if (streamId) {
+      await sb.from("kh_live_streams")
+        .update({
+          status: "ended",
+          ended_at: new Date().toISOString()
+        })
+        .eq("id", streamId);
+
+      await sb.from("kh_channel_settings")
+        .update({
+          live_enabled: false,
+          current_stream_id: null
+        })
+        .eq("current_stream_id", streamId);
+
+      streamId = null;
+    }
+
+    if (liveKitRoom) {
+      try {
+        await liveKitRoom.disconnect();
+      } catch (_) {}
+      liveKitRoom = null;
+    }
+
+    $("status").textContent = "Broadcast failed: " + e.message;
+    alert("START LIVE ERROR: " + e.message);
+  }
 }
-}
+  
+
 
 /* STOP LIVE STATUS */
-async function stopLive(){
-try{
-if(!streamId)throw new Error("No active broadcast found.");
-$("status").textContent="Stopping broadcast...";
-  if (liveKitRoom) {
-  await liveKitRoom.disconnect();
-  liveKitRoom = null;
+async function stopLive() {
+  try {
+    if (!streamId) {
+      throw new Error("No active broadcast found.");
+    }
+
+    $("status").textContent = "Stopping broadcast...";
+
+    // Stop LiveKit Egress and external destinations first.
+    const { data: egressData, error: egressError } =
+      await sb.functions.invoke("livekit-egress", {
+        body: {
+          action: "stop",
+          streamId: streamId
+        }
+      });
+
+    if (egressError) throw egressError;
+
+    if (!egressData || !egressData.success) {
+      throw new Error(
+        egressData?.error || "Could not stop broadcast Egress."
+      );
+    }
+
+    console.log("EGRESS STOPPED:", egressData);
+
+    // Disconnect camera and microphone from LiveKit.
+    if (liveKitRoom) {
+      await liveKitRoom.disconnect();
+      liveKitRoom = null;
+    }
+
+    // Mark broadcast as ended.
+    const { error } = await sb
+      .from("kh_live_streams")
+      .update({
+        status: "ended",
+        ended_at: new Date().toISOString()
+      })
+      .eq("id", streamId);
+
+    if (error) throw error;
+
+    // Turn off channel live status.
+    const { error: settingsError } = await sb
+      .from("kh_channel_settings")
+      .update({
+        live_enabled: false,
+        current_stream_id: null
+      })
+      .eq("current_stream_id", streamId);
+
+    if (settingsError) throw settingsError;
+
+    streamId = null;
+
+    $("status").textContent = "OFFLINE";
+    $("status").style.background = "#eee";
+
+    alert(
+      "Broadcast stopped successfully!\n\n" +
+      "Recording files are being finalized."
+    );
+
+  } catch (e) {
+    console.error("STOP LIVE ERROR:", e);
+    alert("STOP LIVE ERROR: " + e.message);
   }
-
-const {error}=await sb.from("kh_live_streams").update({
-status:"ended",
-ended_at:new Date().toISOString()
-}).eq("id",streamId);
-if(error)throw error;
-
-const {error:se}=await sb.from("kh_channel_settings").update({
-live_enabled:false,
-current_stream_id:null
-}).eq("current_stream_id",streamId);
-if(se)throw se;
-
-streamId=null;
-$("status").textContent="OFFLINE";
-$("status").style.background="#eee";
-alert("Broadcast successfully stopped!");
-}catch(e){alert("STOP LIVE ERROR: "+e.message)}
 }
+  
 
 /* RECORDING */
 async function toggleRecording(){
