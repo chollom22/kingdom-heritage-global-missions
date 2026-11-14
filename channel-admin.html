@@ -771,10 +771,108 @@ async function hideScripture() {
   }
 }
 
-/* DESTINATIONS */
-async function saveDestinations(){
-alert("Destination controls are placeholders. A streaming backend is required.");
+
+/* SAVE BROADCAST DESTINATIONS */
+async function saveDestinations() {
+  const platforms = [
+    { id: "facebook", name: "Facebook" },
+    { id: "youtube", name: "YouTube" },
+    { id: "instagram", name: "Instagram" }
+  ];
+
+  try {
+    const { data: sessionData } =
+      await supabaseClient.auth.getSession();
+
+    if (!sessionData.session) {
+      alert("Please log in first.");
+      return;
+    }
+
+    let saved = 0;
+
+    for (const platform of platforms) {
+      const checkbox = document.getElementById(platform.id);
+
+      if (!checkbox) continue;
+
+      const { data: existing, error: findError } =
+        await supabaseClient
+          .from("kh_stream_destinations")
+          .select("id")
+          .eq("platform", platform.id)
+          .limit(1)
+          .maybeSingle();
+
+      if (findError) throw findError;
+
+      if (!checkbox.checked) {
+        if (existing) {
+          const { error } = await supabaseClient
+            .from("kh_stream_destinations")
+            .update({ enabled: false, status: "disabled" })
+            .eq("id", existing.id);
+
+          if (error) throw error;
+        }
+        continue;
+      }
+
+      const streamUrl = prompt(
+        `Enter ${platform.name} RTMP Server URL:`
+      );
+
+      if (!streamUrl) return;
+
+      const streamKey = prompt(
+        `Enter ${platform.name} Stream Key:`
+      );
+
+      if (!streamKey) return;
+
+      const cleanUrl = streamUrl.trim().replace(/\/+$/, "");
+      const cleanKey = streamKey.trim();
+
+      if (!/^rtmps?:\/\//i.test(cleanUrl)) {
+        alert(`Invalid RTMP URL for ${platform.name}.`);
+        return;
+      }
+
+      const record = {
+        name: platform.name,
+        platform: platform.id,
+        stream_url: cleanUrl,
+        stream_key: cleanKey,
+        enabled: true,
+        status: "ready"
+      };
+
+      let saveError;
+
+      if (existing) {
+        ({ error: saveError } = await supabaseClient
+          .from("kh_stream_destinations")
+          .update(record)
+          .eq("id", existing.id));
+      } else {
+        ({ error: saveError } = await supabaseClient
+          .from("kh_stream_destinations")
+          .insert(record));
+      }
+
+      if (saveError) throw saveError;
+
+      saved++;
+    }
+
+    alert(`${saved} broadcast destination(s) saved successfully.`);
+
+  } catch (error) {
+    console.error("Destination saving error:", error);
+    alert("Could not save destinations: " + error.message);
+  }
 }
+  
 
 /* RECORDINGS */
 async function loadRecordings(){
