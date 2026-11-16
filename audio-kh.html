@@ -478,25 +478,56 @@ $("webm").onclick=async()=>{
  }finally{ready();}
 };
 
+
 $("mp3").onclick=async()=>{
  if(!generatedWebM||!engineReady)return;
+
  $("mp3").disabled=true;
+
  try{
   say("workStatus","Converting WebM to MP3...");
-  awai statusteFile("input.webm",new Uint8Array(await generatedWebM.arrayBuffer()));
-  await ffmpeg.exec(["-i","input.webm","-vn","-codec:a","libmp3lame","-b:a","128k","output.mp3"]);
+
+  await ffmpeg.writeFile(
+   "input.webm",
+   new Uint8Array(await generatedWebM.arrayBuffer())
+  );
+
+  await ffmpeg.exec([
+   "-i","input.webm",
+   "-vn",
+   "-codec:a","libmp3lame",
+   "-b:a","128k",
+   "output.mp3"
+  ]);
+
   let result=await ffmpeg.readFile("output.mp3");
-  download(new Blob([result],{type:"audio/mpeg"}),"kingdom-heritage-message-with-piano.mp3");
-  for(let f of ["input.webm","output.mp3"]){try{await ffmpeg.deleteFile(f)}catch(e){}}
+
+  download(
+   new Blob([result],{type:"audio/mpeg"}),
+   "kingdom-heritage-message-with-piano.mp3"
+  );
+
+  for(let f of ["input.webm","output.mp3"]){
+   try{
+    await ffmpeg.deleteFile(f);
+   }catch(e){}
+  }
+
   say("workStatus","MP3 conversion completed. Check your Downloads folder.");
+
  }catch(e){
-  say("workStatus","MP3 conversion failed: "+(e.message||e)+". Your WebM file is still available.");
- }finally{$("mp3").d
-          finally {
-  $("mp3").disabled = false;
-}
-}
+  console.error(e);
+  say(
+   "workStatus",
+   "MP3 conversion failed: "+(e.message||e)+". Your WebM file is still available."
+  );
+
+ }finally{
+  $("mp3").disabled=false;
+ }
+};
 
 </script>
 </body>
 </html>
+
