@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,165 +8,592 @@
 <title>Kingdom Heritage Audio Studio</title>
 <style>
 :root{--navy:#123b58;--blue:#1677a8;--light:#eef5f9;--ink:#183042}
-*{box-sizing:border-box}body{margin:0;background:var(--light);font-family:Arial,sans-serif;color:var(--ink)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--light);font-family:Arial,sans-serif;color:var(--ink)}
 header{background:linear-gradient(135deg,#123b58,#1677a8);color:white;padding:25px 18px;text-align:center}
-header h1{margin:0 0 7px;font-size:24px}header p{margin:0;font-size:14px}
-main{max-width:680px;margin:18px auto;padding:0 13px 32px}.card{background:white;border-radius:16px;padding:17px;margin:13px 0;box-shadow:0 4px 18px #153c5512}
-.tracks{display:grid;grid-template-columns:1fr;gap:12px}.track{border:1px solid #d8e4eb;border-radius:13px;padding:13px}
-h2{font-size:17px;margin:0 0 12px}input[type=file]{width:100%;font-size:14px}
+header h1{margin:0 0 7px;font-size:24px}
+header p{margin:0;font-size:14px}
+main{max-width:680px;margin:18px auto;padding:0 13px 32px}
+.card{background:white;border-radius:16px;padding:17px;margin:13px 0;box-shadow:0 4px 18px #153c5512}
+.tracks{display:grid;grid-template-columns:1fr;gap:12px}
+.track{border:1px solid #d8e4eb;border-radius:13px;padding:13px}
+h2{font-size:17px;margin:0 0 12px}
+input[type=file]{width:100%;font-size:14px}
 .filename{font-size:13px;color:#557080;margin:8px 0;overflow-wrap:anywhere}
-label{display:block;font-size:13px;font-weight:bold;margin:13px 0 6px}input[type=range]{width:100%;accent-color:var(--blue)}
+label{display:block;font-size:13px;font-weight:bold;margin:13px 0 6px}
+input[type=range]{width:100%;accent-color:var(--blue)}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 button{border:0;border-radius:12px;padding:14px 10px;font-size:14px;font-weight:bold;background:var(--blue);color:white}
-button.secondary{background:#e6eff4;color:var(--navy)}button:disabled{opacity:.45}
-button.wide{width:100%;margin-top:10px}.status{font-size:13px;line-height:1.5;color:#526b7a;margin-top:12px;min-height:20px}
-.note{font-size:12px;color:#607887;line-height:1.5}.meter{height:7px;background:#e7eef2;border-radius:9px;overflow:hidden;margin-top:12px}
+button.secondary{background:#e6eff4;color:var(--navy)}
+button:disabled{opacity:.45}
+button.wide{width:100%;margin-top:10px}
+.status{font-size:13px;line-height:1.5;color:#526b7a;margin-top:12px;min-height:20px}
+.note{font-size:12px;color:#607887;line-height:1.5}
+.meter{height:7px;background:#e7eef2;border-radius:9px;overflow:hidden;margin-top:12px}
 .meter span{display:block;width:0;height:100%;background:#1d9a72}
 @media(min-width:560px){.tracks{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-<header><h1>🎚️ Kingdom Heritage Audio Studio</h1><p>Mix a spoken message with piano music</p></header>
+
+<header>
+<h1>🎚️ Kingdom Heritage Audio Studio</h1>
+<p>Mix a spoken message with piano music</p>
+</header>
+
 <main>
-<section class="card"><div class="tracks">
-  <div class="track">
-    <h2>🎙️ Track 1 — Spoken Message</h2>
-    <input id="voiceFile" type="file" accept="audio/*">
-    <div class="filename" id="voiceName">No message selected</div>
-    <label for="voiceVol">Message volume: <span id="voicePct">100%</span></label>
-    <input id="voiceVol" type="range" min="0" max="1" step=".01" value="1">
-    <label for="noiseLevel">Message noise reduction: <span id="noisePct">Medium</span></label>
-    <input id="noiseLevel" type="range" min="0" max="100" step="1" value="35">
-    <label for="voiceEnhance">Voice enhancement: <span id="enhancePct">Medium</span></label>
-    <input id="voiceEnhance" type="range" min="0" max="100" step="1" value="35">
-  </div>
-  <div class="track">
-    <h2>🎹 Track 2 — Piano Sound</h2>
-    <input id="pianoFile" type="file" accept="audio/*">
-    <div class="filename" id="pianoName">No piano audio selected</div>
-    <label for="pianoVol">Piano volume: <span id="pianoPct">35%</span></label>
-    <input id="pianoVol" type="range" min="0" max="1" step=".01" value=".35">
-  </div>
+<section class="card">
+<div class="tracks">
+
+<div class="track">
+<h2>🎙️ Track 1 — Spoken Message</h2>
+<input id="voiceFile" type="file" accept="audio/*">
+<div class="filename" id="voiceName">No message selected</div>
+
+<label for="voiceVol">Message volume: <span id="voicePct">100%</span></label>
+<input id="voiceVol" type="range" min="0" max="1" step=".01" value="1">
+
+<label for="noiseLevel">Message noise reduction: <span id="noisePct">Medium</span></label>
+<input id="noiseLevel" type="range" min="0" max="100" step="1" value="35">
+
+<label for="voiceEnhance">Voice enhancement: <span id="enhancePct">Medium</span></label>
+<input id="voiceEnhance" type="range" min="0" max="100" step="1" value="35">
+</div>
+
+<div class="track">
+<h2>🎹 Track 2 — Piano Sound</h2>
+<input id="pianoFile" type="file" accept="audio/*">
+<div class="filename" id="pianoName">No piano audio selected</div>
+
+<label for="pianoVol">Piano volume: <span id="pianoPct">35%</span></label>
+<input id="pianoVol" type="range" min="0" max="1" step=".01" value=".35">
+</div>
+
 </div>
 <p class="note">This version streams the selected audio files during playback instead of decoding the entire recordings into memory. This is designed to reduce crashes on phones.</p>
 </section>
+
 <section class="card">
 <h2>Mix and save</h2>
-<div class="controls"><button id="playBtn" disabled>▶ Play mix</button><button id="stopBtn" class="secondary" disabled>■ Stop</button></div>
+
+<div class="controls">
+<button id="playBtn" disabled>▶ Play mix</button>
+<button id="stopBtn" class="secondary" disabled>■ Stop</button>
+</div>
+
 <button id="saveBtn" class="wide" disabled>⬇ Save combined audio (WebM)</button>
 <button id="mp3Btn" class="wide secondary" disabled>🎵 Export as MP3</button>
+
 <div class="meter"><span id="meterBar"></span></div>
-<div class="status" id="status" aria-live="polite">Choose both audio files. Playback will be enabled when both are ready.</div>
+
+<div class="status" id="status" aria-live="polite">
+Choose both audio files. Playback will be enabled when both are ready.
+</div>
+
 <p class="note">MP3 export decodes the tracks for conversion and may use more phone memory than playback. If your recordings are very long, use the WebM save option or shorten the files first. Audio is processed in your browser and is not uploaded.</p>
 </section>
 </main>
-<audio id="voiceAudio" preload="metadata"></audio><audio id="pianoAudio" preload="metadata"></audio>
+
+<audio id="voiceAudio" preload="metadata"></audio>
+<audio id="pianoAudio" preload="metadata"></audio>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+
 <script>
 const $=id=>document.getElementById(id);
-let ctx=null, voiceSource=null, pianoSource=null, master=null, voiceGain=null, pianoGain=null;
-let voiceNodes=[], recording=false, recorder=null, chunks=[], mixDest=null, raf=0, startedAt=0, urls={voice:null,piano:null};
-function setStatus(message){$('status').textContent=message}
-function audioContext(){if(!ctx){const C=window.AudioContext||window.webkitAudioContext;if(!C)throw new Error('This browser does not support Web Audio. Please use Chrome.');ctx=new C();}
- if(!master){master=ctx.createGain();master.gain.value=1;master.connect(ctx.destination);mixDest=ctx.createMediaStreamDestination();master.connect(mixDest);
- voiceSource=ctx.createMediaElementSource($('voiceAudio'));pianoSource=ctx.createMediaElementSource($('pianoAudio'));
- voiceGain=ctx.createGain();pianoGain=ctx.createGain();
- const hp=ctx.createBiquadFilter();hp.type='highpass';hp.Q.value=.7;
- const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.Q.value=.7;
- const warmth=ctx.createBiquadFilter();warmth.type='lowshelf';warmth.frequency.value=180;
- const presence=ctx.createBiquadFilter();presence.type='peaking';presence.frequency.value=3000;presence.Q.value=.9;
- const comp=ctx.createDynamicsCompressor();comp.threshold.value=-26;comp.knee.value=18;comp.ratio.value=3;comp.attack.value=.01;comp.release.value=.2;
- voiceSource.connect(voiceGain);voiceGain.connect(hp);hp.connect(lp);lp.connect(warmth);warmth.connect(presence);presence.connect(comp);comp.connect(master);
- pianoSource.connect(pianoGain);pianoGain.connect(master);
- voiceNodes=[hp,lp,warmth,presence,comp];
+
+let ctx=null, voiceSource=null, pianoSource=null, master=null;
+let voiceGain=null, pianoGain=null;
+let voiceNodes=[], recording=false, recorder=null, chunks=[];
+let mixDest=null, raf=0, startedAt=0;
+let urls={voice:null,piano:null};
+
+function setStatus(message){
+ $('status').textContent=message;
+}
+
+function audioContext(){
+ if(!ctx){
+  const C=window.AudioContext||window.webkitAudioContext;
+  if(!C)throw new Error('This browser does not support Web Audio. Please use Chrome.');
+  ctx=new C();
  }
+
+ if(!master){
+  master=ctx.createGain();
+  master.gain.value=1;
+  master.connect(ctx.destination);
+
+  mixDest=ctx.createMediaStreamDestination();
+  master.connect(mixDest);
+
+  voiceSource=ctx.createMediaElementSource($('voiceAudio'));
+  pianoSource=ctx.createMediaElementSource($('pianoAudio'));
+
+  voiceGain=ctx.createGain();
+  pianoGain=ctx.createGain();
+
+  const hp=ctx.createBiquadFilter();
+  hp.type='highpass';
+  hp.Q.value=.7;
+
+  const lp=ctx.createBiquadFilter();
+  lp.type='lowpass';
+  lp.Q.value=.7;
+
+  const warmth=ctx.createBiquadFilter();
+  warmth.type='lowshelf';
+  warmth.frequency.value=180;
+
+  const presence=ctx.createBiquadFilter();
+  presence.type='peaking';
+  presence.frequency.value=3000;
+  presence.Q.value=.9;
+
+  const comp=ctx.createDynamicsCompressor();
+  comp.threshold.value=-26;
+  comp.knee.value=18;
+  comp.ratio.value=3;
+  comp.attack.value=.01;
+  comp.release.value=.2;
+
+  voiceSource.connect(voiceGain);
+  voiceGain.connect(hp);
+  hp.connect(lp);
+  lp.connect(warmth);
+  warmth.connect(presence);
+  presence.connect(comp);
+  comp.connect(master);
+
+  pianoSource.connect(pianoGain);
+  pianoGain.connect(master);
+
+  voiceNodes=[hp,lp,warmth,presence,comp];
+ }
+
  return ctx;
 }
+
 function setEffects(){
  if(!ctx)return;
- const n=Number($('noiseLevel').value)/100,e=Number($('voiceEnhance').value)/100;
- voiceGain.gain.value=Number($('voiceVol').value);pianoGain.gain.value=Number($('pianoVol').value);
+
+ const n=Number($('noiseLevel').value)/100;
+ const e=Number($('voiceEnhance').value)/100;
+
+ voiceGain.gain.value=Number($('voiceVol').value);
+ pianoGain.gain.value=Number($('pianoVol').value);
+
  voiceNodes[0].frequency.value=60+n*130;
  voiceNodes[1].frequency.value=16000-n*7500;
- voiceNodes[2].gain.value=e*3;voiceNodes[3].gain.value=e*4;
- voiceNodes[4].threshold.value=-24-e*6;voiceNodes[4].ratio.value=2+e*2;
+ voiceNodes[2].gain.value=e*3;
+ voiceNodes[3].gain.value=e*4;
+ voiceNodes[4].threshold.value=-24-e*6;
+ voiceNodes[4].ratio.value=2+e*2;
 }
+
 function updateReady(){
- const ready=!!(urls.voice&&urls.piano&&$('voiceAudio').readyState>=2&&$('pianoAudio').readyState>=2);
- $('playBtn').disabled=!ready;$('saveBtn').disabled=!ready;$('mp3Btn').disabled=!ready;
+ const ready=!!(
+  urls.voice&&urls.piano&&
+  $('voiceAudio').readyState>=2&&
+  $('pianoAudio').readyState>=2
+ );
+
+ $('playBtn').disabled=!ready;
+ $('saveBtn').disabled=!ready;
+ $('mp3Btn').disabled=!ready;
 }
+
 function loadTrack(file,kind){
  if(!file)return;
+
  if(urls[kind])URL.revokeObjectURL(urls[kind]);
+
  urls[kind]=URL.createObjectURL(file);
+
  const audio=$(kind==='voice'?'voiceAudio':'pianoAudio');
- audio.pause();audio.src=urls[kind];audio.load();
+
+ audio.pause();
+ audio.src=urls[kind];
+ audio.load();
+
  $(kind+'Name').textContent=file.name;
+
  setStatus('Loading '+(kind==='voice'?'spoken message':'piano audio')+'…');
- audio.oncanplay=()=>{updateReady();setStatus('Audio loaded. '+(urls.voice&&urls.piano?'Both tracks are ready to mix.':'Choose the other audio file.'));};
- audio.onerror=()=>{updateReady();setStatus('This audio format could not be played by your browser. Try converting the file to MP3 or WAV.');};
+
+ audio.oncanplay=()=>{
+  updateReady();
+  setStatus(
+   'Audio loaded. '+
+   (urls.voice&&urls.piano?
+    'Both tracks are ready to mix.':
+    'Choose the other audio file.')
+  );
+ };
+
+ audio.onerror=()=>{
+  updateReady();
+  setStatus('This audio format could not be played by your browser. Try converting the file to MP3 or WAV.');
+ };
 }
+
 $('voiceFile').addEventListener('change',e=>loadTrack(e.target.files[0],'voice'));
 $('pianoFile').addEventListener('change',e=>loadTrack(e.target.files[0],'piano'));
-[['voiceVol','voicePct'],['pianoVol','pianoPct']].forEach(([a,b])=>$(a).addEventListener('input',()=>{$(b).textContent=Math.round(Number($(a).value)*100)+'%';setEffects();}));
-$('noiseLevel').addEventListener('input',()=>{let n=+$('noiseLevel').value;$('noisePct').textContent=n===0?'Off':n<35?'Low':n<70?'Medium':'High';setEffects();});
-$('voiceEnhance').addEventListener('input',()=>{let n=+$('voiceEnhance').value;$('enhancePct').textContent=n===0?'Off':n<35?'Light':n<70?'Medium':'Strong';setEffects();});
-function resetTracks(){['voiceAudio','pianoAudio'].forEach(id=>{const a=$(id);a.pause();try{a.currentTime=0}catch(e){}});cancelAnimationFrame(raf);$('meterBar').style.width='0%';}
+
+[['voiceVol','voicePct'],['pianoVol','pianoPct']].forEach(([a,b])=>{
+ $(a).addEventListener('input',()=>{
+  $(b).textContent=Math.round(Number($(a).value)*100)+'%';
+  setEffects();
+ });
+});
+
+$('noiseLevel').addEventListener('input',()=>{
+ let n=+$('noiseLevel').value;
+ $('noisePct').textContent=n===0?'Off':n<35?'Low':n<70?'Medium':'High';
+ setEffects();
+});
+
+$('voiceEnhance').addEventListener('input',()=>{
+ let n=+$('voiceEnhance').value;
+ $('enhancePct').textContent=n===0?'Off':n<35?'Light':n<70?'Medium':'Strong';
+ setEffects();
+});
+
+function resetTracks(){
+ ['voiceAudio','pianoAudio'].forEach(id=>{
+  const a=$(id);
+  a.pause();
+  try{a.currentTime=0}catch(e){}
+ });
+
+ cancelAnimationFrame(raf);
+ $('meterBar').style.width='0%';
+}
+
 function playProgress(){
- const a=$('voiceAudio'),b=$('pianoAudio'),duration=Math.max(isFinite(a.duration)?a.duration:0,isFinite(b.duration)?b.duration:0);
- const tick=()=>{const t=Math.max(a.currentTime,b.currentTime);$('meterBar').style.width=duration?Math.min(100,t/duration*100)+'%':'0%';if(!a.paused||!b.paused)raf=requestAnimationFrame(tick)};
+ const a=$('voiceAudio'),b=$('pianoAudio');
+ const duration=Math.max(
+  isFinite(a.duration)?a.duration:0,
+  isFinite(b.duration)?b.duration:0
+ );
+
+ const tick=()=>{
+  const t=Math.max(a.currentTime,b.currentTime);
+  $('meterBar').style.width=duration?
+   Math.min(100,t/duration*100)+'%':'0%';
+
+  if(!a.paused||!b.paused)raf=requestAnimationFrame(tick);
+ };
+
  tick();
 }
+
 async function startMix(){
- if(!urls.voice||!urls.piano)throw new Error('Please choose both audio files first.');
- const c=audioContext();await c.resume();setEffects();resetTracks();
- const a=$('voiceAudio'),b=$('pianoAudio');a.currentTime=0;b.currentTime=0;
+ if(!urls.voice||!urls.piano)
+  throw new Error('Please choose both audio files first.');
+
+ const c=audioContext();
+ await c.resume();
+
+ setEffects();
+ resetTracks();
+
+ const a=$('voiceAudio'),b=$('pianoAudio');
+ a.currentTime=0;
+ b.currentTime=0;
+
  const results=await Promise.allSettled([a.play(),b.play()]);
- if(results.every(x=>x.status==='rejected'))throw new Error('The browser blocked audio playback. Tap Play Mix again.');
- if(results.some(x=>x.status==='rejected'))throw new Error('One of the audio tracks could not start. Check that both files are supported audio formats.');
- $('playBtn').disabled=true;$('stopBtn').disabled=false;setStatus('Playing your spoken message and piano together.');playProgress();
+
+ if(results.every(x=>x.status==='rejected'))
+  throw new Error('The browser blocked audio playback. Tap Play Mix again.');
+
+ if(results.some(x=>x.status==='rejected'))
+  throw new Error('One of the audio tracks could not start. Check that both files are supported audio formats.');
+
+ $('playBtn').disabled=true;
+ $('stopBtn').disabled=false;
+
+ setStatus('Playing your spoken message and piano together.');
+ playProgress();
 }
-$('playBtn').onclick=async()=>{try{await startMix();}catch(e){$('playBtn').disabled=false;$('stopBtn').disabled=true;setStatus('Playback problem: '+e.message);}};
-$('stopBtn').onclick=()=>{resetTracks();$('playBtn').disabled=false;$('stopBtn').disabled=true;setStatus('Playback stopped.');};
-['voiceAudio','pianoAudio'].forEach(id=>$(id).addEventListener('ended',()=>{if($('voiceAudio').ended&&$('pianoAudio').ended){$('playBtn').disabled=false;$('stopBtn').disabled=true;cancelAnimationFrame(raf);$('meterBar').style.width='100%';setStatus('Playback finished.');}}));
+
+$('playBtn').onclick=async()=>{
+ try{
+  await startMix();
+ }catch(e){
+  $('playBtn').disabled=false;
+  $('stopBtn').disabled=true;
+  setStatus('Playback problem: '+e.message);
+ }
+};
+
+$('stopBtn').onclick=()=>{
+ resetTracks();
+ $('playBtn').disabled=false;
+ $('stopBtn').disabled=true;
+ setStatus('Playback stopped.');
+};
+
+['voiceAudio','pianoAudio'].forEach(id=>{
+ $(id).addEventListener('ended',()=>{
+  if($('voiceAudio').ended&&$('pianoAudio').ended){
+   $('playBtn').disabled=false;
+   $('stopBtn').disabled=true;
+   cancelAnimationFrame(raf);
+   $('meterBar').style.width='100%';
+   setStatus('Playback finished.');
+  }
+ });
+});
+
 $('saveBtn').onclick=async()=>{
  try{
-  if(!window.MediaRecorder)throw new Error('Audio recording is not supported in this browser.');
-  const c=audioContext();await c.resume();resetTracks();setEffects();
-  recorder=new MediaRecorder(mixDest.stream);chunks=[];recording=true;
-  recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
-  recorder.onstop=()=>{recording=false;const blob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});download(blob,'kingdom-heritage-message-with-piano.webm');$('playBtn').disabled=false;$('stopBtn').disabled=true;setStatus('Combined audio saved. Check your Downloads folder.');};
-  recorder.start(500);await startMix();setStatus('Recording the combined sound. Keep this page open until both tracks finish.');
-  $('stopBtn').disabled=false;
- }catch(e){if(recorder&&recorder.state!=='inactive')recorder.stop();setStatus('Could not save audio: '+e.message);}
-};
-function download(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000);}
-async function decodeForMp3(file){
- const bytes=await file.arrayBuffer();const c=audioContext();return await c.decodeAudioData(bytes.slice(0));
-}
-$('mp3Btn').onclick=async()=>{
- if(!window.lamejs){setStatus('MP3 encoder did not load. Connect to the internet and reload the page.');return;}
- const voiceFile=$('voiceFile').files[0],pianoFile=$('pianoFile').files[0];
- if(!voiceFile||!pianoFile)return;
- $('mp3Btn').disabled=true;$('saveBtn').disabled=true;setStatus('Preparing MP3. This step needs more memory than playback…');
- try{
-  const c=audioContext(),[v,p]=await Promise.all([decodeForMp3(voiceFile),decodeForMp3(pianoFile)]);
-  const rate=22050,duration=Math.max(v.duration,p.duration),frames=Math.ceil(duration*rate);
-  const off=new OfflineAudioContext(2,frames,rate),master=off.createGain();master.connect(off.destination);
-  const add=(buf,vol,voice)=>{
-   const src=off.createBufferSource(),g=off.createGain();src.buffer=buf;g.gain.value=Number($(vol).value);src.connect(g);
-   if(voice){const n=Number($('noiseLevel').value)/100,e=Number($('voiceEnhance').value)/100;const hp=off.createBiquadFilter();hp.type='highpass';hp.frequency.value=60+n*130;const lp=off.createBiquadFilter();lp.type='lowpass';lp.frequency.value=16000-n*7500;const w=off.createBiquadFilter();w.type='lowshelf';w.frequency.value=180;w.gain.value=e*3;const pr=off.createBiquadFilter();pr.type='peaking';pr.frequency.value=3000;pr.Q.value=.9;pr.gain.value=e*4;const cp=off.createDynamicsCompressor();cp.threshold.value=-24-e*6;cp.ratio.value=2+e*2;g.connect(hp);hp.connect(lp);lp.connect(w);w.connect(pr);pr.connect(cp);cp.connect(master);}
-   else g.connect(master);src.start(0);
+  if(!window.MediaRecorder)
+   throw new Error('Audio recording is not supported in this browser.');
+
+  const c=audioContext();
+  await c.resume();
+
+  resetTracks();
+  setEffects();
+
+  recorder=new MediaRecorder(mixDest.stream);
+  chunks=[];
+  recording=true;
+
+  recorder.ondataavailable=e=>{
+   if(e.data&&e.data.size)chunks.push(e.data);
   };
-  add(v,'voiceVol',true);add(p,'pianoVol',false);
-  const rendered=await off.startRendering(),left=rendered.getChannelData(0),right=rendered.getChannelData(1),encoder=new lamejs.Mp3Encoder(2,rate,128),block=1152,parts=[];
-  const cv=x=>{const a=new Int16Array(x.length);for(let i=0;i<x.length;i++){let z=Math.max(-1,Math.min(1,x[i]));a[i]=z<0?z*32768:z*32767;}return a;};
-  const L=cv(left),R=cv(right);
-  for(let i=0;i<L.length;i+=block){const d=encoder.encodeBuffer(L.subarray(i,i+block),R.subarray(i,i+block));if(d.length)parts.push(new Uint8Array(d));if(i%(block*80)===0)await new Promise(r=>setTimeout(r,0));}
-  const end=encoder.flush();if(end.length)parts.push(new Uint8Array(end));download(new Blob(parts,{type:'audio/mpeg'}),'kingdom-heritage-message-with-piano.mp3');setStatus('MP3 exported. Check your Downloads folder.');
- }catch(e){setStatus('MP3 export failed: '+(e.message||'Try shorter audio files or use WebM save.'));}
- finally{$('mp3Btn').disabled=false;$('saveBtn').disabled=false;}
+
+  recorder.onstop=()=>{
+   recording=false;
+
+   const blob=new Blob(chunks,{
+    type:recorder.mimeType||'audio/webm'
+   });
+
+   download(blob,'kingdom-heritage-message-with-piano.webm');
+
+   $('playBtn').disabled=false;
+   $('stopBtn').disabled=true;
+
+   setStatus('Combined audio saved. Check your Downloads folder.');
+  };
+
+  recorder.start(500);
+
+  await startMix();
+
+  setStatus('Recording the combined sound. Keep this page open until both tracks finish.');
+  $('stopBtn').disabled=false;
+
+ }catch(e){
+  if(recorder&&recorder.state!=='inactive')recorder.stop();
+  setStatus('Could not save audio: '+e.message);
+ }
+};
+
+function download(blob,name){
+ const u=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+
+ a.href=u;
+ a.download=name;
+
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+
+ setTimeout(()=>URL.revokeObjectURL(u),60000);
+}
+
+async function decodeForMp3(file){
+ const bytes=await file.arrayBuffer();
+ const c=audioContext();
+ return await c.decodeAudioData(bytes);
+}
+
+$('mp3Btn').onclick=async()=>{
+ if(!window.lamejs){
+  setStatus('MP3 encoder did not load. Connect to the internet and reload the page.');
+  return;
+ }
+
+ const voiceFile=$('voiceFile').files[0];
+ const pianoFile=$('pianoFile').files[0];
+
+ if(!voiceFile||!pianoFile)return;
+
+ $('mp3Btn').disabled=true;
+ $('saveBtn').disabled=true;
+ $('playBtn').disabled=true;
+
+ try{
+  setStatus('Reading spoken message…');
+  const v=await decodeForMp3(voiceFile);
+
+  setStatus('Reading piano audio…');
+  const p=await decodeForMp3(pianoFile);
+
+  // Target a file size close to the original spoken recording.
+  // MP3 supports fixed bitrate steps, so the result is an estimate.
+  const rate=44100;
+  const chunkSeconds=10;
+  const duration=Math.max(v.duration,p.duration);
+
+  const allowedBitrates=[
+   32,40,48,56,64,80,96,112,128,160,192,224,256,320
+  ];
+
+  const targetKbps=(voiceFile.size*8)/(duration*1000);
+
+  const mp3Bitrate=allowedBitrates.reduce((best,current)=>
+   Math.abs(current-targetKbps)<Math.abs(best-targetKbps)?
+    current:best,
+   allowedBitrates[0]
+  );
+
+  const encoder=new lamejs.Mp3Encoder(2,rate,mp3Bitrate);
+
+  setStatus('Preparing MP3 near the spoken recording size ('+mp3Bitrate+' kbps)…');
+
+  const parts=[];
+  const block=1152;
+
+  const voiceVolume=Number($('voiceVol').value);
+  const pianoVolume=Number($('pianoVol').value);
+  const n=Number($('noiseLevel').value)/100;
+  const e=Number($('voiceEnhance').value)/100;
+
+  // Process and encode the mix in short sections.
+  for(let offset=0;offset<duration;offset+=chunkSeconds){
+
+   const seconds=Math.min(chunkSeconds,duration-offset);
+   const frames=Math.max(1,Math.ceil(seconds*rate));
+
+   const off=new OfflineAudioContext(2,frames,rate);
+
+   const master=off.createGain();
+   master.connect(off.destination);
+
+   function addTrack(buffer,volume,isVoice){
+    if(offset>=buffer.duration)return;
+
+    const source=off.createBufferSource();
+    const gain=off.createGain();
+
+    source.buffer=buffer;
+    gain.gain.value=volume;
+
+    source.connect(gain);
+
+    if(isVoice){
+     const hp=off.createBiquadFilter();
+     hp.type='highpass';
+     hp.frequency.value=60+n*130;
+
+     const lp=off.createBiquadFilter();
+     lp.type='lowpass';
+     lp.frequency.value=16000-n*7500;
+
+     const warmth=off.createBiquadFilter();
+     warmth.type='lowshelf';
+     warmth.frequency.value=180;
+     warmth.gain.value=e*3;
+
+     const presence=off.createBiquadFilter();
+     presence.type='peaking';
+     presence.frequency.value=3000;
+     presence.Q.value=.9;
+     presence.gain.value=e*4;
+
+     const comp=off.createDynamicsCompressor();
+     comp.threshold.value=-24-e*6;
+     comp.ratio.value=2+e*2;
+
+     gain.connect(hp);
+     hp.connect(lp);
+     lp.connect(warmth);
+     warmth.connect(presence);
+     presence.connect(comp);
+     comp.connect(master);
+
+    }else{
+     gain.connect(master);
+    }
+
+    const available=Math.min(seconds,buffer.duration-offset);
+
+    if(available>0)
+     source.start(0,offset,available);
+   }
+
+   addTrack(v,voiceVolume,true);
+   addTrack(p,pianoVolume,false);
+
+   setStatus(
+    'Mixing and encoding MP3: '+
+    Math.min(100,Math.round((offset/duration)*100))+'%'
+   );
+
+   const rendered=await off.startRendering();
+
+   const left=rendered.getChannelData(0);
+   const right=rendered.getChannelData(1);
+
+   for(let i=0;i<frames;i+=block){
+
+    const count=Math.min(block,frames-i);
+    const L=new Int16Array(count);
+    const R=new Int16Array(count);
+
+    for(let j=0;j<count;j++){
+     const li=Math.max(-1,Math.min(1,left[i+j]||0));
+     const ri=Math.max(-1,Math.min(1,right[i+j]||0));
+
+     L[j]=li<0?li*32768:li*32767;
+     R[j]=ri<0?ri*32768:ri*32767;
+    }
+
+    const encoded=encoder.encodeBuffer(L,R);
+
+    if(encoded.length)
+     parts.push(new Uint8Array(encoded));
+   }
+
+   // Give the browser time between sections.
+   await new Promise(resolve=>setTimeout(resolve,50));
+  }
+
+  const finalBytes=encoder.flush();
+
+  if(finalBytes.length)
+   parts.push(new Uint8Array(finalBytes));
+
+  download(
+   new Blob(parts,{type:'audio/mpeg'}),
+   'kingdom-heritage-message-with-piano.mp3'
+  );
+
+  setStatus(
+   'MP3 exported successfully at '+mp3Bitrate+
+   ' kbps. Its size is targeted to be close to the spoken recording. Check your Downloads folder.'
+  );
+
+ }catch(e){
+
+  setStatus(
+   'MP3 export failed: '+
+   (e.message||'Try shorter audio files or use WebM save.')
+  );
+
+ }finally{
+
+  $('mp3Btn').disabled=false;
+  $('saveBtn').disabled=false;
+  updateReady();
+ }
 };
 </script>
 </body>
-</html>
+  </html>
+  
