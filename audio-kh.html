@@ -334,10 +334,11 @@ $("voiceEnhance").addEventListener("input", event => {
     n < 70 ? "Medium" : "Strong";
 });
 
+
 async function loadEngine() {
   if (ffmpegLoaded) return;
 
-  status("Loading the local audio processing engine...");
+  status("Loading audio processing engine...");
   progress(2);
 
   ffmpeg = new FFmpeg();
@@ -356,28 +357,67 @@ async function loadEngine() {
     }
   });
 
-  const baseURL =
+  const coreBase =
     "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd";
 
+  const packageBase =
+    "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm";
+
+  status("Preparing FFmpeg worker...");
+
+  // Load the worker source
+  const workerResponse = await fetch(
+    packageBase + "/worker.js"
+  );
+
+  if (!workerResponse.ok) {
+    throw new Error("Could not download FFmpeg worker.");
+  }
+
+  let workerCode = await workerResponse.text();
+
+  // Resolve the worker's module imports using absolute URLs
+  workerCode = workerCode
+    .replace(
+      /from\s+["']\.\/const\.js["']/g,
+      'from "' + packageBase + '/const.js"'
+    )
+    .replace(
+      /from\s+["']\.\/errors\.js["']/g,
+      'from "' + packageBase + '/errors.js"'
+    );
+
+  // Create a same-origin Blob worker
+  const workerBlob = new Blob(
+    [workerCode],
+    { type: "text/javascript" }
+  );
+
+  const workerURL = URL.createObjectURL(workerBlob);
+
+  // Load FFmpeg core and worker
   const coreURL = await toBlobURL(
-    baseURL + "/ffmpeg-core.js",
+    coreBase + "/ffmpeg-core.js",
     "text/javascript"
   );
 
   const wasmURL = await toBlobURL(
-    baseURL + "/ffmpeg-core.wasm",
+    coreBase + "/ffmpeg-core.wasm",
     "application/wasm"
   );
 
   await ffmpeg.load({
+    classWorkerURL: workerURL,
     coreURL,
     wasmURL
   });
 
   ffmpegLoaded = true;
-  progress(8);
-}
 
+  progress(8);
+  status("Audio processing engine loaded successfully.");
+}
+  
 function makeFilter() {
   const noise = Number($("voiceFilter").value) / 100;
   const enhance = Number($("voiceEnhance").value) / 100;
