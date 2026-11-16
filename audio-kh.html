@@ -3,568 +3,575 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#123b58">
 <title>Kingdom Heritage Audio Studio</title>
-
 <style>
-:root {
-  --navy:#123b58;
-  --blue:#1677a8;
-  --light:#eef5f9;
-  --ink:#183042;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:var(--light);
-  color:var(--ink);
-  font-family:Arial,sans-serif;
-}
-header {
-  background:linear-gradient(135deg,#123b58,#1677a8);
-  color:white;
-  padding:25px 15px;
-  text-align:center;
-}
-header h1 { margin:0 0 8px; font-size:23px; }
-header p { margin:0; font-size:14px; }
-main {
-  max-width:700px;
-  margin:18px auto;
-  padding:0 13px 35px;
-}
-.card {
-  background:white;
-  padding:17px;
-  margin:14px 0;
-  border-radius:16px;
-  box-shadow:0 4px 18px #153c5512;
-}
-h2 { font-size:17px; margin:0 0 14px; }
-.track {
-  border:1px solid #d8e4eb;
-  border-radius:13px;
-  padding:14px;
-  margin-bottom:13px;
-}
-input[type=file] {
-  width:100%;
-  font-size:13px;
-}
-.filename {
-  font-size:12px;
-  color:#607887;
-  overflow-wrap:anywhere;
-  margin-top:8px;
-}
-label {
-  display:block;
-  font-size:13px;
-  font-weight:bold;
-  margin:14px 0 6px;
-}
-input[type=range] {
-  width:100%;
-  accent-color:var(--blue);
-}
-button {
-  width:100%;
-  border:0;
-  border-radius:12px;
-  padding:15px 12px;
-  margin-top:10px;
-  background:var(--blue);
-  color:white;
-  font-size:15px;
-  font-weight:bold;
-}
-button.secondary {
-  background:#e6eff4;
-  color:var(--navy);
-}
-button:disabled { opacity:.45; }
-.status {
-  font-size:13px;
-  line-height:1.5;
-  margin-top:13px;
-  color:#526b7a;
-  overflow-wrap:anywhere;
-}
-.progress {
-  height:9px;
-  background:#e7eef2;
-  border-radius:10px;
-  overflow:hidden;
-  margin-top:14px;
-}
-.progress span {
-  display:block;
-  width:0%;
-  height:100%;
-  background:#15966f;
-  transition:width .2s;
-}
-.note {
-  font-size:12px;
-  line-height:1.6;
-  color:#607887;
-}
-.result {
-  display:none;
-  background:#e9f7f0;
-  border:1px solid #b8e2cc;
-  border-radius:12px;
-  padding:14px;
-  margin-top:15px;
-  overflow-wrap:anywhere;
-}
-.result a {
-  display:block;
-  margin-top:10px;
-  color:#075d40;
-  font-weight:bold;
-}
-@media(min-width:600px) {
-  .tracks {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-  }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#eef5f9;color:#183042;font-family:Arial,sans-serif}
+header{background:linear-gradient(135deg,#123b58,#1677a8);color:white;text-align:center;padding:23px 12px}
+header h1{font-size:23px;margin:0 0 7px}
+main{max-width:720px;margin:18px auto;padding:0 12px 35px}
+.card{background:white;padding:17px;border-radius:15px;margin:13px 0;box-shadow:0 3px 15px #123b5812}
+.track{border:1px solid #d8e4eb;border-radius:12px;padding:13px;margin:12px 0}
+h2{font-size:17px;margin:0 0 12px}
+input[type=file]{width:100%;font-size:13px}
+label{display:block;font-size:13px;font-weight:bold;margin:13px 0 5px}
+input[type=range]{width:100%;accent-color:#1677a8}
+.filename,.note,.status{font-size:13px;line-height:1.5;color:#607887;overflow-wrap:anywhere}
+button{border:0;border-radius:11px;padding:14px 10px;background:#1677a8;color:white;font-weight:bold;font-size:14px}
+button.secondary{background:#e5eff5;color:#123b58}
+button:disabled{opacity:.45}
+button.wide{width:100%;margin-top:10px}
+.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.meter{height:8px;background:#e5edf2;border-radius:10px;margin-top:14px;overflow:hidden}
+.meter span{display:block;height:100%;width:0;background:#15966d}
+.status{margin-top:12px;min-height:22px}
+@media(min-width:600px){.tracks{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
 </style>
 </head>
-
 <body>
-
 <header>
-  <h1>🎚️ Kingdom Heritage Audio Studio</h1>
-  <p>Mix your spoken message with piano music</p>
+<h1>🎚️ Kingdom Heritage Audio Studio</h1>
+<p>Mix spoken messages with piano music</p>
 </header>
 
 <main>
-
 <section class="card">
-  <div class="tracks">
+<div class="tracks">
+<div class="track">
+<h2>🎙️ Spoken Message</h2>
+<input id="voiceFile" type="file" accept="audio/*">
+<div class="filename" id="voiceName">No message selected</div>
 
-    <div class="track">
-      <h2>🎙️ Spoken Message</h2>
+<label>Voice volume: <span id="voicePct">100%</span></label>
+<input id="voiceVol" type="range" min="0" max="2" step=".01" value="1">
 
-      <input type="file" id="voiceFile" accept="audio/*">
+<label>Voice filtering: <span id="noisePct">Medium</span></label>
+<input id="noiseLevel" type="range" min="0" max="100" value="35">
 
-      <div class="filename" id="voiceName">
-        No voice recording selected
-      </div>
+<label>Voice enhancement: <span id="enhancePct">Medium</span></label>
+<input id="voiceEnhance" type="range" min="0" max="100" value="35">
+</div>
 
-      <label>
-        Voice volume:
-        <span id="voiceValue">100%</span>
-      </label>
-      <input type="range" id="voiceVol"
-        min="0" max="2" step="0.01" value="1">
+<div class="track">
+<h2>🎹 Piano Music</h2>
+<input id="pianoFile" type="file" accept="audio/*">
+<div class="filename" id="pianoName">No piano selected</div>
 
-      <label>
-        Voice filtering:
-        <span id="filterValue">Medium</span>
-      </label>
-      <input type="range" id="voiceFilter"
-        min="0" max="100" value="35">
-
-      <label>
-        Voice enhancement:
-        <span id="enhanceValue">Medium</span>
-      </label>
-      <input type="range" id="voiceEnhance"
-        min="0" max="100" value="35">
-    </div>
-
-    <div class="track">
-      <h2>🎹 Piano Music</h2>
-
-      <input type="file" id="pianoFile" accept="audio/*">
-
-      <div class="filename" id="pianoName">
-        No piano recording selected
-      </div>
-
-      <label>
-        Piano volume:
-        <span id="pianoValue">35%</span>
-      </label>
-      <input type="range" id="pianoVol"
-        min="0" max="2" step="0.01" value="0.35">
-    </div>
-
-  </div>
+<label>Piano volume: <span id="pianoPct">35%</span></label>
+<input id="pianoVol" type="range" min="0" max="2" step=".01" value=".35">
+</div>
+</div>
+<p class="note">The spoken message determines the final duration. Piano music repeats if it is shorter than the spoken message.</p>
 </section>
 
 <section class="card">
-  <h2>Generate your WebM file</h2>
-
-  <p class="note">
-    The voice recording determines the final duration.
-    If the piano music is shorter, it will repeat automatically.
-    The two tracks will be mixed into one WebM audio file.
-  </p>
-
-  <button id="generateBtn" disabled>
-    🎧 Generate complete WebM
-  </button>
-
-  <div class="progress">
-    <span id="progressBar"></span>
-  </div>
-
-  <div class="status" id="status" aria-live="polite">
-    Select your voice recording and piano music to begin.
-  </div>
-
-  <div class="result" id="result">
-    <strong>WebM generated successfully!</strong>
-    <div id="fileDetails"></div>
-    <a id="downloadLink" href="#" download="kingdom-heritage-message.webm">
-      ⬇ Download WebM
-    </a>
-  </div>
+<h2>🎧 Preview your mixed audio</h2>
+<p class="note">Listen to both tracks together before creating your final file. Adjust the controls while previewing.</p>
+<div class="buttons">
+<button id="previewBtn" disabled>▶ Play preview</button>
+<button id="stopPreviewBtn" class="secondary" disabled>■ Stop preview</button>
+</div>
+<div class="meter"><span id="previewMeter"></span></div>
+<div class="status" id="previewStatus">Choose both audio files to begin.</div>
 </section>
 
 <section class="card">
-  <h2>About audio processing</h2>
-  <p class="note">
-    This page uses FFmpeg WebAssembly inside your browser.
-    Your selected audio files are processed locally and are not
-    uploaded to an external processing server.
-  </p>
-  <p class="note">
-    Voice filtering uses audio filters to reduce some low-frequency
-    and high-frequency noise. Voice enhancement uses equalization
-    and compression. These are not AI noise removal.
-  </p>
-  <p class="note">
-    Large recordings, especially one-hour recordings, can still
-    require substantial memory. Keep this page open while processing.
-    Do not close Chrome or switch off your phone.
-  </p>
+<h2>Generate your complete WebM file</h2>
+<p class="note">The processing engine works locally in your browser. It does not upload your recordings to Supabase or an external processing server.</p>
+<button class="wide" id="webmBtn" disabled>🎧 Generate complete WebM</button>
+<div class="meter"><span id="workMeter"></span></div>
+<div class="status" id="workStatus">Waiting for audio files.</div>
+<button class="wide secondary" id="mp3Btn" disabled>🎵 Convert generated WebM to MP3</button>
+<p class="note">MP3 conversion is optional and only becomes available after successful WebM generation.</p>
 </section>
-
 </main>
 
+<audio id="voiceAudio" preload="metadata"></audio>
+<audio id="pianoAudio" preload="metadata"></audio>
+
 <script type="module">
-import { FFmpeg } from
-  "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js";
+import {FFmpeg} from
+"https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js";
 
-import { toBlobURL } from
-  "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js";
+import {toBlobURL} from
+"https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js";
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
-let voiceFile = null;
-let pianoFile = null;
-let ffmpeg = null;
-let ffmpegLoaded = false;
-let outputURL = null;
-let busy = false;
+let voiceFile=null,pianoFile=null;
+let voiceURL=null,pianoURL=null;
+let ffmpeg=null,engineReady=false;
+let audioContext=null,voiceNode=null,pianoNode=null;
+let voiceGain=null,pianoGain=null;
+let hp=null,lp=null,warmth=null,presence=null,compressor=null;
+let previewing=false,generatedWebM=null;
+let previewRAF=0;
 
-function status(message) {
-  $("status").textContent = message;
+function status(id,message){
+  $(id).textContent=message;
 }
 
-function progress(value) {
-  const percent = Math.max(0, Math.min(100, value));
-  $("progressBar").style.width = percent + "%";
+function meter(id,value){
+  $(id).style.width=Math.max(0,Math.min(100,value))+"%";
 }
 
-function updateButton() {
-  $("generateBtn").disabled =
-    !voiceFile || !pianoFile || busy;
+function updateButtons(){
+  const ready=!!(voiceFile&&pianoFile);
+  $("previewBtn").disabled=!ready;
+  $("webmBtn").disabled=!ready;
 }
 
-function formatBytes(bytes) {
-  if (bytes < 1024 * 1024) {
-    return (bytes / 1024).toFixed(1) + " KB";
+function updateNames(){
+  $("voiceName").textContent=voiceFile?
+    voiceFile.name+" ("+(voiceFile.size/1048576).toFixed(2)+" MB)":
+    "No message selected";
+
+  $("pianoName").textContent=pianoFile?
+    pianoFile.name+" ("+(pianoFile.size/1048576).toFixed(2)+" MB)":
+    "No piano selected";
+}
+
+function audioSetup(){
+  if(audioContext)return audioContext;
+
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)throw new Error("Web Audio is not supported. Use Chrome.");
+
+  audioContext=new AC();
+
+  voiceNode=audioContext.createMediaElementSource($("voiceAudio"));
+  pianoNode=audioContext.createMediaElementSource($("pianoAudio"));
+
+  voiceGain=audioContext.createGain();
+  pianoGain=audioContext.createGain();
+
+  hp=audioContext.createBiquadFilter();
+  hp.type="highpass";
+
+  lp=audioContext.createBiquadFilter();
+  lp.type="lowpass";
+
+  warmth=audioContext.createBiquadFilter();
+  warmth.type="lowshelf";
+  warmth.frequency.value=180;
+
+  presence=audioContext.createBiquadFilter();
+  presence.type="peaking";
+  presence.frequency.value=3000;
+  presence.Q.value=.9;
+
+  compressor=audioContext.createDynamicsCompressor();
+  compressor.threshold.value=-26;
+  compressor.ratio.value=3;
+
+  voiceNode.connect(voiceGain);
+  voiceGain.connect(hp);
+  hp.connect(lp);
+  lp.connect(warmth);
+  warmth.connect(presence);
+  presence.connect(compressor);
+  compressor.connect(audioContext.destination);
+
+  pianoNode.connect(pianoGain);
+  pianoGain.connect(audioContext.destination);
+
+  return audioContext;
+}
+
+function applyControls(){
+  if(!audioContext)return;
+
+  const n=Number($("noiseLevel").value)/100;
+  const e=Number($("voiceEnhance").value)/100;
+
+  voiceGain.gain.value=Number($("voiceVol").value);
+  pianoGain.gain.value=Number($("pianoVol").value);
+
+  hp.frequency.value=60+n*130;
+  lp.frequency.value=16000-n*7500;
+  warmth.gain.value=e*3;
+  presence.gain.value=e*4;
+  compressor.threshold.value=-24-e*6;
+  compressor.ratio.value=2+e*2;
+}
+
+function updateLabels(){
+  $("voicePct").textContent=Math.round(+$("voiceVol").value*100)+"%";
+  $("pianoPct").textContent=Math.round(+$("pianoVol").value*100)+"%";
+
+  const n=+$("noiseLevel").value;
+  $("noisePct").textContent=n===0?"Off":n<35?"Low":n<70?"Medium":"Strong";
+
+  const e=+$("voiceEnhance").value;
+  $("enhancePct").textContent=e===0?"Off":e<35?"Light":e<70?"Medium":"Strong";
+
+  applyControls();
+}
+
+["voiceVol","pianoVol","noiseLevel","voiceEnhance"].forEach(id=>{
+  $(id).addEventListener("input",updateLabels);
+});
+
+function loadAudio(file,kind){
+  if(!file)return;
+
+  if(kind==="voice"){
+    voiceFile=file;
+    if(voiceURL)URL.revokeObjectURL(voiceURL);
+    voiceURL=URL.createObjectURL(file);
+    $("voiceAudio").src=voiceURL;
+    $("voiceAudio").load();
+  }else{
+    pianoFile=file;
+    if(pianoURL)URL.revokeObjectURL(pianoURL);
+    pianoURL=URL.createObjectURL(file);
+    $("pianoAudio").src=pianoURL;
+    $("pianoAudio").load();
   }
-  return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+
+  generatedWebM=null;
+  $("mp3Btn").disabled=true;
+  updateNames();
+  updateButtons();
+  status("workStatus","Audio selected. Wait for both tracks to load.");
 }
 
-$("voiceFile").addEventListener("change", event => {
-  voiceFile = event.target.files[0] || null;
+$("voiceFile").addEventListener("change",e=>loadAudio(e.target.files[0],"voice"));
+$("pianoFile").addEventListener("change",e=>loadAudio(e.target.files[0],"piano"));
 
-  $("voiceName").textContent = voiceFile
-    ? voiceFile.name + " (" + formatBytes(voiceFile.size) + ")"
-    : "No voice recording selected";
+function stopPreview(){
+  $("voiceAudio").pause();
+  $("pianoAudio").pause();
 
-  updateButton();
-});
+  $("voiceAudio").currentTime=0;
+  $("pianoAudio").currentTime=0;
 
-$("pianoFile").addEventListener("change", event => {
-  pianoFile = event.target.files[0] || null;
+  previewing=false;
+  cancelAnimationFrame(previewRAF);
 
-  $("pianoName").textContent = pianoFile
-    ? pianoFile.name + " (" + formatBytes(pianoFile.size) + ")"
-    : "No piano recording selected";
+  $("previewBtn").disabled=!(voiceFile&&pianoFile);
+  $("stopPreviewBtn").disabled=true;
+  $("previewBtn").textContent="▶ Play preview";
+  meter("previewMeter",0);
+}
 
-  updateButton();
-});
+async function playPreview(){
+  if(!voiceFile||!pianoFile)return;
 
-$("voiceVol").addEventListener("input", event => {
-  $("voiceValue").textContent =
-    Math.round(Number(event.target.value) * 100) + "%";
-});
+  const c=audioSetup();
+  await c.resume();
 
-$("pianoVol").addEventListener("input", event => {
-  $("pianoValue").textContent =
-    Math.round(Number(event.target.value) * 100) + "%";
-});
+  stopPreview();
+  applyControls();
 
-$("voiceFilter").addEventListener("input", event => {
-  const n = Number(event.target.value);
+  const voice=$("voiceAudio");
+  const piano=$("pianoAudio");
 
-  $("filterValue").textContent =
-    n === 0 ? "Off" :
-    n < 35 ? "Low" :
-    n < 70 ? "Medium" : "Strong";
-});
+  voice.currentTime=0;
+  piano.currentTime=0;
 
-$("voiceEnhance").addEventListener("input", event => {
-  const n = Number(event.target.value);
+  piano.loop=true;
 
-  $("enhanceValue").textContent =
-    n === 0 ? "Off" :
-    n < 35 ? "Light" :
-    n < 70 ? "Medium" : "Strong";
-});
+  await Promise.all([voice.play(),piano.play()]);
 
+  previewing=true;
+  $("previewBtn").disabled=false;
+  $("previewBtn").textContent="Ⅱ Pause preview";
+  $("stopPreviewBtn").disabled=false;
 
-async function loadEngine() {
-  if (ffmpegLoaded) return;
+  status("previewStatus","Preview playing. Adjust your volume and sound controls.");
 
-  status("Loading audio processing engine...");
-  progress(2);
+  function tick(){
+    if(!previewing)return;
 
-  ffmpeg = new FFmpeg();
+    const duration=voice.duration||1;
+    meter("previewMeter",voice.currentTime/duration*100);
 
-  ffmpeg.on("log", ({ message }) => {
-    console.log("FFmpeg:", message);
+    if(voice.ended){
+      stopPreview();
+      status("previewStatus","Preview finished.");
+      return;
+    }
+
+    previewRAF=requestAnimationFrame(tick);
+  }
+
+  tick();
+}
+
+$("previewBtn").onclick=async()=>{
+  try{
+    if(previewing){
+      $("voiceAudio").pause();
+      $("pianoAudio").pause();
+      previewing=false;
+      cancelAnimationFrame(previewRAF);
+      $("previewBtn").textContent="▶ Resume preview";
+      status("previewStatus","Preview paused.");
+      return;
+    }
+
+    if($("voiceAudio").currentTime>0){
+      await audioSetup().resume();
+      await $("voiceAudio").play();
+      await $("pianoAudio").play();
+      previewing=true;
+      $("previewBtn").textContent="Ⅱ Pause preview";
+      $("stopPreviewBtn").disabled=false;
+      const tick=()=>{
+        if(!previewing)return;
+        meter("previewMeter",$("voiceAudio").currentTime/($("voiceAudio").duration||1)*100);
+        if($("voiceAudio").ended){stopPreview();return;}
+        previewRAF=requestAnimationFrame(tick);
+      };
+      tick();
+      return;
+    }
+
+    await playPreview();
+  }catch(e){
+    status("previewStatus","Preview error: "+e.message);
+  }
+};
+
+$("stopPreviewBtn").onclick=()=>{
+  stopPreview();
+  status("previewStatus","Preview stopped.");
+};
+
+async function loadEngine(){
+  if(engineReady)return;
+
+  status("workStatus","Loading audio processing engine...");
+  meter("workMeter",2);
+
+  ffmpeg=new FFmpeg();
+
+  ffmpeg.on("log",({message})=>{
+    console.log("FFmpeg:",message);
   });
 
-  ffmpeg.on("progress", ({ progress: amount }) => {
-    if (Number.isFinite(amount)) {
-      progress(10 + amount * 85);
-      status(
-        "Generating WebM locally... " +
-        Math.round(amount * 100) + "%"
-      );
+  ffmpeg.on("progress",({progress})=>{
+    if(Number.isFinite(progress)){
+      meter("workMeter",10+progress*85);
+      status("workStatus","Processing WebM: "+Math.round(progress*100)+"%");
     }
   });
 
-  const coreBase =
+  const coreBase=
     "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd";
 
-  const packageBase =
+  const packageBase=
     "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm";
 
-  status("Preparing FFmpeg worker...");
+  status("workStatus","Preparing processing worker...");
 
-  // Load the worker source
-  const workerResponse = await fetch(
-    packageBase + "/worker.js"
-  );
+  const response=await fetch(packageBase+"/worker.js");
 
-  if (!workerResponse.ok) {
-    throw new Error("Could not download FFmpeg worker.");
+  if(!response.ok){
+    throw new Error("Could not download the FFmpeg worker.");
   }
 
-  let workerCode = await workerResponse.text();
+  let workerCode=await response.text();
 
-  // Resolve the worker's module imports using absolute URLs
-  workerCode = workerCode
-    .replace(
-      /from\s+["']\.\/const\.js["']/g,
-      'from "' + packageBase + '/const.js"'
-    )
-    .replace(
-      /from\s+["']\.\/errors\.js["']/g,
-      'from "' + packageBase + '/errors.js"'
-    );
+  workerCode=workerCode
+    .replace(/from\s+["']\.\/const\.js["']/g,
+      'from "'+packageBase+'/const.js"')
+    .replace(/from\s+["']\.\/errors\.js["']/g,
+      'from "'+packageBase+'/errors.js"');
 
-  // Create a same-origin Blob worker
-  const workerBlob = new Blob(
+  const workerBlob=new Blob(
     [workerCode],
-    { type: "text/javascript" }
+    {type:"text/javascript"}
   );
 
-  const workerURL = URL.createObjectURL(workerBlob);
+  const workerURL=URL.createObjectURL(workerBlob);
 
-  // Load FFmpeg core and worker
-  const coreURL = await toBlobURL(
-    coreBase + "/ffmpeg-core.js",
+  const coreURL=await toBlobURL(
+    coreBase+"/ffmpeg-core.js",
     "text/javascript"
   );
 
-  const wasmURL = await toBlobURL(
-    coreBase + "/ffmpeg-core.wasm",
+  const wasmURL=await toBlobURL(
+    coreBase+"/ffmpeg-core.wasm",
     "application/wasm"
   );
 
-  await ffmpeg.load({
-    classWorkerURL: workerURL,
-    coreURL,
-    wasmURL
-  });
-
-  ffmpegLoaded = true;
-
-  progress(8);
-  status("Audio processing engine loaded successfully.");
-}
-  
-function makeFilter() {
-  const noise = Number($("voiceFilter").value) / 100;
-  const enhance = Number($("voiceEnhance").value) / 100;
-
-  const highPass = Math.round(60 + noise * 130);
-  const lowPass = Math.round(16000 - noise * 6500);
-
-  const bass = (enhance * 3).toFixed(1);
-  const presence = (enhance * 4).toFixed(1);
-  const threshold = (-24 - enhance * 6).toFixed(1);
-  const ratio = (2 + enhance * 2).toFixed(1);
-
-  return (
-    "[0:a]volume=" + $("voiceVol").value +
-    ",highpass=f=" + highPass +
-    ",lowpass=f=" + lowPass +
-    ",equalizer=f=180:t=q:w=1:g=" + bass +
-    ",equalizer=f=3000:t=q:w=1:g=" + presence +
-    ",acompressor=threshold=" + threshold +
-    "dB:ratio=" + ratio +
-    ":attack=10:release=200[voice];" +
-
-    "[1:a]volume=" + $("pianoVol").value + "[piano];" +
-
-    "[voice][piano]amix=inputs=2:duration=first" +
-    ":dropout_transition=2:normalize=0[out]"
-  );
-}
-
-async function generateWebM() {
-  if (busy) return;
-
-  if (!voiceFile || !pianoFile) {
-    status("Please select both audio files.");
-    return;
+  try{
+    await ffmpeg.load({
+      classWorkerURL:workerURL,
+      coreURL,
+      wasmURL
+    });
+  }catch(error){
+    URL.revokeObjectURL(workerURL);
+    throw error;
   }
 
-  busy = true;
-  updateButton();
+  engineReady=true;
+  meter("workMeter",8);
+  status("workStatus","Audio processing engine ready.");
+}
 
-  $("result").style.display = "none";
-  progress(0);
+function download(blob,name){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),120000);
+}
 
-  if (outputURL) {
-    URL.revokeObjectURL(outputURL);
-    outputURL = null;
-  }
+$("webmBtn").onclick=async()=>{
+  if(!voiceFile||!pianoFile)return;
 
-  const voiceName = "voice_input";
-  const pianoName = "piano_input";
-  const outputName = "kingdom-heritage-message.webm";
+  $("webmBtn").disabled=true;
+  $("mp3Btn").disabled=true;
 
-  try {
+  try{
+    stopPreview();
+
     await loadEngine();
 
-    status("Preparing your audio files...");
+    status("workStatus","Preparing spoken message...");
+    meter("workMeter",10);
 
     await ffmpeg.writeFile(
-      voiceName,
+      "voice_input",
       new Uint8Array(await voiceFile.arrayBuffer())
     );
 
-    status("Loading piano music...");
+    status("workStatus","Preparing piano music...");
+    meter("workMeter",15);
 
     await ffmpeg.writeFile(
-      pianoName,
+      "piano_input",
       new Uint8Array(await pianoFile.arrayBuffer())
     );
 
-    status("Mixing voice and piano into one complete WebM...");
+    const voiceVolume=Number($("voiceVol").value);
+    const pianoVolume=Number($("pianoVol").value);
 
-    const filter = makeFilter();
+    const n=Number($("noiseLevel").value)/100;
+    const e=Number($("voiceEnhance").value)/100;
 
-    const exitCode = await ffmpeg.exec([
-      "-i", voiceName,
-      "-stream_loop", "-1",
-      "-i", pianoName,
-      "-filter_complex", filter,
-      "-map", "[out]",
-      "-c:a", "libopus",
-      "-b:a", "96k",
+    const filters=
+      "[0:a]volume="+voiceVolume+
+      ",highpass=f="+Math.round(60+n*130)+
+      ",lowpass=f="+Math.round(16000-n*7500)+
+      ",bass=g="+(e*3).toFixed(2)+
+      ",treble=g="+(e*4).toFixed(2)+
+      ",acompressor=threshold=-24dB:ratio="+(2+e*2).toFixed(2)+
+      "[voice];"+
+      "[1:a]volume="+pianoVolume+"[piano];"+
+      "[voice][piano]amix=inputs=2:duration=first:dropout_transition=2:normalize=0[out]";
+
+    status("workStatus","Mixing both tracks into WebM...");
+    meter("workMeter",20);
+
+    await ffmpeg.exec([
+      "-i","voice_input",
+      "-stream_loop","-1",
+      "-i","piano_input",
+      "-filter_complex",filters,
+      "-map","[out]",
+      "-c:a","libopus",
+      "-b:a","96k",
       "-vn",
       "-shortest",
-      "-f", "webm",
-      outputName
+      "-f","webm",
+      "final_message.webm"
     ]);
 
-    if (exitCode !== 0) {
-      throw new Error(
-        "FFmpeg could not complete the WebM generation."
-      );
-    }
+    status("workStatus","Preparing your finished WebM...");
+    meter("workMeter",95);
 
-    status("Checking the generated WebM file...");
+    const result=await ffmpeg.readFile("final_message.webm");
 
-    const data = await ffmpeg.readFile(outputName);
-
-    if (!data || data.length === 0) {
-      throw new Error("The generated WebM file is empty.");
-    }
-
-    const blob = new Blob(
-      [data],
-      { type: "audio/webm" }
+    generatedWebM=new Blob(
+      [result.buffer],
+      {type:"audio/webm"}
     );
 
-    if (blob.size === 0) {
-      throw new Error("The WebM file could not be created.");
-    }
+    download(
+      generatedWebM,
+      "kingdom-heritage-message-with-piano.webm"
+    );
 
-    outputURL = URL.createObjectURL(blob);
+    meter("workMeter",100);
+    status("workStatus","WebM created successfully. You can now choose whether to convert it to MP3.");
 
-    $("downloadLink").href = outputURL;
-    $("fileDetails").textContent =
-      "File size: " + formatBytes(blob.size);
+    $("mp3Btn").disabled=false;
 
-    $("result").style.display = "block";
+    await ffmpeg.deleteFile("voice_input");
+    await ffmpeg.deleteFile("piano_input");
+    await ffmpeg.deleteFile("final_message.webm");
 
-    progress(100);
-    status("Success! Your complete WebM file is ready.");
+  }catch(error){
+    console.error("WebM generation error:",error);
 
-  } catch (error) {
-    console.error(error);
+    const message=error?.message||String(error)||"Unknown processing error";
 
     status(
-      "WebM generation failed: " +
-      (error.message || "Unknown error") +
-      ". Try a smaller recording if your phone runs out of memory."
+      "workStatus",
+      "WebM generation failed: "+message+
+      ". Check the browser console for more details."
     );
 
-  } finally {
-    try {
-      await ffmpeg.deleteFile(voiceName);
-      await ffmpeg.deleteFile(pianoName);
-      await ffmpeg.deleteFile(outputName);
-    } catch (e) {
-      console.log("Temporary file cleanup:", e);
-    }
+    meter("workMeter",0);
 
-    busy = false;
-    updateButton();
+  }finally{
+    $("webmBtn").disabled=!(voiceFile&&pianoFile);
   }
-}
+};
 
-$("generateBtn").addEventListener("click", generateWebM);
+$("mp3Btn").onclick=async()=>{
+  if(!generatedWebM||!engineReady)return;
+
+  $("mp3Btn").disabled=true;
+
+  try{
+    status("workStatus","Preparing optional MP3 conversion...");
+
+    await ffmpeg.writeFile(
+      "converted_input.webm",
+      new Uint8Array(await generatedWebM.arrayBuffer())
+    );
+
+    await ffmpeg.exec([
+      "-i","converted_input.webm",
+      "-vn",
+      "-codec:a","libmp3lame",
+      "-b:a","128k",
+      "converted_message.mp3"
+    ]);
+
+    const result=await ffmpeg.readFile("converted_message.mp3");
+
+    download(
+      new Blob([result.buffer],{type:"audio/mpeg"}),
+      "kingdom-heritage-message-with-piano.mp3"
+    );
+
+    await ffmpeg.deleteFile("converted_input.webm");
+    await ffmpeg.deleteFile("converted_message.mp3");
+
+    status("workStatus","MP3 conversion completed. Check your Downloads folder.");
+
+  }catch(error){
+    console.error("MP3 conversion error:",error);
+    status("workStatus","MP3 conversion failed: "+(error.message||String(error)));
+  }finally{
+    $("mp3Btn").disabled=false;
+  }
+};
+
+updateLabels();
 </script>
-
 </body>
-</html>
-
+  </html>
+  
