@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b58">
+<title>My Sound Mixer</title>
+<style>
+:root{--navy:#123b58;--blue:#1677a8;--light:#eef5f9;--ink:#183042}
+*{box-sizing:border-box}
+body{margin:0;background:var(--light);font-family:Arial,sans-serif;color:var(--ink)}
+header{background:linear-gradient(135deg,#123b58,#1677a8);color:white;padding:26px 18px 30px;text-align:center}
+header h1{margin:0 0 8px;font-size:25px}header p{margin:0;font-size:14px;opacity:.9}
+main{max-width:650px;margin:18px auto;padding:0 14px 30px}
+.card{background:white;border-radius:17px;padding:18px;margin:14px 0;box-shadow:0 4px 18px #153c5512}
+.track{border:1px solid #d8e4eb;border-radius:13px;padding:14px;margin:12px 0}
+.track h2{font-size:17px;margin:0 0 12px}
+input[type=file]{width:100%;font-size:14px}
+.filename{font-size:13px;color:#557080;margin:9px 0;overflow-wrap:anywhere}
+label{display:block;font-size:13px;font-weight:bold;margin:14px 0 7px}
+input[type=range]{width:100%;accent-color:var(--blue)}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+button{border:0;border-radius:12px;padding:14px 12px;font-size:15px;font-weight:bold;background:var(--blue);color:white}
+button.secondary{background:#e6eff4;color:var(--navy)}
+button:disabled{opacity:.45}
+button.wide{width:100%;margin-top:10px}
+.status{font-size:13px;line-height:1.5;color:#526b7a;margin-top:12px;min-height:20px}
+.note{font-size:12px;color:#607887;line-height:1.5}
+.meter{height:7px;background:#e7eef2;border-radius:9px;overflow:hidden;margin-top:12px}
+.meter span{display:block;width:0;height:100%;background:#1d9a72;transition:width .2s}
+@media(min-width:560px){.tracks{display:grid;grid-template-columns:1fr 1fr;gap:12px}.track{margin:0}}
+</style>
+</head>
+<body>
+<header><h1>🎚️ My Sound Mixer</h1><p>Combine a spoken message and piano music into one audio file.</p></header>
+<main>
+<section class="card">
+  <div class="tracks">
+    <div class="track">
+      <h2>🎙️ Track 1 — Spoken Message</h2>
+      <input id="voiceFile" type="file" accept="audio/*">
+      <div class="filename" id="voiceName">No message selected</div>
+      <label for="voiceVol">Message volume: <span id="voicePct">100%</span></label>
+      <input id="voiceVol" type="range" min="0" max="1" step=".01" value="1">
+      <label for="noiseLevel">Message noise reduction: <span id="noisePct">Medium</span></label>
+      <input id="noiseLevel" type="range" min="0" max="100" step="1" value="45">
+      <p class="note">Reduces low rumble and high hiss in the spoken message.</p>
+      <label for="voiceEnhance">Voice enhancement: <span id="enhancePct">Medium</span></label>
+      <input id="voiceEnhance" type="range" min="0" max="100" step="1" value="50">
+      <p class="note">Adds warmth and speech presence, with gentle compression.</p>
+    </div>
+    <div class="track">
+      <h2>🎹 Track 2 — Piano Sound</h2>
+      <input id="pianoFile" type="file" accept="audio/*">
+      <div class="filename" id="pianoName">No piano audio selected</div>
+      <label for="pianoVol">Piano volume: <span id="pianoPct">35%</span></label>
+      <input id="pianoVol" type="range" min="0" max="1" step=".01" value=".35">
+    </div>
+  </div>
+  <p class="note">Choose two audio files from your phone. You can balance the message and piano separately.</p>
+</section>
+<section class="card">
+  <h2 style="margin:0 0 8px;font-size:18px">Mix and save</h2>
+  <div class="controls">
+    <button id="playBtn">▶ Play mix</button>
+    <button id="stopBtn" class="secondary" disabled>■ Stop</button>
+  </div>
+  <button id="saveBtn" class="wide" disabled>⬇ Save combined audio (WebM)</button>
+  <button id="mp3Btn" class="wide secondary" disabled>🎵 Export as MP3</button>
+  <div class="meter"><span id="meterBar"></span></div>
+  <div class="status" id="status" aria-live="polite">Select both audio files to begin.</div>
+  <p class="note">MP3 export requires an internet connection to load the MP3 encoder the first time. The audio mix itself is processed in your browser and is not uploaded. Voice enhancement adds gentle warmth, speech presence and compression. Noise reduction is a basic filter: it can reduce low rumble and some hiss, but it cannot fully remove traffic, fans or other noise that overlaps with speech. For best results, use a clear recording and adjust the effects by ear. Audio is processed on your device; files are not uploaded.</p>
+</section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let voiceBuffer=null, pianoBuffer=null, ctx=null, sources=[], gains=[];
+let recording=false, recorder=null, chunks=[], mixDestination=null, startedAt=0, raf=0;
+let playEndTimer=null;
+
+function setStatus(s){$('status').textContent=s}
+function loadAudio(file, nameId, kind){
+  if(!file) return;
+  $(nameId).textContent=file.name;
+  const reader=new FileReader();
+  reader.onload=async()=>{
+    try{
+      const audioCtx=ctx || new (window.AudioContext||window.webkitAudioContext)();
+      ctx=audioCtx;
+      const buffer=await ctx.decodeAudioData(reader.result.slice(0));
+      if(kind==='voice') voiceBuffer=buffer; else pianoBuffer=buffer;
+      updateReady();
+      setStatus('Loaded '+(kind==='voice'?'spoken message':'piano audio')+'.');
+    }catch(e){setStatus('Could not read this audio file. Try MP3, WAV, M4A or another supported audio format.');}
+  };
+  reader.onerror=()=>setStatus('Could not open that file. Please try again.');
+  reader.readAsArrayBuffer(file);
+}
+function updateReady(){
+  $('playBtn').disabled=!(voiceBuffer&&pianoBuffer);
+  $('saveBtn').disabled=!(voiceBuffer&&pianoBuffer);
+  $('mp3Btn').disabled=!(voiceBuffer&&pianoBuffer);
+}
+$('voiceFile').addEventListener('change',e=>loadAudio(e.target.files[0],'voiceName','voice'));
+$('pianoFile').addEventListener('change',e=>loadAudio(e.target.files[0],'pianoName','piano'));
+[['voiceVol','voicePct'],['pianoVol','pianoPct']].forEach(([rid,pid])=>{
+  $(rid).addEventListener('input',()=>$(pid).textContent=Math.round(Number($(rid).value)*100)+'%');
+});
+$('noiseLevel').addEventListener('input',()=>{
+  const n=Number($('noiseLevel').value);
+  $('noisePct').textContent=n===0?'Off':n<35?'Low':n<70?'Medium':'High';
+});
+$('voiceEnhance').addEventListener('input',()=>{
+  const n=Number($('voiceEnhance').value);
+  $('enhancePct').textContent=n===0?'Off':n<35?'Light':n<70?'Medium':'Strong';
+});
+function makeMix(){
+  sources=[];gains=[];
+  mixDestination=ctx.createMediaStreamDestination();
+  const master=ctx.createGain(); master.gain.value=1;
+  master.connect(ctx.destination); master.connect(mixDestination);
+  [[voiceBuffer,'voiceVol','voice'],[pianoBuffer,'pianoVol','piano']].forEach(([buffer,volId,kind])=>{
+    const src=ctx.createBufferSource(), gain=ctx.createGain();
+    src.buffer=buffer; gain.gain.value=Number($(volId).value);
+    src.connect(gain);
+    if(kind==='voice'){
+      const amount=Number($('noiseLevel').value)/100;
+      const highpass=ctx.createBiquadFilter();
+      highpass.type='highpass';
+      highpass.frequency.value=60+(amount*120);
+      highpass.Q.value=0.7;
+      const lowpass=ctx.createBiquadFilter();
+      lowpass.type='lowpass';
+      lowpass.frequency.value=16000-(amount*8500);
+      lowpass.Q.value=0.7;
+      const enhanceAmount=Number($('voiceEnhance').value)/100;
+      const warmth=ctx.createBiquadFilter();
+      warmth.type='lowshelf';
+      warmth.frequency.value=180;
+      warmth.gain.value=enhanceAmount*3;
+      const presence=ctx.createBiquadFilter();
+      presence.type='peaking';
+      presence.frequency.value=3000;
+      presence.Q.value=0.9;
+      presence.gain.value=enhanceAmount*4;
+      const compressor=ctx.createDynamicsCompressor();
+      compressor.threshold.value=-24-(enhanceAmount*6);
+      compressor.knee.value=18;
+      compressor.ratio.value=2+(enhanceAmount*2);
+      compressor.attack.value=0.01;
+      compressor.release.value=0.2;
+      gain.connect(highpass);highpass.connect(lowpass);lowpass.connect(warmth);warmth.connect(presence);presence.connect(compressor);compressor.connect(master);
+    }else{
+      gain.connect(master);
+    }
+    src.start();sources.push(src);gains.push(gain);
+  });
+  return Math.max(voiceBuffer.duration,pianoBuffer.duration);
+}
+function stopPlayback(){
+  sources.forEach(s=>{try{s.stop()}catch(e){}});
+  sources=[];clearTimeout(playEndTimer);cancelAnimationFrame(raf);
+  $('stopBtn').disabled=true;$('playBtn').disabled=!(voiceBuffer&&pianoBuffer);
+  $('meterBar').style.width='0%';
+  if(recording && recorder && recorder.state!=='inactive') recorder.stop();
+}
+$('playBtn').onclick=async()=>{
+  if(!voiceBuffer||!pianoBuffer)return;
+  stopPlayback();await ctx.resume();
+  const duration=makeMix();startedAt=ctx.currentTime;
+  $('playBtn').disabled=true;$('stopBtn').disabled=false;
+  const tick=()=>{let p=Math.min(100,((ctx.currentTime-startedAt)/duration)*100);$('meterBar').style.width=p+'%';if(p<100)raf=requestAnimationFrame(tick)};
+  tick();playEndTimer=setTimeout(()=>{sources=[];$('stopBtn').disabled=true;$('playBtn').disabled=false;$('meterBar').style.width='100%';},duration*1000+100);
+  setStatus('Playing both tracks together.');
+};
+$('stopBtn').onclick=()=>{stopPlayback();setStatus('Playback stopped.');};
+$('saveBtn').onclick=async()=>{
+  if(!voiceBuffer||!pianoBuffer)return;
+  if(!window.MediaRecorder || !ctx.createMediaStreamDestination){setStatus('Audio recording is not supported by this browser. Try Chrome on Android.');return;}
+  stopPlayback();await ctx.resume();
+  const duration=makeMix();
+  const mime=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'].find(t=>MediaRecorder.isTypeSupported(t))||'';
+  try{recorder=new MediaRecorder(mixDestination.stream,mime?{mimeType:mime}:undefined);}
+  catch(e){setStatus('This browser could not start audio export. Try Chrome.');return;}
+  chunks=[];recording=true;
+  recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  recorder.onerror=()=>{recording=false;setStatus('Recording failed. Please try again.');};
+  recorder.onstop=()=>{
+    recording=false;
+    const type=recorder.mimeType||'audio/webm';
+    const blob=new Blob(chunks,{type});
+    const ext=type.includes('ogg')?'ogg':'webm';
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='message-with-piano.'+ext;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+    $('meterBar').style.width='100%';
+    setStatus('Your mixed audio is ready. Check Downloads or your browser download notification to find it.');
+    $('playBtn').disabled=false;$('stopBtn').disabled=true;
+  };
+  recorder.start(250);startedAt=ctx.currentTime;
+  $('playBtn').disabled=true;$('stopBtn').disabled=false;
+  setStatus('Recording the combined audio. Please keep this page open…');
+  const tick=()=>{if(!recording)return;let p=Math.min(100,((ctx.currentTime-startedAt)/duration)*100);$('meterBar').style.width=p+'%';if(p<100)raf=requestAnimationFrame(tick)};
+  tick();
+  playEndTimer=setTimeout(()=>{if(recording&&recorder.state!=='inactive')recorder.stop();sources=[];$('stopBtn').disabled=true;},duration*1000+250);
+};
+
+async function renderOfflineMix(){
+  const sampleRate=44100;
+  const duration=Math.max(voiceBuffer.duration,pianoBuffer.duration);
+  const length=Math.ceil(duration*sampleRate);
+  const OfflineCtx=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+  if(!OfflineCtx) throw new Error('Offline audio rendering is not supported in this browser.');
+  const off=new OfflineCtx(2,length,sampleRate);
+  const master=off.createGain();
+  master.gain.value=1;
+  master.connect(off.destination);
+  const tracks=[[voiceBuffer,'voiceVol','voice'],[pianoBuffer,'pianoVol','piano']];
+  tracks.forEach(([buffer,volId,kind])=>{
+    const source=off.createBufferSource();
+    const gain=off.createGain();
+    source.buffer=buffer;
+    gain.gain.value=Number($(volId).value);
+    source.connect(gain);
+    if(kind==='voice'){
+      const noise=Number($('noiseLevel').value)/100;
+      const enhance=Number($('voiceEnhance').value)/100;
+      const hp=off.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=60+noise*120; hp.Q.value=.7;
+      const lp=off.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=16000-noise*8500; lp.Q.value=.7;
+      const warmth=off.createBiquadFilter(); warmth.type='lowshelf'; warmth.frequency.value=180; warmth.gain.value=enhance*3;
+      const presence=off.createBiquadFilter(); presence.type='peaking'; presence.frequency.value=3000; presence.Q.value=.9; presence.gain.value=enhance*4;
+      const comp=off.createDynamicsCompressor(); comp.threshold.value=-24-enhance*6; comp.knee.value=18; comp.ratio.value=2+enhance*2; comp.attack.value=.01; comp.release.value=.2;
+      gain.connect(hp); hp.connect(lp); lp.connect(warmth); warmth.connect(presence); presence.connect(comp); comp.connect(master);
+    }else gain.connect(master);
+    source.connect(gain);
+    source.start(0);
+  });
+  return await off.startRendering();
+}
+function downloadBlob(blob,filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+$('mp3Btn').onclick=async()=>{
+  if(!voiceBuffer||!pianoBuffer)return;
+  if(!window.lamejs){setStatus('MP3 encoder could not load. Connect to the internet, reload this page, and try again.');return;}
+  $('mp3Btn').disabled=true;$('saveBtn').disabled=true;
+  $('meterBar').style.width='5%';
+  setStatus('Preparing your combined audio for MP3 export…');
+  try{
+    const rendered=await renderOfflineMix();
+    const left=rendered.getChannelData(0);
+    const right=rendered.numberOfChannels>1?rendered.getChannelData(1):left;
+    const encoder=new lamejs.Mp3Encoder(2,rendered.sampleRate,192);
+    const blockSize=1152, mp3Chunks=[];
+    const toInt16=(data)=>{
+      const out=new Int16Array(data.length);
+      for(let i=0;i<data.length;i++){
+        const v=Math.max(-1,Math.min(1,data[i]));
+        out[i]=v<0?v*32768:v*32767;
+      }
+      return out;
+    };
+    const l=toInt16(left),r=toInt16(right);
+    for(let i=0;i<l.length;i+=blockSize){
+      const chunk=encoder.encodeBuffer(l.subarray(i,i+blockSize),r.subarray(i,i+blockSize));
+      if(chunk.length)mp3Chunks.push(new Uint8Array(chunk));
+      $('meterBar').style.width=Math.min(95,5+(i/l.length)*90)+'%';
+      if(i%(blockSize*100)===0)await new Promise(resolve=>setTimeout(resolve,0));
+    }
+    const end=encoder.flush();if(end.length)mp3Chunks.push(new Uint8Array(end));
+    const blob=new Blob(mp3Chunks,{type:'audio/mpeg'});
+    downloadBlob(blob,'message-with-piano.mp3');
+    $('meterBar').style.width='100%';
+    setStatus('MP3 created. Check your phone Downloads folder or browser download notification.');
+  }catch(err){
+    setStatus('MP3 export failed: '+(err.message||'Please try again in Chrome.'));
+  }finally{
+    $('mp3Btn').disabled=false;$('saveBtn').disabled=false;
+  }
+};
+
+</script>
+</body>
+</html>
