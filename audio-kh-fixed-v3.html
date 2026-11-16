@@ -257,12 +257,14 @@ $("voiceAudio").onended=()=>{
  say("cutStatus","Voice playback finished.");
  say("previewStatus","Preview finished.");
 };
-
+ </script>
+ 
 $("seek").oninput=()=>{
  seeking=true;
  if(duration())$("voiceAudio").currentTime=+$("seek").value/1000*duration();
  updatePosition();seeking=false;
 };
+
 function move(seconds){
  let a=$("voiceAudio");
  if(duration())a.currentTime=Math.max(0,Math.min(duration()-.05,a.currentTime+seconds));
@@ -274,7 +276,10 @@ $("forward10").onclick=()=>move(10);
 
 $("voicePlay").onclick=async()=>{
  try{
-  if(playing){$("voiceAudio").pause();playing=false;$("voicePlay").textContent="▶ Resume voice";return;}
+  if(playing){
+   $("voiceAudio").pause();playing=false;
+   $("voicePlay").textContent="▶ Resume voice";return;
+  }
   const audioContext=await setupAudio();
   await audioContext.resume();
   applyControls();
@@ -283,16 +288,24 @@ $("voicePlay").onclick=async()=>{
   playing=true;$("voicePlay").textContent="Ⅱ Pause voice";
  }catch(e){say("cutStatus","Playback error: "+e.message);}
 };
-$("voiceStop").onclick=()=>{stopAll();say("cutStatus","Voice stopped.");};
+
+$("voiceStop").onclick=()=>{
+ stopAll();say("cutStatus","Voice stopped.");
+};
 
 $("markStart").onclick=()=>{
  cutStart=$("voiceAudio").currentTime;
  say("cutStatus","Cut start marked at "+fmt(cutStart)+". Move to the end of the unwanted section.");
 };
+
 $("markEnd").onclick=()=>{
  let end=$("voiceAudio").currentTime;
- if(cutStart===null){say("cutStatus","First mark the cut start.");return;}
- if(end<=cutStart+.08){say("cutStatus","Move forward before marking the cut end.");return;}
+ if(cutStart===null){
+  say("cutStatus","First mark the cut start.");return;
+ }
+ if(end<=cutStart+.08){
+  say("cutStatus","Move forward before marking the cut end.");return;
+ }
  cuts.push({start:cutStart,end});
  cuts.sort((a,b)=>a.start-b.start);
  let merged=[];
@@ -303,8 +316,9 @@ $("markEnd").onclick=()=>{
  });
  cuts=merged;cutStart=null;
  renderCuts();resetOutput();ready();
- say("cutStatus","Unwanted section "+fmt(end)+" marked. You can mark another section.");
+ say("cutStatus","Unwanted section marked. You can mark another section.");
 };
+
 $("clearCuts").onclick=()=>{
  cuts=[];cutStart=null;renderCuts();resetOutput();ready();
  say("cutStatus","All cuts cleared.");
@@ -327,48 +341,88 @@ async function setupAudio(){
  const AC=window.AudioContext||window.webkitAudioContext;
  if(!AC)throw Error("Web Audio is not supported. Use Chrome.");
  ctx=new AC();
+
  voiceSource=ctx.createMediaElementSource($("voiceAudio"));
  pianoSource=ctx.createMediaElementSource($("pianoAudio"));
- voiceGain=ctx.createGain();pianoGain=ctx.createGain();
- hp=ctx.createBiquadFilter();hp.type="highpass";hp.frequency.value=60;
- lp=ctx.createBiquadFilter();lp.type="lowpass";lp.frequency.value=16000;
- warmth=ctx.createBiquadFilter();warmth.type="lowshelf";warmth.frequency.value=180;
- presence=ctx.createBiquadFilter();presence.type="peaking";presence.frequency.value=3000;
+
+ voiceGain=ctx.createGain();
+ pianoGain=ctx.createGain();
+
+ hp=ctx.createBiquadFilter();
+ hp.type="highpass";hp.frequency.value=60;
+
+ lp=ctx.createBiquadFilter();
+ lp.type="lowpass";lp.frequency.value=16000;
+
+ warmth=ctx.createBiquadFilter();
+ warmth.type="lowshelf";warmth.frequency.value=180;
+
+ presence=ctx.createBiquadFilter();
+ presence.type="peaking";presence.frequency.value=3000;
+
  compressor=ctx.createDynamicsCompressor();
- voiceSource.connect(voiceGain);voiceGain.connect(hp);hp.connect(lp);lp.connect(warmth);warmth.connect(presence);presence.connect(compressor);compressor.connect(ctx.destination);
- pianoSource.connect(pianoGain);pianoGain.connect(ctx.destination);
+
+ voiceSource.connect(voiceGain);
+ voiceGain.connect(hp);
+ hp.connect(lp);
+ lp.connect(warmth);
+ warmth.connect(presence);
+ presence.connect(compressor);
+ compressor.connect(ctx.destination);
+
+ pianoSource.connect(pianoGain);
+ pianoGain.connect(ctx.destination);
+
  return ctx;
 }
+
 function applyControls(){
  if(!ctx)return;
- let n=+$("noiseLevel").value/100,e=+$("voiceEnhance").value/100;
+
+ let n=+$("noiseLevel").value/100;
+ let e=+$("voiceEnhance").value/100;
+
  voiceGain.gain.value=+$("voiceVol").value;
  pianoGain.gain.value=+$("pianoVol").value;
+
  hp.frequency.value=60+n*130;
  lp.frequency.value=16000-n*7500;
- warmth.gain.value=e*3;presence.gain.value=e*4;
+ warmth.gain.value=e*3;
+ presence.gain.value=e*4;
+
  compressor.threshold.value=-24-e*6;
  compressor.ratio.value=2+e*2;
 }
+
 function updateLabels(){
  $("voicePct").textContent=Math.round(+$("voiceVol").value*100)+"%";
  $("pianoPct").textContent=Math.round(+$("pianoVol").value*100)+"%";
- let n=+$("noiseLevel").value,e=+$("voiceEnhance").value;
+
+ let n=+$("noiseLevel").value;
+ let e=+$("voiceEnhance").value;
+
  $("noisePct").textContent=n===0?"Off":n<35?"Low":n<70?"Medium":"Strong";
  $("enhancePct").textContent=e===0?"Off":e<35?"Light":e<70?"Medium":"Strong";
+
  applyControls();
 }
-["voiceVol","pianoVol","noiseLevel","voiceEnhance"].forEach(id=>$(id).oninput=updateLabels);
+
+["voiceVol","pianoVol","noiseLevel","voiceEnhance"].forEach(id=>{
+ $(id).oninput=updateLabels;
+});
 
 async function playCleanVoice(){
  const audioContext=await setupAudio();
  await audioContext.resume();
  applyControls();
+
  let a=$("voiceAudio");
  let inside=cuts.find(c=>a.currentTime>=c.start&&a.currentTime<c.end);
+
  if(inside)a.currentTime=inside.end+.02;
  await a.play();
 }
+
 $("voicePreview").onclick=async()=>{
  try{
   if(playing){
@@ -377,30 +431,46 @@ $("voicePreview").onclick=async()=>{
   }
   stopAll();
   if($("voiceAudio").ended)$("voiceAudio").currentTime=0;
-  await playCleanVoice();playing=true;
+  await playCleanVoice();
+  playing=true;
   $("voicePreview").textContent="Ⅱ Pause cleaned voice";
   say("cutStatus","Previewing cleaned voice. Cut sections are skipped.");
- }catch(e){say("cutStatus","Preview error: "+e.message);}
+ }catch(e){
+  say("cutStatus","Preview error: "+e.message);
+ }
 };
 
 $("preview").onclick=async()=>{
  try{
   if(mixPlaying){
-   $("voiceAudio").pause();$("pianoAudio").pause();
-   mixPlaying=false;$("preview").textContent="▶ Resume mix preview";
+   $("voiceAudio").pause();
+   $("pianoAudio").pause();
+   mixPlaying=false;
+   $("preview").textContent="▶ Resume mix preview";
    say("previewStatus","Mix preview paused.");return;
   }
+
   stopAll();
+
   const audioContext=await setupAudio();
   await audioContext.resume();
   applyControls();
-  $("voiceAudio").currentTime=0;$("pianoAudio").currentTime=0;
+
+  $("voiceAudio").currentTime=0;
+  $("pianoAudio").currentTime=0;
   $("pianoAudio").loop=true;
-  await playCleanVoice();await $("pianoAudio").play();
-  mixPlaying=true;$("preview").textContent="Ⅱ Pause mix preview";
+
+  await playCleanVoice();
+  await $("pianoAudio").play();
+
+  mixPlaying=true;
+  $("preview").textContent="Ⅱ Pause mix preview";
   $("stopPreview").disabled=false;
+
   say("previewStatus","Playing edited voice with piano.");
- }catch(e){say("previewStatus","Preview error: "+e.message);}
+ }catch(e){
+  say("previewStatus","Preview error: "+e.message);
+ }
 };
 
 $("stopPreview").onclick=()=>{
@@ -409,81 +479,136 @@ $("stopPreview").onclick=()=>{
 };
 
 async function loadEngine(){
-  if(engineReady)return;
+ if(engineReady)return;
 
-  say("workStatus","Loading audio processing engine...");
+ say("workStatus","Loading audio processing engine...");
 
-  const {FFmpeg}=await import(
-    "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js"
+ const {FFmpeg}=await import(
+  "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js"
+ );
+
+ const {toBlobURL}=await import(
+  "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js"
+ );
+
+ ffmpeg=new FFmpeg();
+
+ ffmpeg.on("log",({message})=>console.log(message));
+
+ ffmpeg.on("progress",({progress})=>{
+  if(Number.isFinite(progress)){
+   meter("workMeter",10+progress*85);
+   say("workStatus","Processing WebM: "+Math.round(progress*100)+"%");
+  }
+ });
+
+ const pkg="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm";
+ const core="https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd";
+
+ let workerResponse=await fetch(pkg+"/worker.js");
+
+ if(!workerResponse.ok){
+  throw Error("Could not download FFmpeg worker. HTTP "+workerResponse.status);
+ }
+
+ let workerCode=await workerResponse.text();
+
+ workerCode=workerCode
+  .replace(/from\s+["']\.\/const\.js["']/g,'from "'+pkg+'/const.js"')
+  .replace(/from\s+["']\.\/errors\.js["']/g,'from "'+pkg+'/errors.js"');
+
+ const workerURL=URL.createObjectURL(
+  new Blob([workerCode],{type:"text/javascript"})
+ );
+
+ try{
+  const coreURL=await toBlobURL(
+   core+"/ffmpeg-core.js","text/javascript"
   );
-  const {toBlobURL}=await import(
-    "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js"
+
+  const wasmURL=await toBlobURL(
+   core+"/ffmpeg-core.wasm","application/wasm"
   );
 
-  ffmpeg=new FFmpeg();
-  ffmpeg.on("log",({message})=>console.log(message));
-  ffmpeg.on("progress",({progress})=>{
-    if(Number.isFinite(progress)){
-      meter("workMeter",10+progress*85);
-      say("workStatus","Processing WebM: "+Math.round(progress*100)+"%");
-    }
+  await ffmpeg.load({
+   classWorkerURL:workerURL,
+   coreURL,
+   wasmURL
   });
 
-  // Use a same-origin Blob worker so Chrome does not block a cross-origin Worker.
-  const pkg="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm";
-  const core="https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd";
+  engineReady=true;
 
-  let workerResponse=await fetch(pkg+"/worker.js");
-  if(!workerResponse.ok)throw Error("Could not download FFmpeg worker (HTTP "+workerResponse.status+").");
-  let workerCode=await workerResponse.text();
-  workerCode=workerCode
-    .replace(/from\s+["']\.\/const\.js["']/g,'from "'+pkg+'/const.js"')
-    .replace(/from\s+["']\.\/errors\.js["']/g,'from "'+pkg+'/errors.js"');
-  const workerURL=URL.createObjectURL(new Blob([workerCode],{type:"text/javascript"}));
+ }catch(e){
+  URL.revokeObjectURL(workerURL);
+  ffmpeg=null;
 
-  try{
-    const coreURL=await toBlobURL(core+"/ffmpeg-core.js","text/javascript");
-    const wasmURL=await toBlobURL(core+"/ffmpeg-core.wasm","application/wasm");
-    await ffmpeg.load({classWorkerURL:workerURL,coreURL,wasmURL});
-    engineReady=true;
-  }catch(e){
-    URL.revokeObjectURL(workerURL);
-    ffmpeg=null;
-    throw Error("FFmpeg could not start. Check your internet connection or try Chrome again. Details: "+(e.message||e));
-  }
+  throw Error(
+   "FFmpeg could not start. Check your internet connection or try Chrome again. Details: "+
+   (e.message||e)
+  );
+ }
 }
+
 function download(blob,name){
  let url=URL.createObjectURL(blob);
  let a=document.createElement("a");
+
  a.href=url;
  a.download=name;
+
  document.body.appendChild(a);
  a.click();
  a.remove();
+
  setTimeout(()=>URL.revokeObjectURL(url),120000);
 }
+
 const seconds=n=>Math.max(0,n).toFixed(3);
 
 $("webm").onclick=async()=>{
  if(!voiceFile||!pianoFile)return;
- $("webm").disabled=true;$("mp3").disabled=true;
+
+ $("webm").disabled=true;
+ $("mp3").disabled=true;
+
  try{
   stopAll();
+
   let segments=keepSegments();
+
   await loadEngine();
+
   say("workStatus","Preparing spoken message...");
   meter("workMeter",10);
-  await ffmpeg.writeFile("voice_input",new Uint8Array(await voiceFile.arrayBuffer()));
+
+  await ffmpeg.writeFile(
+   "voice_input",
+   new Uint8Array(await voiceFile.arrayBuffer())
+  );
+
   say("workStatus","Preparing piano music...");
-  await ffmpeg.writeFile("piano_input",new Uint8Array(await pianoFile.arrayBuffer()));
+
+  await ffmpeg.writeFile(
+   "piano_input",
+   new Uint8Array(await pianoFile.arrayBuffer())
+  );
 
   let graph="",labels=[];
+
   segments.forEach((s,i)=>{
-   graph+="[0:a]atrim=start="+seconds(s.start)+":end="+seconds(s.end)+",asetpts=PTS-STARTPTS[v"+i+"];";
+   graph+="[0:a]atrim=start="+seconds(s.start)+
+    ":end="+seconds(s.end)+
+    ",asetpts=PTS-STARTPTS[v"+i+"];";
+
    labels.push("[v"+i+"]");
   });
-  graph+=labels.join("")+"concat=n="+segments.length+":v=0:a=1[clean];";
-  let n=+$("noiseLevel").value/100,e=+$("voiceEnhance").value/100;
+
+  graph+=labels.join("")+
+   "concat=n="+segments.length+":v=0:a=1[clean];";
+
+  let n=+$("noiseLevel").value/100;
+  let e=+$("voiceEnhance").value/100;
+
   graph+="[clean]volume="+$("voiceVol").value+
    ",highpass=f="+Math.round(60+n*130)+
    ",lowpass=f="+Math.round(16000-n*7500)+
@@ -495,29 +620,56 @@ $("webm").onclick=async()=>{
 
   say("workStatus","Removing marked sections and mixing piano...");
   meter("workMeter",20);
+
   await ffmpeg.exec([
    "-i","voice_input",
    "-stream_loop","-1","-i","piano_input",
    "-filter_complex",graph,
-   "-map","[out]","-c:a","libopus","-b:a","96k",
-   "-vn","-shortest","-f","webm","final_message.webm"
+   "-map","[out]",
+   "-c:a","libopus",
+   "-b:a","96k",
+   "-vn",
+   "-shortest",
+   "-f","webm",
+   "final_message.webm"
   ]);
+
   let result=await ffmpeg.readFile("final_message.webm");
-  generatedWebM=new Blob([result],{type:"audio/webm"});
-  download(generatedWebM,"kingdom-heritage-message-with-piano.webm");
+
+  generatedWebM=new Blob(
+   [result],
+   {type:"audio/webm"}
+  );
+
+  download(
+   generatedWebM,
+   "kingdom-heritage-message-with-piano.webm"
+  );
+
   meter("workMeter",100);
   say("workStatus","WebM created successfully with all cuts applied.");
+
   $("mp3").disabled=false;
+
   for(let f of ["voice_input","piano_input","final_message.webm"]){
    try{await ffmpeg.deleteFile(f)}catch(e){}
   }
+
  }catch(e){
   console.error(e);
-  say("workStatus","WebM generation failed: "+(e.message||e)+". Try a shorter recording if your phone runs low on memory.");
-  meter("workMeter",0);
- }finally{ready();}
-};
 
+  say(
+   "workStatus",
+   "WebM generation failed: "+(e.message||e)+
+   ". Try a shorter recording if your phone runs low on memory."
+  );
+
+  meter("workMeter",0);
+
+ }finally{
+  ready();
+ }
+};
 
 $("mp3").onclick=async()=>{
  if(!generatedWebM||!engineReady)return;
@@ -548,18 +700,18 @@ $("mp3").onclick=async()=>{
   );
 
   for(let f of ["input.webm","output.mp3"]){
-   try{
-    await ffmpeg.deleteFile(f);
-   }catch(e){}
+   try{await ffmpeg.deleteFile(f)}catch(e){}
   }
 
   say("workStatus","MP3 conversion completed. Check your Downloads folder.");
 
  }catch(e){
   console.error(e);
+
   say(
    "workStatus",
-   "MP3 conversion failed: "+(e.message||e)+". Your WebM file is still available."
+   "MP3 conversion failed: "+(e.message||e)+
+   ". Your WebM file is still available."
   );
 
  }finally{
@@ -572,5 +724,5 @@ ready();
 
 </script>
 </body>
-</html>
-
+ </html>
+  
