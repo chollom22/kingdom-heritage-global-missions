@@ -213,7 +213,7 @@ They are not uploaded to a server.
 </button>
 
 <button id="mp3Btn" class="wide secondary" disabled>
-🎵 Export complete MP3
+ 🎵 Process and Export Complete MP3
 </button>
 
 <div class="meter">
@@ -784,55 +784,15 @@ $('saveBtn').onclick = async()=>{
  }
 };
 
-// MP3 EXPORT
+
+// AUTOMATIC CHUNKED MP3 PROCESSING
 
 async function decodeForMp3(file){
 
  const bytes = await file.arrayBuffer();
-
  const c = audioContext();
 
  return await c.decodeAudioData(bytes);
-}
-
-function createVoiceChain(off,source,volume,n,e,masterNode){
-
- const gain = off.createGain();
- gain.gain.value = volume;
-
- const hp = off.createBiquadFilter();
- hp.type = 'highpass';
- hp.frequency.value = 60+n*130;
-
- const lp = off.createBiquadFilter();
- lp.type = 'lowpass';
- lp.frequency.value = 16000-n*7500;
-
- const warmth = off.createBiquadFilter();
- warmth.type = 'lowshelf';
- warmth.frequency.value = 180;
- warmth.gain.value = e*3;
-
- const presence = off.createBiquadFilter();
- presence.type = 'peaking';
- presence.frequency.value = 3000;
- presence.Q.value = .9;
- presence.gain.value = e*4;
-
- const comp = off.createDynamicsCompressor();
- comp.threshold.value = -24-e*6;
- comp.knee.value = 18;
- comp.ratio.value = 2+e*2;
- comp.attack.value = .01;
- comp.release.value = .2;
-
- source.connect(gain);
- gain.connect(hp);
- hp.connect(lp);
- lp.connect(warmth);
- warmth.connect(presence);
- presence.connect(comp);
- comp.connect(masterNode);
 }
 
 function yieldToBrowser(){
@@ -842,21 +802,21 @@ function yieldToBrowser(){
 $('mp3Btn').onclick = async()=>{
 
  if(!window.lamejs){
-
   setStatus('MP3 encoder did not load. Connect to the internet and reload the page.');
-
   return;
  }
 
  const voiceFile = $('voiceFile').files[0];
  const pianoFile = $('pianoFile').files[0];
 
- if(!voiceFile || !pianoFile)return;
+ if(!voiceFile || !pianoFile){
+  setStatus('Please select both audio files.');
+  return;
+ }
 
  if(busy)return;
 
  busy = true;
-
  updateReady();
 
  $('mp3Btn').disabled = true;
@@ -864,47 +824,39 @@ $('mp3Btn').onclick = async()=>{
  $('playBtn').disabled = true;
  $('stopBtn').disabled = true;
 
+ let v = null;
+ let p = null;
+ let encoder = null;
+
  try{
 
-  setStatus('Reading the complete spoken message...');
+  setStatus('Reading your complete spoken message...');
+  v = await decodeForMp3(voiceFile);
 
-  const v = await decodeForMp3(voiceFile);
+  await yieldToBrowser();
 
-  setStatus('Reading the complete piano recording...');
+  setStatus('Reading your complete piano recording...');
+  p = await decodeForMp3(pianoFile);
 
-  const p = await decodeForMp3(pianoFile);
+  await yieldToBrowser();
 
   const rate = 44100;
-
+  const bitrate = 128;
   const duration = Math.max(v.duration,p.duration);
 
   if(!duration || !isFinite(duration)){
    throw new Error('Invalid audio duration.');
   }
 
-  const frames = Math.ceil(duration*rate);
+  const totalFrames = Math.ceil(duration*rate);
 
-  if(frames < 1){
-   throw new Error('The audio files are empty.');
-  }
+  // Process 30 seconds at a time.
+  const chunkSeconds = 30;
+  const chunkFrames = chunkSeconds*rate;
 
-  setStatus(
-   'Preparing the complete audio mix ('+
-   Math.floor(duration/60)+' minutes approximately)...'
-  );
+  const encoder = new lamejs.Mp3Encoder(2,rate,bitrate);
 
-  // Render the entire combined recording in one operation.
-  const off = new OfflineAudioContext(2,frames,rate);
-
-  const masterNode = off.createGain();
-  masterNode.gain.value = 1;
-  masterNode.connect(off.destination);
-
-  const voiceSourceOffline = off.createBufferSource();
-  voiceSourceOffline.buffer = v;
-
-  const pianoSourceOffline = off.createBufferSource();
-  pianoSourceOffline.buffer = p;
+  const outputParts = [];
 
   const voiceVolume = Number($('voiceVol').value);
   const pianoVolume = Number($('pianoVol').value);
@@ -912,90 +864,146 @@ $('mp3Btn').onclick = async()=>{
   const n = Number($('noiseLevel').value)/100;
   const e = Number($('voiceEnhance').value)/100;
 
-  createVoiceChain(
-   off,
-   voiceSourceOffline,
-   voiceVolume,
-   n,
-   e,
-   masterNode
-  );
-
-  const pianoGainOffline = off.createGain();
-  pianoGainOffline.gain.value = pianoVolume;
-
-  pianoSourceOffline.connect(pianoGainOffline);
-  pianoGainOffline.connect(masterNode);
-
-  voiceSourceOffline.start(0);
-  pianoSourceOffline.start(0);
-
-  setStatus('Rendering the complete mix. Please wait...');
-
-  const rendered = await off.startRendering();
-
-  setStatus('Converting the complete mix to MP3...');
-
-  const left = rendered.getChannelData(0);
-  const right = rendered.getChannelData(1);
-
-  // 128 kbps provides a reasonable balance for voice and piano.
-  const bitrate = 128;
-
-  const encoder = new lamejs.Mp3Encoder(2,rate,bitrate);
-
-  const parts = [];
   const block = 1152;
 
-  let processed = 0;
+  for(let startFrame=0;startFrame<totalFrames;startFrame+=chunkFrames){
 
-  for(let i=0;i<frames;i+=block){
+   const currentFrames = Math.min(
+    chunkFrames,
+    totalFrames-startFrame
+   );
 
-   const count = Math.min(block,frames-i);
+   const startTime = startFrame/rate;
+   const segmentDuration = currentFrames/rate;
 
-   const L = new Int16Array(count);
-   const R = new Int16Array(count);
+   setStatus(
+    'Processing complete audio: '+
+    Math.min(100,Math.round(startFrame/totalFrames*100))+
+    '%'
+   );
 
-   for(let j=0;j<count;j++){
+   // Create a small offline processor for this section.
+   const Offline = window.OfflineAudioContext ||
+                   window.webkitOfflineAudioContext;
 
-    const li = Math.max(-1,Math.min(1,left[i+j] || 0));
-    const ri = Math.max(-1,Math.min(1,right[i+j] || 0));
-
-    L[j] = li < 0 ? li*32768 : li*32767;
-    R[j] = ri < 0 ? ri*32768 : ri*32767;
+   if(!Offline){
+    throw new Error('Offline audio processing is not supported. Please use Chrome.');
    }
 
-   const encoded = encoder.encodeBuffer(L,R);
+   const off = new Offline(2,currentFrames,rate);
 
-   if(encoded.length){
-    parts.push(new Uint8Array(encoded));
-   }
+   const masterNode = off.createGain();
+   masterNode.gain.value = 1;
+   masterNode.connect(off.destination);
 
-   processed += count;
+   // Spoken message
+   if(startTime < v.duration){
 
-   // Allow the phone browser to update progress.
-   if(processed % (block*100) === 0 || processed >= frames){
+    const source = off.createBufferSource();
+    source.buffer = v;
 
-    const percent = Math.min(
-     100,
-     Math.round(processed/frames*100)
+    createVoiceChain(
+     off,
+     source,
+     voiceVolume,
+     n,
+     e,
+     masterNode
     );
 
-    setStatus('Encoding complete mix: '+percent+'%');
+    const available = Math.min(
+     segmentDuration,
+     v.duration-startTime
+    );
 
-    await yieldToBrowser();
+    if(available>0){
+     source.start(0,startTime,available);
+    }
    }
+
+   // Piano background
+   if(startTime < p.duration){
+
+    const pianoSource = off.createBufferSource();
+    pianoSource.buffer = p;
+
+    const pianoGainOffline = off.createGain();
+    pianoGainOffline.gain.value = pianoVolume;
+
+    pianoSource.connect(pianoGainOffline);
+    pianoGainOffline.connect(masterNode);
+
+    const available = Math.min(
+     segmentDuration,
+     p.duration-startTime
+    );
+
+    if(available>0){
+     pianoSource.start(0,startTime,available);
+    }
+   }
+
+   // Render only this 30-second section.
+   let rendered = await off.startRendering();
+
+   const left = rendered.getChannelData(0);
+   const right = rendered.getChannelData(1);
+
+   // Encode this section into the same continuous MP3 encoder.
+   for(let i=0;i<currentFrames;i+=block){
+
+    const count = Math.min(block,currentFrames-i);
+
+    const L = new Int16Array(count);
+    const R = new Int16Array(count);
+
+    for(let j=0;j<count;j++){
+
+     const li = Math.max(-1,Math.min(1,left[i+j] || 0));
+     const ri = Math.max(-1,Math.min(1,right[i+j] || 0));
+
+     L[j] = li<0 ? li*32768 : li*32767;
+     R[j] = ri<0 ? ri*32768 : ri*32767;
+    }
+
+    const encoded = encoder.encodeBuffer(L,R);
+
+    if(encoded.length){
+     outputParts.push(new Uint8Array(encoded));
+    }
+   }
+
+   // Release this section before processing the next one.
+   rendered = null;
+
+   await yieldToBrowser();
+
+   const percent = Math.min(
+    100,
+    Math.round((startFrame+currentFrames)/totalFrames*100)
+   );
+
+   $('meterBar').style.width = percent+'%';
+
+   setStatus(
+    'Processing complete audio: '+percent+'%'
+   );
   }
+
+  // Finish the MP3 encoder.
+  setStatus('Finalizing your complete MP3 file...');
 
   const finalBytes = encoder.flush();
 
   if(finalBytes.length){
-   parts.push(new Uint8Array(finalBytes));
+   outputParts.push(new Uint8Array(finalBytes));
   }
 
-  const mp3 = new Blob(parts,{type:'audio/mpeg'});
+  const mp3 = new Blob(outputParts,{
+   type:'audio/mpeg'
+  });
 
-  if(mp3.size === 0){
+  if(!mp3.size){
    throw new Error('MP3 conversion produced an empty file.');
   }
 
@@ -1004,22 +1012,28 @@ $('mp3Btn').onclick = async()=>{
    'kingdom-heritage-message-with-piano.mp3'
   );
 
+  $('meterBar').style.width = '100%';
+
   setStatus(
-   'Complete MP3 exported successfully at 128 kbps. File size: '+
+   'Complete MP3 created successfully! File size: '+
    (mp3.size/1024/1024).toFixed(2)+
    ' MB. Check your Downloads folder.'
   );
 
- }catch(e){
+ }catch(error){
 
-  console.error(e);
+  console.error(error);
 
   setStatus(
-   'MP3 export failed: '+
-   (e.message || 'Your phone may not have enough available memory. Try WebM export.')
+   'Processing failed: '+
+   (error.message || 'Your phone may not have enough available memory.')
   );
 
  }finally{
+
+  v = null;
+  p = null;
+  encoder = null;
 
   busy = false;
 
